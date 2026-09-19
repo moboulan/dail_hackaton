@@ -80,11 +80,7 @@ h1:focus, main:focus { outline: none; }
   border-bottom: 1px solid var(--rule);
   background: var(--paper);
 }
-.brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; }
-.brand-mark {
-  width: 36px; height: 36px; border-radius: var(--radius); background: var(--sand); color: var(--sand-ink);
-  display: grid; place-items: center; font-family: var(--font-register); font-weight: 700; font-size: 1.05rem; letter-spacing: 0.04em;
-}
+.brand { display: flex; align-items: center; min-height: 44px; color: var(--ink); text-decoration: none; }
 .brand-name { font-family: var(--font-register); font-weight: 700; font-size: 1.35rem; letter-spacing: 0.02em; }
 
 .steps { justify-self: center; }

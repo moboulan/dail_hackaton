@@ -10,7 +10,7 @@ ruled register of numbered entries; a module is validated with a stamp. Built fr
 | --- | --- | --- |
 | `--paper` | #FFFDF7 | Page ground (NomadKit background) |
 | `--surface` | #FFFFFF | Chat bubbles, quiz options, text field |
-| `--sand` | #D4A373 | Brand mark, current-step underline, register numerals |
+| `--sand` | #D4A373 | Current-step underline, register numerals |
 | `--sand-ink` | #2B1D0E | Text on sand (white on sand fails contrast) |
 | `--wash` | #F6EAD9 | Pharmacist bubbles, hover, notices |
 | `--ink` / `--ink-soft` | #2A2118 / #5E5244 | Text; secondary text |
