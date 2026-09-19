@@ -1,42 +1,31 @@
-# BP Learning: Moroccan learner frontend
+# BP Learning: Eagle Day version
 
-This frontend offers a French learning journey for a synthetic Casablanca pharmacy context. Learners practise asking for a language preference, explaining one step at a time, checking comprehension and recording progress.
+French communication practice for pharmacy employees in Casablanca: ask the customer's
+language preference, explain one step at a time, check understanding. All people and
+dialogue are synthetic. The app gives no health advice.
 
-## Run locally
+Built for DaiL Eagle Day, 19 September 2026, Challenge A, from the organisers' starter
+(baseline commit `aa0dfd0`, originals in `docs/original/`).
 
-From this directory:
+## Run (current state)
+
+The app is still static until the chat server lands (see `docs/SPEC.md`, step 4).
 
 ```sh
+cd public
 python3 -m http.server 8089
 ```
 
-Open `http://127.0.0.1:8089/`. No install, build, account, environment variable or API key is required.
+Open http://127.0.0.1:8089/. Progress is saved in this browser only.
 
-## Learning journey
+## Configuration
 
-1. Open the overview and begin the training.
-2. Complete the three preparation checks.
-3. Work through a three-step conversation about language preference and comprehension.
-4. Review the conversation result.
-5. Complete three short learning checks.
-6. Inspect the learning path, reload to continue later, or reset progress.
+Copy `.env.example` to `.env` and set `DEEPSEEK_API_KEY`. `.env` is git-ignored and must
+never be committed or served.
 
-All learner, customer and dialogue details are synthetic. The exercise develops communication habits and does not provide health advice.
+## Docs
 
-## Challenge tracks
-
-- **A1: Repair a learner journey.** Find and fix one concrete usability problem, then test the revised path with another person.
-- **A2: Add a useful interaction.** Help a multilingual learner practise, understand feedback, recover work or use the experience on mobile.
-- **A3: Redesign a complete path.** Improve one end-to-end learning path for the Moroccan audience while retaining a clear learning goal.
-
-See `CHALLENGE.md` for the expected evidence and deliverables.
-
-## Files
-
-- `index.html`: French document shell and routes.
-- `styles.css`: responsive interface and print rules.
-- `fixtures.js`: synthetic learner, customer, dialogue and quiz content.
-- `app.js`: navigation, saved progress, checklist, conversation, quizzes and reset behavior.
-- `PROVENANCE.md`: concise origin and content note.
-- `CHALLENGE.md`: participant challenge brief.
-- `FILE-MANIFEST.sha256`: hashes for the packaged files.
+- `docs/SPEC.md`: scope, decisions, steps, open questions.
+- `docs/PROBLEMS.md`: every problem found and how it was fixed.
+- `docs/SUBMISSION-CHECKLIST.md`: DaiL submission checklist with status.
+- `docs/evidence/`: before and after screenshots.
