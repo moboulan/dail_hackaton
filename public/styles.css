@@ -87,7 +87,6 @@ main { width: 100%; max-width: var(--max); margin: 0 auto; padding: 32px var(--s
 .module-card .button { text-decoration: none; display: inline-flex; align-items: center; }
 .module-card h2 { margin: 0 0 4px; font-size: 1.2rem; }
 .module-meta { margin: 0; color: var(--muted); }
-.attestations { color: var(--muted); }
 
 /* Product sheets */
 .sheets { display: grid; gap: 12px; }
@@ -97,11 +96,7 @@ main { width: 100%; max-width: var(--max); margin: 0 auto; padding: 32px var(--s
 .sheet dl { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; font-size: 0.95rem; }
 .sheet dt { font-weight: 700; }
 .sheet dd { margin: 0; }
-.doctor { margin-top: 12px; }
 
-.reflexes { padding-left: 1.4em; }
-.reflexes li { margin-bottom: 10px; }
-.reflexes span { color: var(--muted); }
 
 /* Checks */
 .check { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: var(--space); margin: 0 0 var(--space); }
@@ -123,17 +118,11 @@ main { width: 100%; max-width: var(--max); margin: 0 auto; padding: 32px var(--s
   background: var(--surface); color: var(--text); font: inherit; font-weight: 700; cursor: pointer;
 }
 .button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-text); }
-.button.danger { background: var(--wrong); border-color: var(--wrong); color: #fff; }
-.link-button { background: none; border: 0; padding: 8px 0; min-height: 44px; font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer; }
 .next { margin-top: 28px; }
 .scenario { font-size: 1.1rem; }
 .hint { color: var(--muted); }
 
-/* Footer */
 .storage-warning { margin: 0; padding: 10px var(--space); background: var(--notice-bg); text-align: center; }
-.site-footer { border-top: 1px solid var(--line); padding: 16px var(--space); font-size: 0.9rem; color: var(--muted); text-align: center; }
-.reset { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
-.reset p { width: 100%; margin: 0; color: var(--text); }
 
 /* Phones: only the current step keeps its label, so the bar fits on one line. */
 @media (max-width: 640px) {
@@ -147,5 +136,5 @@ main { width: 100%; max-width: var(--max); margin: 0 auto; padding: 32px var(--s
 }
 
 @media print {
-  .site-header, .site-footer, .skip-link { display: none; }
+  .site-header, .skip-link { display: none; }
 }

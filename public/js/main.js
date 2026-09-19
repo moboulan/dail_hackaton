@@ -13,7 +13,6 @@ const stepBar = document.getElementById("steps");
 const backLink = document.getElementById("back");
 const status = document.getElementById("status");
 const storageWarning = document.getElementById("storage-warning");
-const resetZone = document.getElementById("reset");
 
 let state = store.load();
 let route = { module: null, step: null }; // module null = dashboard
@@ -69,7 +68,7 @@ function parseHash() {
   return { module, step: STEP_IDS.has(step) ? step : null };
 }
 
-// The furthest step that is unlocked and already built.
+// Where "Reprendre" lands: the furthest step that is unlocked and already built.
 function furthestBuilt(progress) {
   const open = STEPS.map((s) => s.id).filter((id) => isUnlocked(id, progress) && STEP_SCREENS[id]);
   return open[open.length - 1];
@@ -84,21 +83,18 @@ function show({ moveFocus }) {
     if (location.hash !== "#accueil") history.replaceState(null, "", "#accueil");
   } else {
     const progress = state.modules[parsed.module.id];
-    let step = parsed.step ?? progress.lastStep;
+    let step = parsed.step ?? furthestBuilt(progress);
     if (!STEP_SCREENS[step] || !isUnlocked(step, progress)) {
       // Explain only when a step was asked for explicitly; resuming needs no message.
       if (parsed.step) ctx.notice = lockReason(step);
       step = furthestBuilt(progress);
     }
     route = { module: parsed.module, step };
-    progress.lastStep = step;
-    persist();
     const hash = `#${parsed.module.id}/${step}`;
     if (location.hash !== hash) history.replaceState(null, "", hash);
   }
 
   renderScreen();
-  renderResetLink();
   if (moveFocus) {
     window.scrollTo(0, 0);
     main.querySelector("h1")?.focus();
@@ -148,7 +144,6 @@ document.addEventListener("click", (event) => {
   const target = event.target.closest("[data-action]");
   if (!target) return;
   const action = target.dataset.action;
-  if (RESET_ACTIONS[action]) return RESET_ACTIONS[action]();
   currentScreen().actions[action]?.(target, ctx);
 });
 
@@ -158,35 +153,6 @@ document.addEventListener("change", (event) => {
 });
 
 window.addEventListener("hashchange", () => show({ moveFocus: true }));
-
-// Reset lives in the footer and always asks first, inside the page.
-const RESET_ACTIONS = {
-  "reset-ask"() {
-    resetZone.innerHTML = `
-      <p id="reset-question">Effacer toute votre progression ?</p>
-      <button class="button danger" type="button" data-action="reset-confirm" aria-describedby="reset-question">Oui, tout effacer</button>
-      <button class="button" type="button" data-action="reset-cancel">Annuler</button>`;
-    resetZone.querySelector("[data-action=reset-cancel]").focus();
-  },
-  "reset-cancel"() {
-    renderResetLink();
-    resetZone.querySelector("button").focus();
-  },
-  "reset-confirm"() {
-    store.clear();
-    state = store.freshState();
-    navigate("accueil");
-    announce("Progression effacée.");
-  },
-};
-
-// Offered only once there is progress to erase.
-function renderResetLink() {
-  const anyProgress = Object.values(state.modules).some((p) => p.started);
-  resetZone.innerHTML = anyProgress
-    ? `<button class="link-button" type="button" data-action="reset-ask">Effacer ma progression</button>`
-    : "";
-}
 
 storageWarning.hidden = store.storageAvailable();
 show({ moveFocus: false });

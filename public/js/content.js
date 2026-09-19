@@ -21,7 +21,6 @@ export const MODULES = [
     duration: "10 min",
     customer: "Mme Naïma",
     brief: "Mme Naïma a le nez bouché et dort mal. Elle préfère souvent qu'on lui explique en darija.",
-    doctorIf: "forte fièvre, plus de 7 jours, gêne respiratoire, douleur à l'oreille",
     products: [
       { name: "Respira Mer", form: "Spray d'eau de mer", forWhat: "Nez bouché ou qui coule.", use: "Se moucher, puis une pulvérisation par narine, plusieurs fois par jour.", caution: "Aucune contre-indication. Ne pas partager le flacon." },
       { name: "Gorgéa Miel", form: "Pastilles", forWhat: "Gorge qui gratte.", use: "Laisser fondre en bouche.", caution: "Contient du sucre : pas en cas de diabète." },
@@ -66,7 +65,6 @@ export const MODULES = [
     duration: "10 min",
     customer: "Yasmine",
     brief: "Yasmine a les épaules brûlées par le soleil. Elle retourne à la plage demain.",
-    doctorIf: "cloques, fièvre, grande surface brûlée, enfant en bas âge",
     products: [
       { name: "Apaisa Gel", form: "Gel après-soleil", forWhat: "Coup de soleil léger, peau rouge.", use: "En couche fine, plusieurs fois par jour.", caution: "Pas sur des cloques ni une peau abîmée." },
       { name: "Solaris 50", form: "Crème solaire SPF 50", forWhat: "Protéger la peau du soleil.", use: "Avant l'exposition, à renouveler toutes les 2 heures.", caution: "Aucune contre-indication." },
@@ -111,7 +109,6 @@ export const MODULES = [
     duration: "10 min",
     customer: "M. Driss",
     brief: "M. Driss a mal au ventre depuis deux jours. Il veut « quelque chose qui calme ».",
-    doctorIf: "douleur forte ou localisée, fièvre, vomissements, sang dans les selles",
     products: [
       { name: "Digestia", form: "Comprimés à croquer", forWhat: "Brûlures d'estomac après un repas.", use: "Après le repas.", caution: "Pas en cas de douleur forte ou de fièvre." },
       { name: "Flora+", form: "Gélules", forWhat: "Digestion difficile, ballonnements.", use: "Le matin.", caution: "Ne remplace pas une consultation." },

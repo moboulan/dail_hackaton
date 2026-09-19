@@ -40,7 +40,7 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | ~~One scenario~~ superseded: 3 modules, one per decision to learn: Rhume (complement contraindicated: do not upsell), Coup de soleil (complement fits: offer it), Mal de ventre with a warning sign (sell nothing: refer to a doctor). Licence = 3 modules, one attestation per module. |
 | 19 Sep | The customer writes French with a few common darija words (Latin script); the pharmacist may answer in French or darija. Grading judges respect of the preference, not darija quality. |
 | 19 Sep | The pharmacist types free text. DeepSeek role-plays the customer. |
-| 19 Sep | Feedback: the conversation runs uninterrupted; an optional "Indice" button helps when stuck; at the end an AI debrief grades against a fixed rubric and quotes the pharmacist's own lines. |
+| 19 Sep | Feedback: the conversation runs uninterrupted; at the end an AI debrief grades against a fixed rubric and quotes the pharmacist's own lines. No "Indice" button: the Mémo covers it. |
 | 19 Sep | The pharmacist ends the conversation ("Terminer l'échange"); the customer may say goodbye when satisfied. Hard cap: 12 pharmacist messages. |
 | 19 Sep | ~~Preparation with reflexes and checks~~ superseded: a short Brief (situation + "Votre rayon" product cards) leads straight to the chat. The 4 réflexes are learned through the debrief (they are its scoring grid) and a "Mémo" available in the chat. Checks move to the end-of-module quiz. |
 | 19 Sep | Quiz at the end, with explanations and retry. |
@@ -48,6 +48,8 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | Passing unlocks a printable attestation (name from the fictional profile, module, date, score). No name field. |
 | 19 Sep | Navigation: dashboard, then per module a guided path (Brief, Échange, Bilan, Quiz) with a step bar. Finished steps can be revisited; later steps cannot be skipped. |
 | 19 Sep | Products during the chat: side panel on desktop, "Vos produits" bottom sheet on phones. |
+| 19 Sep | No footer, no global reset (a pharmacist never wipes licence progress; "Réessayer" redoes a module), no empty "Attestations : aucune" line, no "Médecin si" line. Nothing is added now that polish would remove later. |
+| 19 Sep | "Reprendre" always lands on the furthest unlocked step, so revisiting an earlier step never moves the resume point. |
 | 19 Sep | Patterns borrowed: role-play trainers (short scenario card, conversation, skill-scored debrief), Duolingo (start doing at once, tips behind a button), Khan Academy (hints on demand). |
 | 19 Sep | If DeepSeek fails: honest error, typed text kept, retry. No fake scripted customer. A recorded run is kept as backup evidence for the fireside. |
 | 19 Sep | Backend: Node, no dependencies. Local server serves `public/` and `/api/*`; the same handlers deploy as Vercel functions. Hosted on Vercel as well as locally. |
@@ -60,13 +62,13 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 ## Product structure
 
 **Tableau de bord** (`#accueil`): "Bonjour, Dr Alami", licence 2026 (validated / 3), the 3
-module cards (duration, state, score when done, one button), attestations.
+module cards (duration, state, score when done, one button). Attestations appear only once one exists.
 
 **Per module** (`#<module>/<step>`), step bar with 4 steps:
-1. **Brief:** who comes in and why (2 lines), "Votre rayon" product cards.
+1. **Brief:** who comes in and why (2 lines), "Votre rayon" product cards. Referral criteria are not listed: they live in the product cautions and the customer's answers.
    One button: "Commencer l'échange".
 2. **Échange:** chat with the AI customer. "Vos produits" panel (sheet on phones), "Mémo"
-   (the 4 réflexes), "Indice", "Terminer l'échange". One-line data warning at the input.
+   (the 4 réflexes), "Terminer l'échange". One-line data warning at the input.
 3. **Bilan:** score on the 4 réflexes plus product accuracy, the pharmacist's own lines quoted,
    what to improve.
 4. **Quiz:** 3 questions, immediate correction with a one-line reason, retry.
@@ -118,6 +120,16 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 | 7 | Design pass: ask the user, then impeccable.style with `nomadkit-DESIGN.md`. | | todo |
 | 8 | Vercel hosting, key in environment variables. | | todo |
 | 9 | Evidence: test with another person, after screenshots, checklist complete. | | todo |
+
+## Ideas (not planned)
+
+**Shared inventory.** Instead of 3 products per module, every fictional product joins one
+pharmacy inventory, and each new scenario adds its products to it. The pharmacist then picks
+from the whole shelf, which is closer to the real job ("know what you sell") and makes wrong
+choices possible across scenarios (Bronz'Express offered for a cold).
+Costs: the shelf needs search or categories once it grows past about 10 products; the AI
+prompt and the grading must see the whole inventory; the brief would show only the category,
+not a pre-picked shortlist. Worth doing after the 3 modules work, not before.
 
 ## Assumptions
 

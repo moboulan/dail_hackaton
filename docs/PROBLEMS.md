@@ -40,7 +40,7 @@ Evidence: a screenshot in `evidence/before/`, "browser" (reproduced by hand, no 
 | P15 | "Prochaines étapes" keeps listing finished steps as next steps. | 05 | Low | fixed | No progress page. The step bar marks finished steps (announced "terminé"). (step 2) |
 | P16 | The disabled "Démarrer la simulation" button is a dummy gate: the Simulation nav link opens it without preparation. | browser | Medium | fixed | Locked steps cannot be opened: a direct URL redirects to the furthest open step with the reason. (step 2) |
 | P17 | The "NA / Profil fictif" button is not a profile; it opens the progress page. | browser | Low | fixed | Profile button removed. (step 2) |
-| P18 | "Réinitialiser la progression locale" erases everything with no confirmation and no undo. | code | Medium | fixed | Reset asks in the page ("Oui, tout effacer" / "Annuler"), focus on Annuler; only shown once there is progress. (step 2) |
+| P18 | "Réinitialiser la progression locale" erases everything with no confirmation and no undo. | code | Medium | fixed | Global reset removed: a pharmacist never needs to wipe licence progress; redoing a module is \"Réessayer\" (steps 3 and 6). |
 | P19 | The home page calls stage 3 "Modules", the result page calls it "Étape 3 · Résultat". | 01, 04 | Low | fixed | One set of step names, used by the step bar and the page titles. (step 2) |
 
 ## Content and onboarding

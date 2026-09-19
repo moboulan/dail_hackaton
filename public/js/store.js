@@ -10,7 +10,6 @@ let storageWorks = true;
 export function freshProgress() {
   return {
     started: false,
-    lastStep: "brief",
     chat: { messages: [], ended: false },
     debrief: null,
     quiz: {},
@@ -67,7 +66,6 @@ function sanitize(saved) {
     if (!stored || typeof stored !== "object") continue;
     const progress = state.modules[module.id];
     if (typeof stored.started === "boolean") progress.started = stored.started;
-    if (typeof stored.lastStep === "string") progress.lastStep = stored.lastStep;
     if (Array.isArray(stored.chat?.messages)) {
       progress.chat.messages = stored.chat.messages.filter(
         (m) => m && (m.role === "customer" || m.role === "pharmacist") && typeof m.text === "string",

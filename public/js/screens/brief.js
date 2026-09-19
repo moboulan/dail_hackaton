@@ -13,7 +13,6 @@ export default {
 
       <h2>Votre rayon</h2>
       <div class="sheets">${module.products.map(productCard).join("")}</div>
-      <p class="doctor"><strong>Médecin si :</strong> ${esc(module.doctorIf)}.</p>
 
       <button class="button primary next" type="button" data-action="start">Commencer l'échange</button>`;
   },
