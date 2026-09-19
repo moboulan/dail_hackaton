@@ -11,7 +11,7 @@ export default {
       <p class="situation">${esc(module.brief)}</p>
 
       <h2 class="register-title">Votre rayon</h2>
-      <ul class="products">${module.products.map(productLine).join("")}</ul>
+      <ul class="products">${module.products.map((product) => productLine(product)).join("")}</ul>
 
       <button class="button primary next" type="button" data-action="start">Commencer l'échange</button>`;
   },

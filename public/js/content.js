@@ -24,6 +24,7 @@ export const MODULES = [
   {
     id: "rhume",
     exclusions: [{ fact: "tension", products: ["Décongest Nuit"], reason: "Écarté : elle traite sa tension." }],
+    confirmations: [{ fact: "sansdiabete", products: ["Gorgéa Miel"], reason: "Possible : elle n'est pas diabétique." }],
     title: "Rhume",
     duration: "10 min",
     customer: "Mme Imane",
@@ -68,6 +69,7 @@ export const MODULES = [
   },
   {
     id: "soleil",
+    confirmations: [],
     exclusions: [{ fact: "brulure", products: ["Bronz'Express"], reason: "Écarté : pas sur une peau brûlée." }],
     title: "Coup de soleil",
     duration: "10 min",
@@ -113,6 +115,7 @@ export const MODULES = [
   },
   {
     id: "ventre",
+    confirmations: [],
     exclusions: [{ fact: "alerte", products: ["Digestia", "Flora+", "Spasmo Doux"], reason: "Écarté : signe d'alerte, il doit voir un médecin." }],
     title: "Mal de ventre",
     duration: "10 min",

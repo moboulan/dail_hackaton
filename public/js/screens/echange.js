@@ -26,16 +26,20 @@ function memo() {
     <ol class="memo-list">${REFLEXES.map((r) => `<li><strong>${esc(r.title)}</strong><span>${esc(r.body)}</span></li>`).join("")}</ol>`;
 }
 
-// Why a product is ruled out by what the customer has revealed so far, or "".
-function exclusionFor(module, progress, product) {
-  const rule = module.exclusions.find((e) => progress.chat.facts.includes(e.fact) && e.products.includes(product.name));
-  return rule ? rule.reason : "";
+// What the customer has revealed so far says about a product: ruled out, confirmed, or nothing.
+// A ruling-out wins over a confirmation.
+function verdictFor(module, progress, product) {
+  const applies = (rule) => progress.chat.facts.includes(rule.fact) && rule.products.includes(product.name);
+  const out = module.exclusions.find(applies);
+  if (out) return { kind: "excluded", reason: out.reason };
+  const ok = module.confirmations.find(applies);
+  return ok ? { kind: "confirmed", reason: ok.reason } : null;
 }
 
 // The same register lines as the Brief, set compact beside the conversation. Products the
 // conversation has ruled out are greyed with the reason: the payoff of asking the right question.
 function shelf(module, progress) {
-  return `<ul class="products is-compact">${module.products.map((p) => productLine(p, exclusionFor(module, progress, p))).join("")}</ul>`;
+  return `<ul class="products is-compact">${module.products.map((p) => productLine(p, verdictFor(module, progress, p))).join("")}</ul>`;
 }
 
 // New facts from a reply: record them, redraw both shelves (side column and phone sheet).
@@ -48,8 +52,8 @@ function applyFacts(ctx, facts) {
   document.querySelectorAll(".products.is-compact").forEach((list) => {
     list.outerHTML = shelf(module, progress);
   });
-  const ruledOut = module.exclusions.filter((e) => fresh.includes(e.fact));
-  if (ruledOut.length) ctx.announce(ruledOut.map((e) => `${e.products.join(", ")} : ${e.reason}`).join(" "));
+  const changed = [...module.exclusions, ...module.confirmations].filter((rule) => fresh.includes(rule.fact));
+  if (changed.length) ctx.announce(changed.map((rule) => `${rule.products.join(", ")} : ${rule.reason}`).join(" "));
 }
 
 function composer(progress, customer) {

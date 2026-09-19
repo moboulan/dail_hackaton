@@ -21,15 +21,16 @@ export function icon(name, label = "") {
 }
 
 // A product as a line of the pharmacy's register. Same markup on the Brief and the chat shelf.
-// `excluded` is the reason a revealed fact rules the product out, shown on the chat shelf.
-export function productLine(product, excluded = "") {
+// `verdict` comes from what the customer revealed in the chat: { kind: "excluded" | "confirmed",
+// reason }. The Brief passes none.
+export function productLine(product, verdict = null) {
   return `
-    <li class="product${excluded ? " is-excluded" : ""}">
+    <li class="product${verdict ? ` is-${verdict.kind}` : ""}">
       <p class="product-head"><strong>${esc(product.name)}</strong><span class="product-form">${esc(product.form)}</span><span class="price">${product.price} DH</span></p>
       <p class="product-for">${esc(product.forWhat)}</p>
       <p class="product-use">${esc(product.use)}</p>
       ${product.caution ? `<p class="product-caution">${icon("alert")}<span class="visually-hidden">Attention : </span>${esc(product.caution)}</p>` : ""}
-      ${excluded ? `<p class="product-excluded">${icon("cross")}${esc(excluded)}</p>` : ""}
+      ${verdict ? `<p class="product-verdict">${icon(verdict.kind === "excluded" ? "cross" : "check")}${esc(verdict.reason)}</p>` : ""}
     </li>`;
 }
 
