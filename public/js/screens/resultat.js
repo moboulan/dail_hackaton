@@ -29,7 +29,7 @@ function toRework(debrief) {
 export default {
   title: "Résultat",
 
-  render({ module, progress }) {
+  render({ module, progress, state }) {
     const questions = quizQuestions(module, progress);
     const passed = progress.score >= PASS_MARK;
     const key = `${module.id}:${progress.completedAt}`;
@@ -62,7 +62,7 @@ export default {
       </ul>
 
 
-      ${passed ? attestation(module, progress, PROFILE) : ""}`;
+      ${passed ? attestation(module, progress, { name: state.staffName }) : ""}`;
   },
 
   // Bar widths are set here: the CSP forbids inline style attributes.

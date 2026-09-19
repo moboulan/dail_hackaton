@@ -41,7 +41,7 @@ export default {
 
     return `
       <div class="register-head">
-        <h1 tabindex="-1">Bonjour, ${esc(PROFILE.name)}</h1>
+        <h1 tabindex="-1">Bonjour, ${esc(state.staffName)}</h1>
         <p class="licence"><span class="licence-count">${validated}<span class="licence-of">/${MODULES.length}</span></span> modules validés pour la licence ${PROFILE.licenceYear}</p>
       </div>
       <table class="register">
@@ -50,8 +50,7 @@ export default {
         </thead>
         <tbody>${rows}</tbody>
       </table>
-      <a class="button new-case" href="#nouveau-cas">Créer un cas</a>
-      ${modules.filter((m) => passed(state.modules[m.id])).map((m) => attestation(m, state.modules[m.id], PROFILE)).join("")}`;
+      ${modules.filter((m) => passed(state.modules[m.id])).map((m) => attestation(m, state.modules[m.id], { name: state.staffName })).join("")}`;
   },
 
   actions: {

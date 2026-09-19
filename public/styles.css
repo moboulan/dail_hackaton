@@ -389,7 +389,9 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   .outcome { flex-direction: column; align-items: flex-start; gap: 20px; }
   .outcome-score span:first-child { font-size: 4.5rem; }
   .part { grid-template-columns: 5em minmax(0, 1fr) 3.8em; gap: 10px; }
-  .site-header { grid-template-columns: 1fr; }
+  .site-header { grid-template-columns: 1fr auto; }
+  .team-link { grid-column: 2; grid-row: 1; }
+  .steps { grid-column: 1 / -1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -432,3 +434,23 @@ main[data-screen="editor"] { max-width: 820px; }
 .check-field input { width: 20px; height: 20px; accent-color: var(--forest); }
 .product-fields { border: 0; border-bottom: 1px solid var(--rule); padding: 0 0 18px; margin: 0; display: grid; gap: 10px; }
 .product-fields legend { font-weight: 700; padding: 0; margin-bottom: 6px; }
+
+/* Équipe */
+.team-link { justify-self: end; grid-column: 3; color: var(--ink); font-weight: 700; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; padding: 0 4px; border-bottom: 3px solid transparent; }
+.team-link[aria-current] { border-bottom-color: var(--sand); }
+.team-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+main[data-screen="team"] { max-width: 1100px; }
+.table-scroll { overflow-x: auto; }
+.register.team td, .register.team th { white-space: nowrap; }
+.register.team .col-licence { font-size: 1.1rem; }
+.lvl { display: inline-flex; gap: 4px; align-items: center; font-weight: 700; }
+.lvl.is-ok { color: var(--forest); }
+.lvl.is-low { color: var(--warning-text); }
+.lvl.is-none { color: var(--ink-soft); font-weight: 400; }
+.add-staff { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin: 28px 0 40px; }
+.add-staff .field { flex: 1; min-width: 220px; }
+.add-staff .button { min-height: 48px; }
+.cases { display: grid; gap: 14px; justify-items: start; }
+.cases .register-title { justify-self: stretch; }
+.case-list { display: grid; gap: 6px; }
+.case-list span { color: var(--ink-soft); }

@@ -4,6 +4,7 @@ import { icon } from "./html.js";
 import { STEPS, STEP_IDS, isDone, isUnlocked } from "./steps.js";
 import dashboard from "./screens/dashboard.js";
 import editor from "./screens/editor.js";
+import team from "./screens/team.js";
 import brief from "./screens/brief.js";
 import echange from "./screens/echange.js";
 import bilan from "./screens/bilan.js";
@@ -14,16 +15,33 @@ const STEP_SCREENS = { brief, echange, bilan, quiz, resultat };
 
 const main = document.getElementById("main");
 const stepBar = document.getElementById("steps");
+const teamLink = document.getElementById("team-link");
 const status = document.getElementById("status");
 const storageWarning = document.getElementById("storage-warning");
 
-let state = store.load();
+let pharmacy = store.load();
+let state = store.view(pharmacy); // the current person's record plus the shared cases
 let route = { module: null, step: null, page: "dashboard" }; // module null = dashboard or editor
 
 // Shared with every screen. Inside a module, update() hands over that module's progress.
 const ctx = {
   get state() {
     return state;
+  },
+  get pharmacy() {
+    return pharmacy;
+  },
+  // Team space: switch the person using this computer, or add one.
+  switchStaff(id) {
+    pharmacy.current = id;
+    state = store.view(pharmacy);
+    persist();
+  },
+  addStaff(name) {
+    const id = `p${Date.now()}`;
+    pharmacy.staff.push({ id, name });
+    pharmacy.records[id] = store.freshRecord();
+    persist();
   },
   get module() {
     return route.module;
@@ -54,7 +72,7 @@ function navigate(hash) {
 }
 
 function persist() {
-  store.save(state);
+  store.save(pharmacy);
   storageWarning.hidden = store.storageAvailable();
 }
 
@@ -70,6 +88,7 @@ function announce(message) {
 function parseHash() {
   const [moduleId, step] = location.hash.slice(1).split("/");
   if (moduleId === "nouveau-cas") return { module: null, step: null, page: "editor" };
+  if (moduleId === "equipe") return { module: null, step: null, page: "team" };
   const module = findModule(moduleId, state);
   if (!module) return { module: null, step: null };
   return { module, step: STEP_IDS.has(step) ? step : null };
@@ -84,8 +103,8 @@ function furthestBuilt(progress) {
 function show({ moveFocus }) {
   const parsed = parseHash();
 
-  if (parsed.page === "editor") {
-    route = { module: null, step: null, page: "editor" };
+  if (parsed.page) {
+    route = { module: null, step: null, page: parsed.page };
   } else if (!parsed.module) {
     route = { module: null, step: null, page: "dashboard" };
     if (location.hash !== "#accueil") history.replaceState(null, "", "#accueil");
@@ -108,7 +127,7 @@ function show({ moveFocus }) {
 
 function currentScreen() {
   if (route.module) return STEP_SCREENS[route.step];
-  return route.page === "editor" ? editor : dashboard;
+  return { editor, team }[route.page] ?? dashboard;
 }
 
 function renderScreen() {
@@ -125,6 +144,8 @@ function renderScreen() {
 function renderStepBar() {
   const inModule = Boolean(route.module);
   stepBar.hidden = !inModule;
+  teamLink.hidden = inModule;
+  teamLink.toggleAttribute("aria-current", route.page === "team");
   if (!inModule) return;
 
   const progress = state.modules[route.module.id];
