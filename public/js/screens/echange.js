@@ -122,7 +122,7 @@ function showReply(ctx, form, reply) {
 function fitTextarea(textarea) {
   textarea.style.height = "auto";
   textarea.style.height = `${Math.min(textarea.scrollHeight + 3, 160)}px`; // + the 1.5 px borders
-  textarea.style.overflowY = textarea.scrollHeight > 157 ? "auto" : "hidden";
+  textarea.classList.toggle("is-tall", textarea.scrollHeight > 157);
 }
 
 // The customer walks in and speaks first.

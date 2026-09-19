@@ -23,6 +23,7 @@
   --rule-strong: #cdb899;
   --wash: #f6ead9;
   --panel: #f3ece1;
+  --panel-dark: #e8dcc9;
   --bubble-own: #e9d6bb;
   --sand-ink: #2b1d0e;
   --ocean-text: #0e6f8a;
@@ -224,18 +225,20 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .message.pharmacist { align-self: flex-end; background: var(--bubble-own); border-bottom-right-radius: 4px; }
 .chat-status { min-height: 1.5em; padding: 0 16px; color: var(--ink-soft); font-size: 0.95rem; }
 .chat-status.is-error { color: var(--error-text); }
-.composer { display: flex; gap: 8px; align-items: flex-end; padding: 10px 12px; background: var(--panel); border-top: 1px solid var(--rule-strong); }
+.composer { display: flex; gap: 8px; align-items: flex-end; padding: 10px 12px; background: var(--panel-dark); }
 .composer textarea {
-  flex: 1; font: inherit; padding: 10px 14px; min-height: 48px; height: 48px; resize: none; overflow-y: hidden; line-height: 1.4;
+  flex: 1; font: inherit; padding: 10px 14px; min-height: 48px; height: 48px; resize: none; overflow-y: hidden !important; line-height: 1.4;
   scrollbar-width: none;
   border: 1.5px solid var(--rule-strong); border-radius: var(--radius); background: var(--surface); color: var(--ink);
 }
+.composer textarea::-webkit-scrollbar { display: none; }
+.composer textarea.is-tall { overflow-y: auto !important; }
 .composer textarea:focus { border-color: var(--ocean); outline: none; box-shadow: 0 0 0 3px rgb(8 145 178 / 0.18); }
 .composer .button { min-height: 48px; }
 .chat-panel .chat-closed { margin: 10px; }
-.chat-panel .end-zone { padding: 0 12px 6px; background: var(--panel); }
+.chat-panel .end-zone { padding: 0 12px 6px; background: var(--panel-dark); }
 .chat-panel .end-zone:has(> [hidden]:only-child) { display: none; }
-.composer-note { font-size: 0.85rem; color: var(--ink-soft); padding: 0 16px 10px; background: var(--panel); }
+.composer-note { font-size: 0.85rem; color: var(--ink-soft); padding: 0 16px 10px; background: var(--panel-dark); }
 .composer-note:empty { display: none; }
 .end-zone { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .end-zone p { width: 100%; }
