@@ -37,16 +37,18 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | Topic: communication plus product advice plus ethical upselling. |
 | 19 Sep | Products are fictional, each with a product sheet (indication, contraindications, complementary product). The sheet is the only source of product facts for the AI and the grading. No real drugs, no real doses. |
 | 19 Sep | Upselling scores only when it fits the customer's need; offering it despite a contraindication or without relevance is penalised. |
-| 19 Sep | One scenario, done well: customer prefers darija explanations, asks about a fictional cold product, has a contraindication to the complementary product. |
+| 19 Sep | ~~One scenario~~ superseded: 3 modules, one per decision to learn: Rhume (complement contraindicated: do not upsell), Coup de soleil (complement fits: offer it), Mal de ventre with a warning sign (sell nothing: refer to a doctor). Licence = 3 modules, one attestation per module. |
 | 19 Sep | The customer writes French with a few common darija words (Latin script); the pharmacist may answer in French or darija. Grading judges respect of the preference, not darija quality. |
 | 19 Sep | The pharmacist types free text. DeepSeek role-plays the customer. |
 | 19 Sep | Feedback: the conversation runs uninterrupted; an optional "Indice" button helps when stuck; at the end an AI debrief grades against a fixed rubric and quotes the pharmacist's own lines. |
 | 19 Sep | The pharmacist ends the conversation ("Terminer l'échange"); the customer may say goodbye when satisfied. Hard cap: 12 pharmacist messages. |
-| 19 Sep | Preparation: read the fictional product sheets and the 4 reflexes, then 2 quick checks (retry allowed) unlock the conversation. The sheet stays viewable during the chat. |
+| 19 Sep | ~~Preparation with reflexes and checks~~ superseded: a short Brief (situation + "Votre rayon" product cards) leads straight to the chat. The 4 réflexes are learned through the debrief (they are its scoring grid) and a "Mémo" available in the chat. Checks move to the end-of-module quiz. |
 | 19 Sep | Quiz at the end, with explanations and retry. |
 | 19 Sep | Final score = 50 % conversation rubric + 50 % final quiz. Pass mark 80 %. Unlimited retries. |
 | 19 Sep | Passing unlocks a printable attestation (name from the fictional profile, module, date, score). No name field. |
-| 19 Sep | Navigation: guided path with one clear "Continuer" button and a step indicator. Finished steps can be revisited; later steps cannot be skipped. |
+| 19 Sep | Navigation: dashboard, then per module a guided path (Brief, Échange, Bilan, Quiz) with a step bar. Finished steps can be revisited; later steps cannot be skipped. |
+| 19 Sep | Products during the chat: side panel on desktop, "Vos produits" bottom sheet on phones. |
+| 19 Sep | Patterns borrowed: role-play trainers (short scenario card, conversation, skill-scored debrief), Duolingo (start doing at once, tips behind a button), Khan Academy (hints on demand). |
 | 19 Sep | If DeepSeek fails: honest error, typed text kept, retry. No fake scripted customer. A recorded run is kept as backup evidence for the fireside. |
 | 19 Sep | Backend: Node, no dependencies. Local server serves `public/` and `/api/*`; the same handlers deploy as Vercel functions. Hosted on Vercel as well as locally. |
 | 19 Sep | API key only on the server (`.env` locally, Vercel environment variables when hosted). Never in the browser, never committed. |
@@ -55,23 +57,27 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | First screen is a dashboard (fictional profile Dr Alami, licence status, the module, attestations), not an explainer. Minimal copy everywhere: the user is a pharmacist who does not want to read. |
 | 19 Sep | The data warning is one line at the chat input only ("Cas fictif : n'écrivez aucune donnée réelle de patient."), not on the dashboard. |
 
-## Guided path (5 screens, rebuilt from scratch)
+## Product structure
 
-No backward compatibility with the starter: new code, new storage key, no old routes.
-No menu and no progress page: a step bar is the only navigation. Finished steps can be
-revisited, later ones cannot be skipped. First visit opens the intro; later visits open the
-step where the pharmacist stopped.
+**Tableau de bord** (`#accueil`): "Bonjour, Dr Alami", licence 2026 (validated / 3), the 3
+module cards (duration, state, score when done, one button), attestations.
 
-1. **Tableau de bord** (`#accueil`): "Bonjour, Dr Alami", licence status (0 / 1 module),
-   the module card (15 min, state, one button: Commencer / Reprendre), attestations.
-2. **Préparation** (`#preparation`): fictional product sheets, the 4 reflexes, 2 quick checks
-   with explanation and retry. "Continuer" unlocks when both are right.
-3. **Échange** (`#echange`): full-screen chat with the AI customer, typed replies,
-   "Fiche produit", "Indice", "Terminer l'échange". One-line data warning at the input.
-4. **Bilan** (`#bilan`): debrief with the pharmacist's own quotes, then the final quiz below.
-   "Voir mon résultat".
-5. **Résultat** (`#resultat`): combined score, pass or not, what to redo; when passed,
-   "Imprimer l'attestation". The dashboard then shows 1 / 1 and the attestation.
+**Per module** (`#<module>/<step>`), step bar with 4 steps:
+1. **Brief:** who comes in and why (2 lines), "Votre rayon" product cards.
+   One button: "Commencer l'échange".
+2. **Échange:** chat with the AI customer. "Vos produits" panel (sheet on phones), "Mémo"
+   (the 4 réflexes), "Indice", "Terminer l'échange". One-line data warning at the input.
+3. **Bilan:** score on the 4 réflexes plus product accuracy, the pharmacist's own lines quoted,
+   what to improve.
+4. **Quiz:** 3 questions, immediate correction with a one-line reason, retry.
+   End: module score (50 % bilan + 50 % quiz). Pass at 80 %: attestation. Back to dashboard.
+
+**Modules** (all fictional):
+| Module | Customer | Decision to learn |
+| --- | --- | --- |
+| Rhume | Mme Naïma, prefers darija, treats her blood pressure (revealed only if asked) | The night decongestant is contraindicated: do not upsell it; the throat lozenge fits. |
+| Coup de soleil | Young customer back from the beach | The complementary product fits: offer it. |
+| Mal de ventre | Customer with a warning sign (revealed if asked) | Sell nothing: refer to a doctor. |
 
 ## Conversation design
 
@@ -104,13 +110,14 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 | # | Step | Fixes | Status |
 | --- | --- | --- | --- |
 | 1 | Repo skeleton, baseline, docs, before screenshots (desktop and mobile). | | done |
-| 2 | New app shell (router, step bar, resume, safe storage, focus and scroll handling, inline status, reset with confirmation, mobile layout) plus Accueil and Préparation with the fictional content. | P07 (header), P15 to P28 as they apply | done |
-| 3 | Échange: Node server, `/api/chat`, persona, PII redaction, limits, all states, "Indice", end button. | P01 to P07 | todo |
-| 4 | Bilan: `/api/debrief` rubric grading with quotes, then the final quiz with explanations and retry. | P05, P08 to P13 | todo |
-| 5 | Résultat: combined score, 80 % pass, printable attestation. | P14 | todo |
-| 6 | Design pass: ask the user, then apply impeccable.style with their `nomadkit-DESIGN.md` (designmd.ai). | | todo |
-| 7 | Vercel hosting, key in environment variables. | | todo |
-| 8 | Evidence: test with another person, after screenshots, checklist complete. | | todo |
+| 2 | First rebuild: shell, router, step bar, storage, focus handling, reset (kept); intro and preparation (replaced by step 3). | P15 to P28 | done |
+| 3 | Module engine: 3 modules as content, dashboard with 3 cards and licence status, Brief screen, per-module routes and state. | | todo |
+| 4 | Échange: Node server, `/api/chat`, persona per module, PII redaction, limits, all states, products panel, Mémo, Indice, end button. | P01 to P07 | todo |
+| 5 | Bilan: `/api/debrief`, rubric scoring with quotes. | P08 | todo |
+| 6 | Quiz, module score, attestation, dashboard update. | P05, P09 to P14 | todo |
+| 7 | Design pass: ask the user, then impeccable.style with `nomadkit-DESIGN.md`. | | todo |
+| 8 | Vercel hosting, key in environment variables. | | todo |
+| 9 | Evidence: test with another person, after screenshots, checklist complete. | | todo |
 
 ## Assumptions
 
