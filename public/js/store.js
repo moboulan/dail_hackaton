@@ -18,8 +18,10 @@ export function freshProgress() {
   };
 }
 
+// memoHints: réflexe id -> the better phrasing from the last Bilan that missed it. Kept across
+// modules and retries so the Mémo can remind the pharmacist what they forgot.
 export function freshState() {
-  return { modules: Object.fromEntries(MODULES.map((m) => [m.id, freshProgress()])) };
+  return { modules: Object.fromEntries(MODULES.map((m) => [m.id, freshProgress()])), memoHints: {} };
 }
 
 export function load() {
@@ -62,6 +64,11 @@ export function storageAvailable() {
 // Keep only fields of the expected type, so a hand-edited or stale entry cannot break rendering.
 function sanitize(saved) {
   const state = freshState();
+  if (saved?.memoHints && typeof saved.memoHints === "object") {
+    for (const [id, hint] of Object.entries(saved.memoHints)) {
+      if (typeof hint === "string") state.memoHints[id] = hint;
+    }
+  }
   for (const module of MODULES) {
     const stored = saved?.modules?.[module.id];
     if (!stored || typeof stored !== "object") continue;

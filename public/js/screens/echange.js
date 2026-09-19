@@ -20,10 +20,15 @@ function messageItem(message, customer) {
   return `<li class="message ${message.role}"><span class="speaker">${esc(who)}</span>${esc(message.text)}</li>`;
 }
 
-function memo() {
+// The 4 réflexes; the ones missed in an earlier Bilan carry that Bilan's better phrasing.
+function memo(state) {
+  const item = (r) => {
+    const hint = state.memoHints[r.id];
+    return `<li${hint ? ' class="has-hint"' : ""}><strong>${esc(r.title)}</strong><span>${esc(r.body)}</span>${hint ? `<span class="memo-hint"><span class="speaker">La dernière fois</span>« ${esc(hint)} »</span>` : ""}</li>`;
+  };
   return `
     <h2 class="register-title">Mémo</h2>
-    <ol class="memo-list">${REFLEXES.map((r) => `<li><strong>${esc(r.title)}</strong><span>${esc(r.body)}</span></li>`).join("")}</ol>`;
+    <ol class="memo-list">${REFLEXES.map(item).join("")}</ol>`;
 }
 
 // What the customer has revealed so far says about a product: ruled out, confirmed, or nothing.
@@ -139,10 +144,10 @@ async function openConversation(ctx) {
 export default {
   title: "Échange",
 
-  render({ module, progress }) {
+  render({ module, progress, state }) {
     return `
       <div class="chat-layout">
-        <aside class="memo" aria-label="Mémo">${memo()}</aside>
+        <aside class="memo" aria-label="Mémo">${memo(state)}</aside>
         <section class="chat" aria-labelledby="chat-title">
           <div class="chat-head">
             <h1 id="chat-title" tabindex="-1">${esc(module.customer)}</h1>
@@ -160,7 +165,7 @@ export default {
           <button class="button" type="button" data-action="shelf-close">Fermer</button>
         </div>
         ${shelf(module, progress)}
-        <div class="dialog-memo">${memo()}</div>
+        <div class="dialog-memo">${memo(state)}</div>
       </dialog>`;
   },
 

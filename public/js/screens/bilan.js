@@ -1,7 +1,9 @@
 // Debrief of the conversation: computed once by the AI grader, then stored. No score here:
 // scores belong to the Résultat. Criteria the situation did not call for are not shown.
 
-import { CRITERIA } from "../content.js";
+import { CRITERIA, REFLEXES } from "../content.js";
+
+const REFLEX_IDS = new Set(REFLEXES.map((r) => r.id));
 import { requestDebrief } from "../api.js";
 import { esc, icon } from "../html.js";
 
@@ -51,6 +53,15 @@ function criteriaList(debrief, customer) {
     .join("");
 }
 
+// Feed the Mémo: a missed réflexe keeps its better phrasing as a hint, a mastered one loses it.
+function rememberForMemo(state, debrief) {
+  for (const c of debrief.criteria) {
+    if (!REFLEX_IDS.has(c.id) || c.score === null) continue;
+    if (c.score === 2) delete state.memoHints[c.id];
+    else if (c.better) state.memoHints[c.id] = c.better;
+  }
+}
+
 async function grade(ctx) {
   const { module, progress } = ctx;
   loading = true;
@@ -58,6 +69,7 @@ async function grade(ctx) {
     const debrief = await requestDebrief(module, progress.chat.messages);
     loading = false;
     progress.debrief = debrief;
+    rememberForMemo(ctx.state, debrief);
     ctx.save();
     if (document.getElementById("bilan-pending")) ctx.update(() => {}, { focus: "h1" });
   } catch (error) {

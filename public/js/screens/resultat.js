@@ -49,8 +49,9 @@ export default {
           <div class="result-actions">
             ${passed
               ? `<button class="button primary" type="button" data-action="print">Imprimer l'attestation</button>
-                 <a class="button" href="#accueil">Tableau de bord</a>`
-              : `<button class="button primary" type="button" data-action="restart">Recommencer le module</button>`}
+                 <a class="button" href="#${module.id}/quiz">Voir le quiz corrigé</a>`
+              : `<button class="button primary" type="button" data-action="restart">Recommencer le module</button>
+                 <a class="button" href="#${module.id}/quiz">Voir le quiz corrigé</a>`}
           </div>
         </div>
       </section>
@@ -60,7 +61,6 @@ export default {
         ${bar("Quiz", quizScore(questions, progress.quiz))}
       </ul>
 
-      <a class="button" href="#${module.id}/quiz">Voir le quiz corrigé</a>
 
       ${passed ? attestation(module, progress, PROFILE) : ""}`;
   },
