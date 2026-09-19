@@ -46,10 +46,10 @@ export function stamp(score, isoDate, { pressing = false } = {}) {
 }
 
 // The printable attestation. Hidden on screen; printAttestation() prints exactly this one.
-export function attestation(module, progress, profile) {
+export function attestation(module, progress, profile, key = module.id) {
   const date = new Date(progress.completedAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
   return `
-    <section class="attestation" data-attestation="${esc(module.id)}" aria-hidden="true">
+    <section class="attestation" data-attestation="${esc(key)}" aria-hidden="true">
       <p class="attestation-brand">BP Learning · Formation continue</p>
       <h2>Attestation de formation</h2>
       <p><strong>${esc(profile.name)}</strong> a validé le module « ${esc(module.title)} »</p>

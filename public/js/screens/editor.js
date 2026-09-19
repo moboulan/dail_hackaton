@@ -1,8 +1,8 @@
-// "Créer un cas": the pharmacy writes a new training case. It is saved in this browser, listed on
-// the dashboard and played with the same AI flow; the server validates every field again.
+// "Créer un cas" (manager only): a new training case for the team. Saved on this computer, it
+// appears in every pharmacist's register and plays with the same AI flow; the server validates
+// every field again.
 
 import { esc } from "../html.js";
-import { freshProgress } from "../store.js";
 
 const MAX_SHORT = 60;
 const MAX_LONG = 400;
@@ -79,8 +79,8 @@ export default {
           ${field("expected", "Ce qu'un bon pharmacien fait", { long: true, required: true, placeholder: "Demander s'il fume et depuis quand, conseiller Toux Calm, orienter vers un médecin si fièvre." })}
         </section>
         <div class="result-actions">
-          <button class="button primary" type="submit">Enregistrer et commencer</button>
-          <a class="button" href="#accueil">Annuler</a>
+          <button class="button primary" type="submit">Enregistrer le cas</button>
+          <a class="button" href="#equipe">Annuler</a>
         </div>
       </form>`;
   },
@@ -102,9 +102,9 @@ export default {
       };
       ctx.update((state) => {
         state.customModules.push(raw);
-        state.modules[id] = freshProgress();
       });
-      ctx.navigate(`${id}/brief`);
+      ctx.navigate("equipe");
+      ctx.announce(`Cas « ${raw.title} » ajouté : l'équipe le voit dans son registre.`);
     },
   },
 };

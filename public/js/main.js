@@ -15,7 +15,7 @@ const STEP_SCREENS = { brief, echange, bilan, quiz, resultat };
 
 const main = document.getElementById("main");
 const stepBar = document.getElementById("steps");
-const teamLink = document.getElementById("team-link");
+const account = document.getElementById("account");
 const status = document.getElementById("status");
 const storageWarning = document.getElementById("storage-warning");
 
@@ -31,18 +31,7 @@ const ctx = {
   get pharmacy() {
     return pharmacy;
   },
-  // Team space: switch the person using this computer, or add one.
-  switchStaff(id) {
-    pharmacy.current = id;
-    state = store.view(pharmacy);
-    persist();
-  },
-  addStaff(name) {
-    const id = `p${Date.now()}`;
-    pharmacy.staff.push({ id, name });
-    pharmacy.records[id] = store.freshRecord();
-    persist();
-  },
+
   get module() {
     return route.module;
   },
@@ -103,8 +92,15 @@ function furthestBuilt(progress) {
 function show({ moveFocus }) {
   const parsed = parseHash();
 
+  // The manager only has the team pages; pharmacists never see them.
+  const allowed = state.isAdmin ? ["team", "editor"] : ["dashboard"];
+  if (state.isAdmin && !parsed.page) parsed.page = "team";
+  if (parsed.page && !allowed.includes(parsed.page)) parsed.page = state.isAdmin ? "team" : null;
+  if (state.isAdmin) parsed.module = null;
   if (parsed.page) {
     route = { module: null, step: null, page: parsed.page };
+    const hash = parsed.page === "team" ? "#equipe" : "#nouveau-cas";
+    if (location.hash !== hash) history.replaceState(null, "", hash);
   } else if (!parsed.module) {
     route = { module: null, step: null, page: "dashboard" };
     if (location.hash !== "#accueil") history.replaceState(null, "", "#accueil");
@@ -144,8 +140,7 @@ function renderScreen() {
 function renderStepBar() {
   const inModule = Boolean(route.module);
   stepBar.hidden = !inModule;
-  teamLink.hidden = inModule;
-  teamLink.toggleAttribute("aria-current", route.page === "team");
+
   if (!inModule) return;
 
   const progress = state.modules[route.module.id];
@@ -197,5 +192,21 @@ syncViewport();
 
 window.addEventListener("hashchange", () => show({ moveFocus: true }));
 
+// Account menu: who is using the pharmacy computer.
+function renderAccount() {
+  const options = [...store.STAFF, store.ADMIN]
+    .map((a) => `<option value="${a.id}" ${a.id === pharmacy.current ? "selected" : ""}>${a.name}</option>`)
+    .join("");
+  account.innerHTML = `<label class="visually-hidden" for="account-select">Compte</label><select id="account-select">${options}</select>`;
+}
+
+account.addEventListener("change", (event) => {
+  pharmacy.current = event.target.value;
+  state = store.view(pharmacy);
+  persist();
+  navigate(state.isAdmin ? "equipe" : "accueil");
+});
+
+renderAccount();
 storageWarning.hidden = store.storageAvailable();
 show({ moveFocus: false });

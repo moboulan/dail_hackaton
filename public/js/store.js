@@ -2,13 +2,18 @@
 // is guarded: private windows and strict settings can block localStorage, and the app must keep
 // working without it.
 //
-// pharmacy = { staff: [{ id, name }], current, records: { [staffId]: { modules, memoHints } },
+// pharmacy = { staff: [{ id, name }], current (a staff id or "admin"), records: { [staffId]: { modules, memoHints } },
 //              customModules: [...] }   (cases written in the editor belong to the pharmacy)
 
 import { MODULES } from "./content.js";
 
-const KEY = "bp-learning-eagle-v4";
-const FIRST_STAFF = { id: "alami", name: "Dr Alami" };
+const KEY = "bp-learning-eagle-v5";
+// Fixed accounts on the pharmacy computer: two pharmacists and the manager (admin).
+export const STAFF = [
+  { id: "alami", name: "Dr Alami" },
+  { id: "bennani", name: "Dr Bennani" },
+];
+export const ADMIN = { id: "admin", name: "Responsable" };
 
 let storageWorks = true;
 
@@ -29,16 +34,24 @@ export function freshRecord() {
 }
 
 export function freshPharmacy() {
-  return { staff: [{ ...FIRST_STAFF }], current: FIRST_STAFF.id, records: { [FIRST_STAFF.id]: freshRecord() }, customModules: [] };
+  return {
+    staff: STAFF.map((s) => ({ ...s })),
+    current: STAFF[0].id,
+    records: Object.fromEntries(STAFF.map((s) => [s.id, freshRecord()])),
+    customModules: [],
+  };
 }
 
 // What the screens read and change: the current person's record plus the shared cases.
 // The objects are the pharmacy's own, so changes persist with save(pharmacy).
 export function view(pharmacy) {
+  if (pharmacy.current === ADMIN.id) {
+    return { modules: {}, memoHints: {}, customModules: pharmacy.customModules, staffName: ADMIN.name, isAdmin: true };
+  }
   const record = pharmacy.records[pharmacy.current];
   for (const c of pharmacy.customModules) record.modules[c.id] ??= freshProgress();
   const person = pharmacy.staff.find((s) => s.id === pharmacy.current);
-  return { modules: record.modules, memoHints: record.memoHints, customModules: pharmacy.customModules, staffName: person.name };
+  return { modules: record.modules, memoHints: record.memoHints, customModules: pharmacy.customModules, staffName: person.name, isAdmin: false };
 }
 
 export function load() {
@@ -78,15 +91,12 @@ function sanitizePharmacy(saved) {
       (c) => c && /^cas-\d{6,}$/.test(c.id) && typeof c.title === "string" && Array.isArray(c.products),
     );
   }
-  if (Array.isArray(saved?.staff)) {
-    const staff = saved.staff.filter((s) => s && typeof s.id === "string" && typeof s.name === "string" && s.name.trim());
-    if (staff.length) pharmacy.staff = staff;
-  }
   const ids = [...MODULES.map((m) => m.id), ...pharmacy.customModules.map((c) => c.id)];
   pharmacy.records = Object.fromEntries(
     pharmacy.staff.map((s) => [s.id, sanitizeRecord(saved?.records?.[s.id], ids)]),
   );
-  pharmacy.current = pharmacy.staff.some((s) => s.id === saved?.current) ? saved.current : pharmacy.staff[0].id;
+  const accounts = [...pharmacy.staff.map((s) => s.id), ADMIN.id];
+  pharmacy.current = accounts.includes(saved?.current) ? saved.current : pharmacy.staff[0].id;
   return pharmacy;
 }
 
