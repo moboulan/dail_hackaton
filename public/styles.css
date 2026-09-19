@@ -192,6 +192,11 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .products.is-compact .product { padding: 12px 0; font-size: 0.9rem; }
 .products.is-compact .product-head strong { font-size: 1rem; }
 .products.is-compact .product-form { display: none; }
+.product { transition: opacity 400ms var(--ease-out); }
+.product.is-excluded > :not(.product-excluded) { opacity: 0.4; }
+.product.is-excluded .product-head strong { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.product-excluded { display: flex; gap: 6px; align-items: flex-start; font-weight: 700; color: var(--ink); margin-top: 4px; }
+.product-excluded .icon { color: var(--error-text); margin-top: 0.2em; }
 
 .chat { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .chat-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 2px solid var(--ink); }

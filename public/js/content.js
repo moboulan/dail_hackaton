@@ -23,6 +23,7 @@ export const CRITERIA = [
 export const MODULES = [
   {
     id: "rhume",
+    exclusions: [{ fact: "tension", products: ["Décongest Nuit"], reason: "Écarté : elle traite sa tension." }],
     title: "Rhume",
     duration: "10 min",
     customer: "Mme Imane",
@@ -67,6 +68,7 @@ export const MODULES = [
   },
   {
     id: "soleil",
+    exclusions: [{ fact: "brulure", products: ["Bronz'Express"], reason: "Écarté : pas sur une peau brûlée." }],
     title: "Coup de soleil",
     duration: "10 min",
     customer: "Yasmine",
@@ -111,6 +113,7 @@ export const MODULES = [
   },
   {
     id: "ventre",
+    exclusions: [{ fact: "alerte", products: ["Digestia", "Flora+", "Spasmo Doux"], reason: "Écarté : signe d'alerte, il doit voir un médecin." }],
     title: "Mal de ventre",
     duration: "10 min",
     customer: "M. Driss",

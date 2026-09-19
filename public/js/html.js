@@ -21,13 +21,15 @@ export function icon(name, label = "") {
 }
 
 // A product as a line of the pharmacy's register. Same markup on the Brief and the chat shelf.
-export function productLine(product) {
+// `excluded` is the reason a revealed fact rules the product out, shown on the chat shelf.
+export function productLine(product, excluded = "") {
   return `
-    <li class="product">
+    <li class="product${excluded ? " is-excluded" : ""}">
       <p class="product-head"><strong>${esc(product.name)}</strong><span class="product-form">${esc(product.form)}</span><span class="price">${product.price} DH</span></p>
       <p class="product-for">${esc(product.forWhat)}</p>
       <p class="product-use">${esc(product.use)}</p>
       ${product.caution ? `<p class="product-caution">${icon("alert")}<span class="visually-hidden">Attention : </span>${esc(product.caution)}</p>` : ""}
+      ${excluded ? `<p class="product-excluded">${icon("cross")}${esc(excluded)}</p>` : ""}
     </li>`;
 }
 

@@ -26,9 +26,30 @@ function memo() {
     <ol class="memo-list">${REFLEXES.map((r) => `<li><strong>${esc(r.title)}</strong><span>${esc(r.body)}</span></li>`).join("")}</ol>`;
 }
 
-// The same register lines as the Brief, set compact beside the conversation.
-function shelf(module) {
-  return `<ul class="products is-compact">${module.products.map(productLine).join("")}</ul>`;
+// Why a product is ruled out by what the customer has revealed so far, or "".
+function exclusionFor(module, progress, product) {
+  const rule = module.exclusions.find((e) => progress.chat.facts.includes(e.fact) && e.products.includes(product.name));
+  return rule ? rule.reason : "";
+}
+
+// The same register lines as the Brief, set compact beside the conversation. Products the
+// conversation has ruled out are greyed with the reason: the payoff of asking the right question.
+function shelf(module, progress) {
+  return `<ul class="products is-compact">${module.products.map((p) => productLine(p, exclusionFor(module, progress, p))).join("")}</ul>`;
+}
+
+// New facts from a reply: record them, redraw both shelves (side column and phone sheet).
+function applyFacts(ctx, facts) {
+  const { module, progress } = ctx;
+  const fresh = (facts || []).filter((f) => !progress.chat.facts.includes(f));
+  if (!fresh.length) return;
+  progress.chat.facts.push(...fresh);
+  ctx.save();
+  document.querySelectorAll(".products.is-compact").forEach((list) => {
+    list.outerHTML = shelf(module, progress);
+  });
+  const ruledOut = module.exclusions.filter((e) => fresh.includes(e.fact));
+  if (ruledOut.length) ctx.announce(ruledOut.map((e) => `${e.products.join(", ")} : ${e.reason}`).join(" "));
 }
 
 function composer(progress, customer) {
@@ -98,10 +119,11 @@ async function openConversation(ctx) {
   waiting = true;
   setStatus(`${esc(module.customer)} écrit…`);
   try {
-    const { reply } = await askCustomer(module, []);
+    const { reply, facts } = await askCustomer(module, []);
     waiting = false;
     if (progress.chat.messages.length) return; // opened meanwhile in another tab
     progress.chat.messages.push({ role: "customer", text: reply });
+    progress.chat.facts.push(...(facts || []).filter((f) => !progress.chat.facts.includes(f)));
     ctx.save();
     if (document.getElementById("messages")) ctx.update(() => {}, { focus: "#reply" });
   } catch (error) {
@@ -126,14 +148,14 @@ export default {
           <p id="chat-status" class="chat-status" role="status" aria-live="polite"></p>
           ${progress.chat.ended ? `<p class="chat-closed">Échange terminé.</p>` : composer(progress, module.customer)}
         </section>
-        <aside class="shelf" aria-labelledby="shelf-title"><h2 id="shelf-title" class="register-title">Vos produits</h2>${shelf(module)}</aside>
+        <aside class="shelf" aria-labelledby="shelf-title"><h2 id="shelf-title" class="register-title">Vos produits</h2>${shelf(module, progress)}</aside>
       </div>
       <dialog id="shelf-dialog" class="shelf-dialog" aria-labelledby="shelf-dialog-title">
         <div class="dialog-head">
           <h2 id="shelf-dialog-title" class="register-title">Vos produits</h2>
           <button class="button" type="button" data-action="shelf-close">Fermer</button>
         </div>
-        ${shelf(module)}
+        ${shelf(module, progress)}
         <div class="dialog-memo">${memo()}</div>
       </dialog>`;
   },
@@ -178,12 +200,18 @@ export default {
       form.querySelector("#send").disabled = true;
       setStatus(`${esc(module.customer)} écrit…`);
       try {
-        const { reply, left } = await askCustomer(module, progress.chat.messages);
+        const { reply, left, facts } = await askCustomer(module, progress.chat.messages);
         progress.chat.messages.push({ role: "customer", text: reply });
         progress.chat.left = left;
         ctx.save();
         waiting = false;
-        if (form.isConnected) showReply(ctx, form, reply);
+        if (form.isConnected) {
+          showReply(ctx, form, reply);
+          applyFacts(ctx, facts);
+        } else {
+          progress.chat.facts.push(...(facts || []).filter((f) => !progress.chat.facts.includes(f)));
+          ctx.save();
+        }
         ctx.announce(`${module.customer} : ${reply}`);
       } catch (error) {
         // Not delivered: take the message back out and return the text to the box.
