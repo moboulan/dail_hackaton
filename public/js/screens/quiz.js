@@ -1,15 +1,24 @@
-// 3 questions on what the pharmacist missed in the conversation. Answers are chosen freely,
-// then submitted once; corrections and scores are on the Résultat step.
+// 3 questions on what the pharmacist missed in the conversation. Answers are chosen freely and
+// submitted once; afterwards this page shows the corrections, the Résultat shows the scores.
 
-import { esc } from "../html.js";
+import { esc, icon } from "../html.js";
 import { quizQuestions, quizScore } from "../quiz-questions.js";
+
+// After submission each option shows its mark: your right answer, your wrong one struck
+// through, and the right one you missed.
+function mark(q, answers, index) {
+  if (index === q.correct) return answers[q.id] === index ? " is-right" : " is-answer";
+  return answers[q.id] === index ? " is-wrong" : "";
+}
 
 function question(q, answers, number, locked) {
   const options = q.options.map((option, index) => `
-      <label class="option">
+      <label class="option${locked ? mark(q, answers, index) : ""}">
         <input type="radio" name="${esc(q.id)}" value="${index}" id="${esc(q.id)}-${index}"
           data-change="answer" data-question="${esc(q.id)}" ${answers[q.id] === index ? "checked" : ""} ${locked ? "disabled" : ""}>
         <span>${esc(option.text)}</span>
+        ${locked && index === q.correct ? `<span class="option-tag">${icon("check")}${answers[q.id] === index ? "Juste" : "Bonne réponse"}</span>` : ""}
+        ${locked && index !== q.correct && answers[q.id] === index ? `<span class="option-tag">${icon("cross")}Votre réponse</span>` : ""}
       </label>`).join("");
   return `
     <fieldset class="question">

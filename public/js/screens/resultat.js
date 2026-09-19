@@ -26,18 +26,6 @@ function toRework(debrief) {
     .map((c) => `<li class="level-${c.score}">${icon(c.score === 0 ? "cross" : "partial")}${esc(CRITERIA.find((item) => item.id === c.id).title)}</li>`);
 }
 
-function correction(q, answer, number) {
-  const right = answer === q.correct;
-  const given = q.options[answer]?.text ?? "Sans réponse";
-  return `
-    <li class="correction ${right ? "is-right" : "is-wrong"}">
-      <p class="correction-question"><span class="question-number">${number}</span>${esc(q.question)}</p>
-      <p class="correction-answer">${icon(right ? "check" : "cross")}<span class="visually-hidden">${right ? "Juste" : "Faux"} : </span>${esc(given)}</p>
-      ${right ? "" : `<p class="correction-right">Réponse juste : ${esc(q.options[q.correct].text)}</p>`}
-      <p class="correction-why">${esc(q.options[q.correct].why)}</p>
-    </li>`;
-}
-
 export default {
   title: "Résultat",
 
@@ -72,8 +60,7 @@ export default {
         ${bar("Quiz", quizScore(questions, progress.quiz))}
       </ul>
 
-      <h2 class="register-title">Corrections du quiz</h2>
-      <ol class="corrections">${questions.map((q, i) => correction(q, progress.quiz[q.id], i + 1)).join("")}</ol>
+      <p class="quiz-link"><a href="#${module.id}/quiz">Voir le quiz corrigé</a></p>
 
       ${passed ? attestation(module, progress, PROFILE) : ""}`;
   },
