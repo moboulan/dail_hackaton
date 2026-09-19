@@ -87,11 +87,6 @@ function composer(progress, customer) {
     </div>`;
 }
 
-// "Mme Imane" -> "I", "M. Driss" -> "D": the name without its title.
-function initials(name) {
-  return name.replace(/^(Mme|M\.)\s+/, "").charAt(0);
-}
-
 function scrollToLatest() {
   const list = document.getElementById("messages");
   if (list) list.scrollTop = list.scrollHeight;
@@ -159,7 +154,6 @@ export default {
         <section class="chat" aria-labelledby="chat-title">
           <div class="chat-panel">
             <div class="chat-head">
-              <span class="avatar" aria-hidden="true">${esc(initials(module.customer))}</span>
               <h1 id="chat-title" tabindex="-1">${esc(module.customer)}</h1>
               <button class="button shelf-open" type="button" data-action="shelf-open">Produits et mémo</button>
             </div>

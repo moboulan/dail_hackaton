@@ -206,12 +206,8 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .is-confirmed .product-verdict .icon { margin-top: 0.2em; }
 
 .chat { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.chat-head { display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; padding: 12px 16px; background: var(--panel-dark); }
+.chat-head { display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; min-height: 58px; padding: 12px 16px; background: var(--panel-dark); }
 .chat-head h1 { font-size: 1.2rem; margin: 0; }
-.avatar {
-  width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none;
-  background: var(--forest); color: #fff; font-family: var(--font-register); font-weight: 700; font-size: 1.05rem;
-}
 .chat-head .shelf-open { position: absolute; right: 10px; min-height: 40px; padding: 6px 12px; font-size: 0.9rem; }
 /* The conversation panel: messages and the input bar framed together, like a messaging app. */
 .chat-panel { display: flex; flex-direction: column; background: var(--panel); border-radius: 14px; overflow: hidden; }
@@ -253,6 +249,10 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .shelf-dialog::backdrop { background: rgb(42 33 24 / 0.45); }
 .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
 .dialog-head .register-title { border: 0; padding: 0; }
+/* Mémo and shelf titles: centred and level with the customer's name in the chat header. */
+.memo > .register-title, .shelf > .register-title {
+  min-height: 58px; display: flex; align-items: center; justify-content: center; padding: 0; margin-bottom: 4px;
+}
 .dialog-memo { margin-top: 24px; }
 
 /* Bilan */
