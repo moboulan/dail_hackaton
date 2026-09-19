@@ -52,6 +52,8 @@ Numbers 15 to 23 come from the builder testing the live demo in the last hour.
 | 22 | Mémo hints restated the réflexe title ("Posez les questions avant de conseiller"). | User test | The grader writes a short example sentence to say instead. |
 | 23 | Dashboard module names wrapped on 3 lines once the Attestation button was added. | Screenshot review | Wider register, minimum width for the module column. |
 
+**Créer un cas** was tested end to end: a case written in the editor (M. Karim, dry cough, hidden: smokes, no fever) was saved, played in darija with its hidden facts revealed only when asked, graded, given a personalised quiz, validated and stamped, with no page errors.
+
 ## Still to do by a person
 
 - Test with another person (not the builder): watch a pharmacist-like user do Rhume without
@@ -76,4 +78,4 @@ Numbers 15 to 23 come from the builder testing the live demo in the last hour.
 - The customer and the grader are a language model: behaviour is constrained and validated
   server-side, but wording can still surprise.
 - Rate limiting is per Vercel instance, so it slows abuse rather than stopping it.
-- Not built: a shared inventory of all products unlocked across modules (see `SPEC.md`).
+- Not built: a shared inventory of all products unlocked across modules; a staff overview for the pharmacy (needs accounts and a database); editing or deleting a written case.
