@@ -24,6 +24,8 @@ Live demo: https://dail-bp-learning.vercel.app. Audit of the original starter: `
 
 ## Failures found and how they were fixed
 
+Numbers 15 to 23 come from the builder testing the live demo in the last hour.
+
 | # | What failed | Found by | Fix |
 | --- | --- | --- | --- |
 | 1 | Sending a message wiped the text and did nothing: the browser still ran a cached `main.js` from the first static server, so the form submitted natively. | Manual run | The Node server sends `Cache-Control: no-store`. |
@@ -40,6 +42,15 @@ Live demo: https://dail-bp-learning.vercel.app. Audit of the original starter: `
 | 12 | The Mémo was unreachable on phones. | 390 px review | Added to the "Produits et mémo" sheet. |
 | 13 | On Vercel every `/api` route returned 404 (an empty `buildCommand` skipped the functions build). | Production check | `buildCommand` removed; routes verified live. |
 | 14 | The AI customer joked about a darija word listed in its instructions. | E2E run | The word was removed from the prompt. |
+| 15 | The Brief greyed out products with "✕ 1", "✕ 2": `map(productLine)` passed the index as the ruled-out reason. | User test | The Brief calls `productLine(product)` explicitly. |
+| 16 | "Vous avez tension ?" answered, but Décongest Nuit stayed on the shelf: the model forgot its hidden fact tag. | User test | The server also recognises each fixed fact from the words of the reply (French and darija); tag or words, either counts. |
+| 17 | The Bilan reproached "not checking diabetes" after it had been asked earlier. | User test | The grader judges the whole conversation; earlier questions count. |
+| 18 | A decent demo conversation could not validate: the grader only gave 2 for textbook wording. | User test | 2 = essentials done, even with typos; 1 and 0 kept for real omissions. |
+| 19 | A quiz answer was "juste sous condition", so two answers looked right. | User test | Quiz writer rule: one clearly right answer, two clearly wrong. |
+| 20 | On the corrected quiz, a wrong chosen answer showed the "selected" green. | Screenshot review | The selected style excludes wrong answers. |
+| 21 | "Vous auriez pu dire : « Vous auriez pu demander : « … » »" nested lead-ins and quotes. | User test | Grader returns the bare sentence; the server strips lead-ins and quotes. |
+| 22 | Mémo hints restated the réflexe title ("Posez les questions avant de conseiller"). | User test | The grader writes a short example sentence to say instead. |
+| 23 | Dashboard module names wrapped on 3 lines once the Attestation button was added. | Screenshot review | Wider register, minimum width for the module column. |
 
 ## Still to do by a person
 
