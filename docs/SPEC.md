@@ -74,10 +74,13 @@ module cards (duration, state, score when done, one button). Attestations appear
 2. **Échange:** the AI customer speaks first. Mémo (the 4 réflexes) on the left, the
    conversation in the centre, a compact "Vos produits" shelf on the right (sheet on phones),
    "Terminer l'échange". One-line data warning at the input.
-3. **Bilan:** score on the 4 réflexes plus product accuracy, the pharmacist's own lines quoted,
-   what to improve.
-4. **Quiz:** 3 questions, immediate correction with a one-line reason, retry.
-   End: module score (50 % bilan + 50 % quiz). Pass at 80 %: attestation. Back to dashboard.
+3. **Bilan:** one AI grading on 5 criteria (the 4 réflexes plus "le bon conseil, sans erreur"),
+   0 to 2 each, with a comment, the pharmacist's own words and a better phrasing when missed.
+   Quotes are kept only if the pharmacist really wrote them; malformed gradings are retried once.
+4. **Quiz:** 3 questions, immediate correction with a one-line reason, retry allowed; the
+   first answer counts. When all are answered, the result appears below: module score
+   (50 % bilan + 50 % quiz). At 80 %: "Imprimer l'attestation" (printing shows only the
+   attestation). Below 80 %: "Recommencer le module".
 
 **Modules** (all fictional):
 | Module | Customer | Decision to learn |
@@ -120,8 +123,8 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 | 2 | First rebuild: shell, router, step bar, storage, focus handling, reset (kept); intro and preparation (replaced by step 3). | P15 to P28 | done |
 | 3 | Module engine: 3 modules as content, dashboard with 3 cards and licence status, Brief screen, per-module routes and state. | | done |
 | 4 | Échange: Node server, `/api/chat`, persona per module, PII redaction, limits, all states, products panel, Mémo, end button. | P01 to P07 | done |
-| 5 | Bilan: `/api/debrief`, rubric scoring with quotes. | P08 | todo |
-| 6 | Quiz, module score, attestation, dashboard update. | P05, P09 to P14 | todo |
+| 5 | Bilan: `/api/debrief`, rubric scoring with quotes. | P08 | done |
+| 6 | Quiz, module score, attestation, dashboard update. | P05, P09 to P14 | done |
 | 7 | Design pass: ask the user, then impeccable.style with `nomadkit-DESIGN.md`. | | todo |
 | 8 | Vercel hosting, key in environment variables. | | todo |
 | 9 | Evidence: test with another person, after screenshots, checklist complete. | | todo |
@@ -145,7 +148,6 @@ not a pre-picked shortlist. Worth doing after the 3 modules work, not before.
 ## Known gaps and mocks
 
 - All people, products and dialogue are synthetic and labelled so in the app.
-- Bilan and Quiz do not exist until steps 5 and 6: after "Terminer l'échange" the chat stays read-only.
 - The pharmacist's own messages are kept unredacted in their browser (local only); redaction applies to what leaves the server.
 - The customer is a language model: it follows the persona and rules well in tests, but can still word things unexpectedly.
 

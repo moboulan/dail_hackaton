@@ -6,12 +6,18 @@ export const PROFILE = { name: "Dr Alami", licenceYear: 2026 };
 
 export const PASS_MARK = 80;
 
-// The scoring grid of every debrief, also shown as the "Mémo" during the chat.
+// Shown as the "Mémo" during the chat; also the first 4 criteria of every Bilan.
 export const REFLEXES = [
-  { title: "Demander la langue", body: "« Vous préférez en français ou en darija ? »" },
-  { title: "Questionner avant de conseiller", body: "Symptômes, depuis quand, traitements, grossesse." },
-  { title: "Une étape à la fois", body: "Une consigne, puis faites reformuler." },
-  { title: "Un complément seulement s'il aide", body: "Jamais s'il est contre-indiqué." },
+  { id: "langue", title: "Demander la langue", body: "« Vous préférez en français ou en darija ? »" },
+  { id: "questions", title: "Questionner avant de conseiller", body: "Symptômes, depuis quand, traitements, grossesse." },
+  { id: "etapes", title: "Une étape à la fois", body: "Une consigne, puis faites reformuler." },
+  { id: "complement", title: "Un complément seulement s'il aide", body: "Jamais s'il est contre-indiqué." },
+];
+
+// The Bilan grades the 4 réflexes plus this one. Ids must match lib/debrief.js.
+export const CRITERIA = [
+  ...REFLEXES.map(({ id, title }) => ({ id, title })),
+  { id: "produit", title: "Le bon conseil, sans erreur" },
 ];
 
 export const MODULES = [

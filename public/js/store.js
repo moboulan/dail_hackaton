@@ -12,8 +12,9 @@ export function freshProgress() {
     started: false,
     chat: { messages: [], left: false, ended: false },
     debrief: null,
-    quiz: {},
+    quiz: {}, // question id -> every answer given, in order; the first one counts
     score: null,
+    completedAt: null,
   };
 }
 
@@ -75,11 +76,12 @@ function sanitize(saved) {
     }
     if (stored.debrief && typeof stored.debrief === "object") progress.debrief = stored.debrief;
     if (stored.quiz && typeof stored.quiz === "object" && !Array.isArray(stored.quiz)) {
-      for (const [id, value] of Object.entries(stored.quiz)) {
-        if (Number.isInteger(value)) progress.quiz[id] = value;
+      for (const [id, answers] of Object.entries(stored.quiz)) {
+        if (Array.isArray(answers) && answers.every(Number.isInteger)) progress.quiz[id] = answers;
       }
     }
     if (Number.isFinite(stored.score)) progress.score = stored.score;
+    if (typeof stored.completedAt === "string") progress.completedAt = stored.completedAt;
   }
   return state;
 }

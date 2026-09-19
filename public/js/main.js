@@ -4,9 +4,10 @@ import { STEPS, STEP_IDS, isDone, isUnlocked } from "./steps.js";
 import dashboard from "./screens/dashboard.js";
 import brief from "./screens/brief.js";
 import echange from "./screens/echange.js";
+import bilan from "./screens/bilan.js";
+import quiz from "./screens/quiz.js";
 
-// Module steps that exist so far. A step missing here falls back to the furthest built one.
-const STEP_SCREENS = { brief, echange };
+const STEP_SCREENS = { brief, echange, bilan, quiz };
 
 const main = document.getElementById("main");
 const stepBar = document.getElementById("steps");

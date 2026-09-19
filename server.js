@@ -7,6 +7,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { extname, join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { handleChat } from "./lib/chat.js";
+import { handleDebrief } from "./lib/debrief.js";
 
 const ROOT = fileURLToPath(new URL(".", import.meta.url));
 const PUBLIC = join(ROOT, "public");
@@ -16,6 +17,9 @@ loadEnv(join(ROOT, ".env"));
 const PORT = Number(process.env.PORT) || 8089;
 const API_KEY = process.env.DEEPSEEK_API_KEY;
 const MODEL = process.env.DEEPSEEK_MODEL || "deepseek-chat";
+
+// Each API route takes the parsed JSON body and returns { status, body }.
+const API_ROUTES = { "/api/chat": handleChat, "/api/debrief": handleDebrief };
 
 const TYPES = {
   ".html": "text/html; charset=utf-8",
@@ -35,7 +39,7 @@ function loadEnv(path) {
   }
 }
 
-// Basic abuse brake: 40 chat requests per IP per 10 minutes. In memory, so it resets on restart.
+// Basic abuse brake: 40 API requests per IP per 10 minutes. In memory, so it resets on restart.
 const hits = new Map();
 function rateLimited(ip) {
   const now = Date.now();
@@ -81,7 +85,8 @@ async function serveStatic(req, res) {
 }
 
 const server = createServer(async (req, res) => {
-  if (req.url === "/api/chat") {
+  const handler = API_ROUTES[req.url];
+  if (handler) {
     if (req.method !== "POST") return send(res, 405, { error: "POST uniquement." });
     if (rateLimited(req.socket.remoteAddress)) {
       return send(res, 429, { error: "Trop de messages. Réessayez dans quelques minutes." });
@@ -92,7 +97,7 @@ const server = createServer(async (req, res) => {
     } catch {
       return send(res, 400, { error: "Requête invalide." });
     }
-    const result = await handleChat(body, API_KEY, MODEL);
+    const result = await handler(body, API_KEY, MODEL);
     return send(res, result.status, result.body);
   }
   if (req.method !== "GET" && req.method !== "HEAD") return send(res, 405, "Method not allowed", "text/plain");

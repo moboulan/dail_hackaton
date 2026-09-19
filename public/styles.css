@@ -170,6 +170,31 @@ main[data-screen="echange"] { max-width: 1280px; }
   .shelf { grid-area: shelf; position: static; }
 }
 
+/* Bilan */
+.pending { color: var(--muted); }
+.pending.is-error { color: var(--wrong); }
+.bilan-score { font-size: 1.8rem; }
+.lead { font-size: 1.1rem; color: var(--muted); }
+.criteria { list-style: none; margin: 20px 0; padding: 0; display: grid; gap: 12px; }
+.criterion { background: var(--surface); border: 1px solid var(--line); border-left-width: 4px; border-radius: var(--radius); padding: 12px var(--space); }
+.criterion p { margin: 0 0 6px; }
+.criterion-head { display: flex; justify-content: space-between; gap: 12px; }
+.criterion.level-2 { border-left-color: var(--right); }
+.criterion.level-2 .criterion-head span { color: var(--right); }
+.criterion.level-1 { border-left-color: #b7791f; }
+.criterion.level-1 .criterion-head span { color: #8a5a12; }
+.criterion.level-0 { border-left-color: var(--wrong); }
+.criterion.level-0 .criterion-head span { color: var(--wrong); }
+.said { color: var(--muted); font-style: italic; }
+.better { color: var(--text); }
+
+/* Quiz result and attestation */
+.result { margin-top: 24px; padding: 20px var(--space); border-radius: var(--radius); background: var(--notice-bg); display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.result h2, .result p { width: 100%; margin: 0; }
+.result.is-passed { background: var(--right-bg); }
+.result a.button { text-decoration: none; display: inline-flex; align-items: center; }
+.attestation { display: none; }
+
 /* Phones: only the current step keeps its label, so the bar fits on one line. */
 @media (max-width: 640px) {
   h1 { font-size: 1.5rem; }
@@ -188,6 +213,13 @@ main[data-screen="echange"] { max-width: 1280px; }
   .shelf-dialog { margin: auto 0 0; width: 100%; max-width: 100%; border-radius: var(--radius) var(--radius) 0 0; }
 }
 
+/* Printing only ever prints the attestation. */
 @media print {
-  .site-header, .skip-link { display: none; }
+  body > *:not(main), main > *:not(.attestation) { display: none !important; }
+  body, main { background: #fff; }
+  main { max-width: none; padding: 0; }
+  .attestation { display: block; text-align: center; padding: 80px 40px; border: 2px solid var(--text); }
+  .attestation h2 { font-size: 2rem; margin: 16px 0 32px; }
+  .attestation-brand, .attestation-note { color: var(--muted); }
+  .attestation-note { margin-top: 48px; font-size: 0.85rem; }
 }
