@@ -12,7 +12,7 @@ export function freshProgress() {
     started: false,
     chat: { messages: [], left: false, ended: false },
     debrief: null,
-    quiz: {}, // question id -> every answer given, in order; the first one counts
+    quiz: {}, // question id -> the answer chosen; submitted once
     score: null,
     completedAt: null,
   };
@@ -76,8 +76,8 @@ function sanitize(saved) {
     }
     if (stored.debrief && typeof stored.debrief === "object") progress.debrief = stored.debrief;
     if (stored.quiz && typeof stored.quiz === "object" && !Array.isArray(stored.quiz)) {
-      for (const [id, answers] of Object.entries(stored.quiz)) {
-        if (Array.isArray(answers) && answers.every(Number.isInteger)) progress.quiz[id] = answers;
+      for (const [id, answer] of Object.entries(stored.quiz)) {
+        if (Number.isInteger(answer)) progress.quiz[id] = answer;
       }
     }
     if (Number.isFinite(stored.score)) progress.score = stored.score;

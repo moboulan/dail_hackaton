@@ -10,13 +10,13 @@ ruled register of numbered entries; a module is validated with a stamp. Built fr
 | --- | --- | --- |
 | `--paper` | #FFFDF7 | Page ground (NomadKit background) |
 | `--surface` | #FFFFFF | Chat bubbles, quiz options, text field |
-| `--sand` | #D4A373 | Primary buttons, brand mark, current-step underline, register numerals |
+| `--sand` | #D4A373 | Brand mark, current-step underline, register numerals |
 | `--sand-ink` | #2B1D0E | Text on sand (white on sand fails contrast) |
 | `--sand-wash` | #F6EAD9 | Pharmacist bubbles, hover, notices |
 | `--ink` / `--ink-soft` | #2A2118 / #5E5244 | Text; secondary text |
 | `--rule` / `--rule-strong` | #E8DCC8 / #CDB899 | Register hairlines; field borders |
 | `--ocean` / `--ocean-text` | #0891B2 / #0E6F8A | Focus rings; links and "better phrasing" text |
-| `--forest` | #166534 | Cachet, done steps, right answers |
+| `--forest` | #166534 | Primary buttons (white text, 7:1), cachet, done steps, chosen and right answers |
 | `--warning-text` | #8A5A08 | "À améliorer", "à repasser" (NomadKit #CA8A04 is too light for text) |
 | `--error-text` | #B91C1C | Product cautions, wrong answers |
 
@@ -42,12 +42,15 @@ alert icon and a hidden "Attention :" label.
 - **Cachet** (`stamp()` in `js/html.js`): 3 px forest ring with an inner 1.5 px ring, "VALIDÉ",
   score, date, rotated -9°, ink-speckle SVG filter (`#ink`). Sizes: 84 px in the register,
   132 px on the result, 150 px on the printed attestation.
-- **Buttons**: primary sand with dark ink text; secondary ink outline; 48 px min height.
-- **Step bar**: numbered circles; current = ink disc + sand underline; done = forest disc with
+- **Buttons**: primary forest with white text (user decision, deviates from nomadkit's "sand for primary actions"); secondary ink outline; 48 px min height.
+- **Step bar** (centred in the header): numbered circles; current = ink disc + sand underline; done = forest disc with
   a check; locked = muted, not a link.
 - **Chat**: Mémo (numbered, sand numerals) | conversation | compact shelf; side columns sticky.
-- **Bilan criterion**: level column (icon + word) beside title, comment, "Vous avez dit",
-  "Vous auriez pu dire" (ocean).
+- **Speaker label**: register caps above every chat message and excerpt line (customer name or "Vous").
+- **Bilan criterion**: level column (icon + word) beside title, comment, the real exchange as two
+  bubbles, "Vous auriez pu dire" in a dashed ocean bubble.
+- **Résultat**: cachet or "Pas encore validé", a 3-line score register, quiz corrections
+  (your answer with a check or struck through, the right answer, the reason).
 - **Quiz**: sand numerals, full-width options (52 px), right/wrong by border, wash and text.
 
 ## Motion

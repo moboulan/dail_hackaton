@@ -1,4 +1,4 @@
-// The 4 steps of a module, when each unlocks and when it counts as done.
+// The 5 steps of a module, when each unlocks and when it counts as done.
 // Unlocks are derived from the saved progress, never stored, so they cannot drift out of sync.
 
 export const STEPS = [
@@ -6,6 +6,7 @@ export const STEPS = [
   { id: "echange", label: "Échange" },
   { id: "bilan", label: "Bilan" },
   { id: "quiz", label: "Quiz" },
+  { id: "resultat", label: "Résultat" },
 ];
 
 export const STEP_IDS = new Set(STEPS.map((s) => s.id));
@@ -20,6 +21,8 @@ export function isUnlocked(step, progress) {
       return progress.chat.ended;
     case "quiz":
       return progress.debrief !== null;
+    case "resultat":
+      return progress.score !== null;
     default:
       return false;
   }

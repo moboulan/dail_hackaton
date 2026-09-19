@@ -7,8 +7,9 @@ import brief from "./screens/brief.js";
 import echange from "./screens/echange.js";
 import bilan from "./screens/bilan.js";
 import quiz from "./screens/quiz.js";
+import resultat from "./screens/resultat.js";
 
-const STEP_SCREENS = { brief, echange, bilan, quiz };
+const STEP_SCREENS = { brief, echange, bilan, quiz, resultat };
 
 const main = document.getElementById("main");
 const stepBar = document.getElementById("steps");

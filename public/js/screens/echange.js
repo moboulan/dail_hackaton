@@ -17,7 +17,7 @@ function sentCount(progress) {
 
 function messageItem(message, customer) {
   const who = message.role === "customer" ? customer : "Vous";
-  return `<li class="message ${message.role}"><span class="visually-hidden">${esc(who)} : </span>${esc(message.text)}</li>`;
+  return `<li class="message ${message.role}"><span class="speaker">${esc(who)}</span>${esc(message.text)}</li>`;
 }
 
 function memo() {

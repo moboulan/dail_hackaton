@@ -28,7 +28,7 @@ export const MODULES = [
     customer: "Mme Naïma",
     brief: "Mme Naïma a le nez bouché et dort mal. Elle préfère souvent qu'on lui explique en darija.",
     products: [
-      { name: "Respira Mer", price: 45, form: "Spray d'eau de mer", forWhat: "Nez bouché ou qui coule.", use: "Se moucher, puis une pulvérisation par narine, plusieurs fois par jour.", caution: "Aucune contre-indication. Ne pas partager le flacon." },
+      { name: "Respira Mer", price: 45, form: "Spray d'eau de mer", forWhat: "Nez bouché ou qui coule.", use: "Se moucher, puis une pulvérisation par narine, plusieurs fois par jour." },
       { name: "Gorgéa Miel", price: 30, form: "Pastilles", forWhat: "Gorge qui gratte.", use: "Laisser fondre en bouche.", caution: "Contient du sucre : pas en cas de diabète." },
       { name: "Décongest Nuit", price: 55, form: "Comprimés", forWhat: "Nez très bouché la nuit.", use: "Le soir.", caution: "Contre-indiqué si tension élevée, problème cardiaque ou grossesse." },
     ],
@@ -73,7 +73,7 @@ export const MODULES = [
     brief: "Yasmine a les épaules brûlées par le soleil. Elle retourne à la plage demain.",
     products: [
       { name: "Apaisa Gel", price: 60, form: "Gel après-soleil", forWhat: "Coup de soleil léger, peau rouge.", use: "En couche fine, plusieurs fois par jour.", caution: "Pas sur des cloques ni une peau abîmée." },
-      { name: "Solaris 50", price: 120, form: "Crème solaire SPF 50", forWhat: "Protéger la peau du soleil.", use: "Avant l'exposition, à renouveler toutes les 2 heures.", caution: "Aucune contre-indication." },
+      { name: "Solaris 50", price: 120, form: "Crème solaire SPF 50", forWhat: "Protéger la peau du soleil.", use: "Avant l'exposition, à renouveler toutes les 2 heures." },
       { name: "Bronz'Express", price: 90, form: "Autobronzant", forWhat: "Donner un teint hâlé.", use: "Sur peau propre et saine.", caution: "Ne protège pas du soleil. Pas sur une peau brûlée." },
     ],
     quiz: [

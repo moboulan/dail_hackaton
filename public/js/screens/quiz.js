@@ -1,131 +1,65 @@
-// 3 questions. The first answer to each question counts; the pharmacist can keep trying
-// until right. Once all are answered, the module result and the attestation appear below.
+// 3 questions on what the pharmacist missed in the conversation. Answers are chosen freely,
+// then submitted once; corrections and scores are on the Résultat step.
 
-import { PASS_MARK, PROFILE } from "../content.js";
-import { esc, stamp } from "../html.js";
-import { freshProgress } from "../store.js";
+import { esc } from "../html.js";
+import { quizQuestions, quizScore } from "../quiz-questions.js";
 
-function allAnswered(module, progress) {
-  return module.quiz.every((q) => progress.quiz[q.id]?.length);
-}
-
-function quizScore(module, progress) {
-  const right = module.quiz.filter((q) => progress.quiz[q.id][0] === q.correct).length;
-  return Math.round((right / module.quiz.length) * 100);
-}
-
-// Set when the answer that completes the quiz is given, so the cachet is pressed exactly once.
-let pressNext = false;
-
-function question(q, progress, number) {
-  const answers = progress.quiz[q.id] ?? [];
-  const chosen = answers[answers.length - 1];
-  const answered = chosen !== undefined;
-  const right = chosen === q.correct;
-  const options = q.options.map((option, index) => {
-    const mark = chosen === index ? (right ? " is-right" : " is-wrong") : "";
-    return `
-      <label class="option${mark}">
-        <input type="radio" name="${q.id}" value="${index}" id="${q.id}-${index}"
-          data-change="answer" data-question="${q.id}" ${chosen === index ? "checked" : ""}>
+function question(q, answers, number, locked) {
+  const options = q.options.map((option, index) => `
+      <label class="option">
+        <input type="radio" name="${esc(q.id)}" value="${index}" id="${esc(q.id)}-${index}"
+          data-change="answer" data-question="${esc(q.id)}" ${answers[q.id] === index ? "checked" : ""} ${locked ? "disabled" : ""}>
         <span>${esc(option.text)}</span>
-      </label>`;
-  }).join("");
+      </label>`).join("");
   return `
     <fieldset class="question">
       <legend><span class="question-number">${number}</span>${esc(q.question)}</legend>
       ${options}
-      ${answered ? `<p class="feedback ${right ? "is-right" : "is-wrong"}"><strong>${right ? "Oui." : "Non."}</strong> ${esc(q.options[chosen].why)}</p>` : ""}
     </fieldset>`;
-}
-
-function formatDate(iso) {
-  return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-}
-
-function result(module, progress) {
-  const passed = progress.score >= PASS_MARK;
-  const detail = `Échange ${progress.debrief.score} % · Quiz ${quizScore(module, progress)} %`;
-  if (!passed) {
-    return `
-      <section class="result" aria-labelledby="result-title">
-        <div class="result-body">
-          <h2 id="result-title">Pas encore validé : ${progress.score}&nbsp;%</h2>
-          <p>${detail}. Il faut ${PASS_MARK} % pour valider le module.</p>
-          <div class="result-actions">
-            <button class="button primary" type="button" data-action="restart">Recommencer le module</button>
-          </div>
-        </div>
-      </section>`;
-  }
-  return `
-    <section class="result is-passed" aria-labelledby="result-title">
-      ${stamp(progress.score, progress.completedAt, { pressing: pressNext })}
-      <div class="result-body">
-        <h2 id="result-title">Module validé</h2>
-        <p>${detail}.</p>
-        <div class="result-actions">
-          <button class="button primary" type="button" data-action="print">Imprimer l'attestation</button>
-          <a class="button" href="#accueil">Tableau de bord</a>
-        </div>
-      </div>
-    </section>
-    <section class="attestation" aria-hidden="true">
-      <p class="attestation-brand">BP Learning · Formation continue</p>
-      <h2>Attestation de formation</h2>
-      <p><strong>${esc(PROFILE.name)}</strong> a validé le module « ${esc(module.title)} »</p>
-      <p>le ${formatDate(progress.completedAt)}, avec un score de ${progress.score} %.</p>
-      ${stamp(progress.score, progress.completedAt)}
-      <p class="attestation-note">Formation sur cas et produits fictifs.</p>
-    </section>`;
 }
 
 export default {
   title: "Quiz",
 
   render({ module, progress }) {
+    const questions = quizQuestions(module, progress);
+    const locked = progress.score !== null;
+    const missing = questions.filter((q) => progress.quiz[q.id] === undefined).length;
     return `
       <h1 tabindex="-1" class="visually-hidden">Quiz</h1>
-      <ol class="questions">${module.quiz.map((q, i) => `<li>${question(q, progress, i + 1)}</li>`).join("")}</ol>
-      ${progress.score !== null ? result(module, progress) : ""}`;
+      <ol class="questions">${questions.map((q, i) => `<li>${question(q, progress.quiz, i + 1, locked)}</li>`).join("")}</ol>
+      ${locked
+        ? `<a class="button primary next" href="#${module.id}/resultat">Voir le résultat</a>`
+        : `<div class="submit-zone">
+            <button class="button primary" type="button" data-action="submit" ${missing ? 'aria-describedby="quiz-left"' : ""}>Valider mes réponses</button>
+            ${missing ? `<p id="quiz-left" class="hint">${missing === 1 ? "Encore 1 question." : `Encore ${missing} questions.`}</p>` : ""}
+          </div>`}`;
   },
 
   actions: {
     answer(input, ctx) {
-      const { module } = ctx;
-      const id = input.dataset.question;
-      const index = Number(input.value);
-      const q = module.quiz.find((item) => item.id === id);
-      const alreadyScored = ctx.progress.score !== null;
       ctx.update(
         (progress) => {
-          (progress.quiz[id] ??= []).push(index);
-          // The module is scored once, the first time every question has an answer.
-          if (progress.score === null && allAnswered(module, progress)) {
-            pressNext = true;
-            progress.score = Math.round((progress.debrief.score + quizScore(module, progress)) / 2);
-            progress.completedAt = new Date().toISOString();
-          }
+          progress.quiz[input.dataset.question] = Number(input.value);
         },
-        { focus: `#${id}-${index}` },
-      );
-      pressNext = false;
-      const justScored = !alreadyScored && ctx.progress.score !== null;
-      ctx.announce(
-        (index === q.correct ? "Oui. " : "Non. ") + q.options[index].why +
-        (justScored ? ` Résultat du module : ${ctx.progress.score} %.` : ""),
+        { focus: `#${CSS.escape(input.id)}` },
       );
     },
 
-    print() {
-      window.print();
-    },
-
-    restart(_el, ctx) {
-      ctx.update((progress) => {
-        Object.assign(progress, freshProgress());
+    submit(_el, ctx) {
+      const { module, progress } = ctx;
+      const questions = quizQuestions(module, progress);
+      const unanswered = questions.find((q) => progress.quiz[q.id] === undefined);
+      if (unanswered) {
+        document.getElementById(`${unanswered.id}-0`).focus();
+        ctx.announce("Répondez aux 3 questions avant de valider.");
+        return;
+      }
+      ctx.update((p) => {
+        p.score = Math.round((p.debrief.score + quizScore(questions, p.quiz)) / 2);
+        p.completedAt = new Date().toISOString();
       });
-      ctx.go("brief");
+      ctx.go("resultat");
     },
   },
 };

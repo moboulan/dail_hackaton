@@ -51,6 +51,7 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | Products show a fictional price (DH): knowing what you sell includes its price. |
 | 19 Sep | Each customer's hidden facts and rules live in `lib/personas.js` on the server, so they cannot be read in the page source. |
 | 19 Sep | The AI customer speaks first (no scripted opening line), so no two conversations start the same way. |
+| 19 Sep | Quiz generated from the Bilan (the pharmacist's own misses); scores and corrections moved to a new Résultat step; criteria not called for are hidden; products without contraindication show no Attention line; primary buttons forest green (deviation from nomadkit's sand rule, user decision); speaker named on every chat message. |
 | 19 Sep | One piece of information in one place: the logo is the way home (no back link), the step bar names the step (no counter, no repeated heading). Chat layout: Mémo left, conversation centre with the customer's name as its title, compact shelf right; side columns stay in view. |
 | 19 Sep | No footer, no global reset (a pharmacist never wipes licence progress; "Réessayer" redoes a module), no empty "Attestations : aucune" line, no "Médecin si" line. Nothing is added now that polish would remove later. |
 | 19 Sep | "Reprendre" always lands on the furthest unlocked step, so revisiting an earlier step never moves the resume point. |
@@ -68,19 +69,23 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 **Tableau de bord** (`#accueil`): "Bonjour, Dr Alami", licence 2026 (validated / 3), the 3
 module cards (duration, state, score when done, one button). Attestations appear only once one exists.
 
-**Per module** (`#<module>/<step>`), step bar with 4 steps:
+**Per module** (`#<module>/<step>`), step bar with 5 steps:
 1. **Brief:** who comes in and why (2 lines), "Votre rayon" product cards. Referral criteria are not listed: they live in the product cautions and the customer's answers.
    One button: "Commencer l'échange".
 2. **Échange:** the AI customer speaks first. Mémo (the 4 réflexes) on the left, the
    conversation in the centre, a compact "Vos produits" shelf on the right (sheet on phones),
    "Terminer l'échange". One-line data warning at the input.
-3. **Bilan:** one AI grading on 5 criteria (the 4 réflexes plus "le bon conseil, sans erreur"),
-   0 to 2 each, with a comment, the pharmacist's own words and a better phrasing when missed.
-   Quotes are kept only if the pharmacist really wrote them; malformed gradings are retried once.
-4. **Quiz:** 3 questions, immediate correction with a one-line reason, retry allowed; the
-   first answer counts. When all are answered, the result appears below: module score
-   (50 % bilan + 50 % quiz). At 80 %: "Imprimer l'attestation" (printing shows only the
-   attestation). Below 80 %: "Recommencer le module".
+3. **Bilan:** feedback only, no score. One AI grading on 5 criteria (the 4 réflexes plus "le
+   bon conseil, sans erreur"), 0 to 2 each or not applicable when the situation did not call for
+   it (hidden, and left out of the score). Each shows a comment, the real exchange (customer line
+   and the pharmacist's line, speakers named, each exchange shown once) and a better phrasing
+   that never contradicts the right decision. Malformed gradings are retried once.
+4. **Quiz:** 3 questions written by the same AI call on what the pharmacist missed (server-
+   validated, answer order shuffled); the module's fixed questions when none were written.
+   Answers are chosen, then submitted once with "Valider mes réponses"; no correction shown.
+5. **Résultat:** the cachet (pressed once) or "Pas encore validé", the scores (Échange, Quiz,
+   Module = 50/50), quiz corrections with reasons, "Imprimer l'attestation" at 80 % (printing
+   shows only the attestation) or "Recommencer le module".
 
 **Modules** (all fictional):
 | Module | Customer | Decision to learn |

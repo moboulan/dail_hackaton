@@ -27,7 +27,7 @@ export function productLine(product) {
       <p class="product-head"><strong>${esc(product.name)}</strong><span class="product-form">${esc(product.form)}</span><span class="price">${product.price} DH</span></p>
       <p class="product-for">${esc(product.forWhat)}</p>
       <p class="product-use">${esc(product.use)}</p>
-      <p class="product-caution">${icon("alert")}<span class="visually-hidden">Attention : </span>${esc(product.caution)}</p>
+      ${product.caution ? `<p class="product-caution">${icon("alert")}<span class="visually-hidden">Attention : </span>${esc(product.caution)}</p>` : ""}
     </li>`;
 }
 
