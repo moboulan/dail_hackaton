@@ -20,11 +20,15 @@ function messageItem(message, customer) {
   return `<li class="message ${message.role}"><span class="speaker">${esc(who)}</span>${esc(message.text)}</li>`;
 }
 
-// The 4 réflexes; the ones missed in an earlier Bilan carry that Bilan's better phrasing.
+// The 4 réflexes; one missed in an earlier Bilan shows that Bilan's better phrasing instead.
 function memo(state) {
   const item = (r) => {
     const hint = state.memoHints[r.id];
-    return `<li${hint ? ' class="has-hint"' : ""}><strong>${esc(r.title)}</strong><span>${esc(r.body)}</span>${hint ? `<span class="memo-hint"><span class="speaker">La dernière fois</span>« ${esc(hint)} »</span>` : ""}</li>`;
+    // A hint replaces the generic line: one reminder per réflexe, the personal one when it exists.
+    const detail = hint
+      ? `<span class="memo-hint"><span class="speaker">À ne pas oublier</span>« ${esc(hint)} »</span>`
+      : `<span>${esc(r.body)}</span>`;
+    return `<li${hint ? ' class="has-hint"' : ""}><strong>${esc(r.title)}</strong>${detail}</li>`;
   };
   return `
     <h2 class="register-title">Mémo</h2>
