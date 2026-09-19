@@ -267,7 +267,7 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 }
 .option:hover { border-color: var(--rule-strong); }
 .option input { width: 20px; height: 20px; margin: 0; flex: none; accent-color: var(--forest); }
-.option:has(input:checked) { border-color: var(--forest); background: var(--forest-wash); }
+.option:not(.is-wrong):has(input:checked) { border-color: var(--forest); background: var(--forest-wash); }
 .option-tag { margin-left: auto; display: flex; gap: 6px; align-items: center; font-family: var(--font-register); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.85rem; white-space: nowrap; }
 .option.is-right, .option.is-answer { border-color: var(--forest); background: var(--forest-wash); color: var(--forest); }
 .option.is-wrong { border-color: var(--error-text); background: var(--error-wash); }
