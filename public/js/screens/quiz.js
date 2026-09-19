@@ -17,8 +17,8 @@ function question(q, answers, number, locked) {
         <input type="radio" name="${esc(q.id)}" value="${index}" id="${esc(q.id)}-${index}"
           data-change="answer" data-question="${esc(q.id)}" ${answers[q.id] === index ? "checked" : ""} ${locked ? "disabled" : ""}>
         <span>${esc(option.text)}</span>
-        ${locked && index === q.correct ? `<span class="option-tag">${icon("check")}${answers[q.id] === index ? "Juste" : "Bonne réponse"}</span>` : ""}
-        ${locked && index !== q.correct && answers[q.id] === index ? `<span class="option-tag">${icon("cross")}Votre réponse</span>` : ""}
+        ${locked && index === q.correct ? `<span class="option-tag">${icon("check")}<span class="visually-hidden">${answers[q.id] === index ? "Juste" : "Bonne réponse"}</span></span>` : ""}
+        ${locked && index !== q.correct && answers[q.id] === index ? `<span class="option-tag">${icon("cross")}<span class="visually-hidden">Votre réponse, fausse</span></span>` : ""}
       </label>`).join("");
   return `
     <fieldset class="question">

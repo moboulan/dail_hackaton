@@ -60,7 +60,7 @@ export default {
         ${bar("Quiz", quizScore(questions, progress.quiz))}
       </ul>
 
-      <p class="quiz-link"><a href="#${module.id}/quiz">Voir le quiz corrigé</a></p>
+      <a class="button" href="#${module.id}/quiz">Voir le quiz corrigé</a>
 
       ${passed ? attestation(module, progress, PROFILE) : ""}`;
   },

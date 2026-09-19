@@ -270,13 +270,12 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .option:hover { border-color: var(--rule-strong); }
 .option input { width: 20px; height: 20px; margin: 0; flex: none; accent-color: var(--forest); }
 .option:not(.is-wrong):has(input:checked) { border-color: var(--forest); background: var(--forest-wash); }
-.option-tag { margin-left: auto; display: flex; gap: 6px; align-items: center; font-family: var(--font-register); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.85rem; white-space: nowrap; }
+.option-tag { margin-left: auto; display: flex; align-items: center; font-size: 1.2rem; }
 .option.is-right, .option.is-answer { border-color: var(--forest); background: var(--forest-wash); color: var(--forest); }
 .option.is-wrong { border-color: var(--error-text); background: var(--error-wash); }
 .option.is-wrong > span:first-of-type { text-decoration: line-through; }
 .option.is-wrong .option-tag { color: var(--error-text); }
 .option input:disabled { opacity: 1; }
-.quiz-link { margin-top: 8px; }
 .submit-zone { margin-top: 32px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 
 /* Résultat: the module score lives once (cachet or large figure), parts as bars vs 80 % */
@@ -297,7 +296,7 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .rework .level-0 .icon { color: var(--error-text); }
 .rework .level-1 .icon { color: var(--warning-text); }
 .result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
-.parts { display: grid; gap: 14px; margin: 32px 0 48px; }
+.parts { display: grid; gap: 14px; margin: 32px 0 28px; }
 .part { display: grid; grid-template-columns: 6.5em minmax(0, 1fr) 4.5em; gap: 16px; align-items: center; }
 .part-label { font-weight: 700; }
 .part-track { position: relative; height: 10px; border-radius: 5px; background: var(--wash); }
