@@ -1,8 +1,8 @@
 # Problems found and how they were fixed
 
 Audit of the original starter (live at https://eagle-day-materials.vercel.app/learning-demo/,
-identical to the baseline commit `aa0dfd0`), done 19 September 2026 in Chrome at 1440 px and
-390 px wide. Each row is updated in the same commit that fixes it.
+identical to the baseline commit `aa0dfd0`), done 19 September 2026 in Chrome at 1440 px wide and at the narrowest
+window Chrome allows here (500 px viewport; true 390 px phones not tested yet). Each row is updated in the same commit that fixes it.
 
 Severity: High = the learner is misled or the core task fails. Medium = friction or a broken
 promise. Low = polish or hidden risk.
@@ -19,7 +19,7 @@ Evidence: a screenshot in `evidence/before/`, "browser" (reproduced by hand, no 
 | P04 | A weak reply gets no explanation, no better alternative and no retry. | browser | Medium | open | |
 | P05 | The best reply is always option 1, in every dialogue turn and every quiz, so the right answer can be guessed. | code | Medium | open | |
 | P06 | A green "Simulation terminée" box looks like success even when every reply was weak (0 %). | browser | Medium | open | |
-| P07 | Mobile: header and navigation take about 190 px and the scenario card fills the first screen. The dialogue and the choices are below the fold. | 07 | Medium | open | |
+| P07 | Mobile: the sticky header and navigation take about 190 px (27 % of the screen) and the scenario card fills the first screen. The dialogue and the choices are below the fold. | mobile/00, mobile/03 | Medium | open | |
 
 ## Result and quiz
 
@@ -58,3 +58,11 @@ Evidence: a screenshot in `evidence/before/`, "browser" (reproduced by hand, no 
 | P23 | Ticking a preparation box re-renders the page and sends keyboard focus to `<body>`. | browser (`document.activeElement` = BODY) | Medium | open | |
 | P24 | `save()` writes to localStorage without try/catch, so it can throw when storage is blocked or full. | code | Low | open | |
 | P25 | Every render re-attaches click listeners to the header nav links, so listeners pile up over a session. | code | Low | open | |
+
+## Mobile (added from the mobile pass)
+
+| ID | Problem | Evidence | Sev | Status | Fix (commit) |
+| --- | --- | --- | --- | --- | --- |
+| P26 | Changing page keeps the previous scroll position: the result page opens mid-page and the progress page opens at the bottom. | mobile/04, mobile/06 | Medium | open | |
+| P27 | The toast covers page controls on mobile (it sits over "Réinitialiser la progression locale"). | mobile/06 | Medium | open | |
+| P28 | Preparation on mobile lists the three points twice (summary card, then checkboxes), pushing the checkboxes below the fold. | mobile/02 | Low | open | |
