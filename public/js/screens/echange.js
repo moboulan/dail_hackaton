@@ -77,8 +77,8 @@ function composer(progress, customer) {
   return `
     <form class="composer" data-submit="send">
       <label class="visually-hidden" for="reply">Votre réponse</label>
-      <textarea id="reply" rows="2" maxlength="${MAX_LENGTH}" data-keydown="composeKey" data-input="typing"
-        placeholder="Votre réponse"></textarea>
+      <textarea id="reply" rows="1" maxlength="${MAX_LENGTH}" data-keydown="composeKey" data-input="typing"
+        data-focus="composerFocus" placeholder="Votre réponse"></textarea>
       <button class="button primary" type="submit" id="send" ${opened ? "" : "disabled"}>Envoyer</button>
     </form>
     <p class="composer-note" id="composer-note" aria-live="polite">${remaining <= 3 ? `Encore ${remaining} message${remaining > 1 ? "s" : ""}.` : ""}</p>
@@ -155,9 +155,11 @@ export default {
             <h1 id="chat-title" tabindex="-1">${esc(module.customer)}</h1>
             <button class="button shelf-open" type="button" data-action="shelf-open">Produits et mémo</button>
           </div>
-          <ol class="messages" id="messages">${progress.chat.messages.map((m) => messageItem(m, module.customer)).join("")}</ol>
-          <p id="chat-status" class="chat-status" role="status" aria-live="polite"></p>
-          ${progress.chat.ended ? `<p class="chat-closed">Échange terminé.</p>` : composer(progress, module.customer)}
+          <div class="chat-panel">
+            <ol class="messages" id="messages">${progress.chat.messages.map((m) => messageItem(m, module.customer)).join("")}</ol>
+            <p id="chat-status" class="chat-status" role="status" aria-live="polite"></p>
+            ${progress.chat.ended ? `<p class="chat-closed">Échange terminé.</p>` : composer(progress, module.customer)}
+          </div>
         </section>
         <aside class="shelf" aria-labelledby="shelf-title"><h2 id="shelf-title" class="register-title">Vos produits</h2>${shelf(module, progress)}</aside>
       </div>
@@ -187,6 +189,11 @@ export default {
         event.preventDefault();
         textarea.form.requestSubmit();
       }
+    },
+
+    // Phones: once the keyboard is up, bring the latest message back into view.
+    composerFocus() {
+      window.setTimeout(scrollToLatest, 300);
     },
 
     typing(textarea) {

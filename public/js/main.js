@@ -147,15 +147,27 @@ document.addEventListener("click", (event) => {
   currentScreen().actions[action]?.(target, ctx);
 });
 
-// Other events route the same way: data-change, data-input, data-keydown, data-submit.
-for (const type of ["change", "input", "keydown", "submit"]) {
+// Other events route the same way: data-change, data-input, data-keydown, data-submit, data-focus.
+const ROUTED = { change: "change", input: "input", keydown: "keydown", submit: "submit", focusin: "focus" };
+for (const [type, attribute] of Object.entries(ROUTED)) {
   document.addEventListener(type, (event) => {
-    const target = event.target.closest(`[data-${type}]`);
+    const target = event.target.closest(`[data-${attribute}]`);
     if (!target) return;
     if (type === "submit") event.preventDefault();
-    currentScreen().actions[target.dataset[type]]?.(target, ctx, event);
+    currentScreen().actions[target.dataset[attribute]]?.(target, ctx, event);
   });
 }
+
+// iOS does not shrink the page when the keyboard opens. Expose the visible height as --vvh and
+// flag an open keyboard, so the chat can fit what the pharmacist actually sees.
+function syncViewport() {
+  const viewport = window.visualViewport;
+  if (!viewport) return;
+  document.documentElement.style.setProperty("--vvh", `${viewport.height}px`);
+  document.body.classList.toggle("keyboard-open", viewport.height < window.innerHeight * 0.8);
+}
+window.visualViewport?.addEventListener("resize", syncViewport);
+syncViewport();
 
 window.addEventListener("hashchange", () => show({ moveFocus: true }));
 

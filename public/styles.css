@@ -22,6 +22,8 @@
   --rule: #e8dcc8;
   --rule-strong: #cdb899;
   --wash: #f6ead9;
+  --panel: #f3ece1;
+  --bubble-own: #e9d6bb;
   --sand-ink: #2b1d0e;
   --ocean-text: #0e6f8a;
   --forest-wash: #eaf3ec;
@@ -205,9 +207,11 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .chat { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .chat-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 2px solid var(--ink); }
 .chat-head h1 { font-size: 1.5rem; }
+/* The conversation panel: messages and the input bar framed together, like a messaging app. */
+.chat-panel { display: flex; flex-direction: column; background: var(--panel); border-radius: 14px; overflow: hidden; }
 .messages {
-  display: flex; flex-direction: column; gap: 12px; padding: 8px 2px;
-  height: calc(100vh - 420px); min-height: 280px; overflow-y: auto;
+  display: flex; flex-direction: column; gap: 12px; padding: 18px 16px 8px;
+  height: calc(100vh - 380px); min-height: 280px; overflow-y: auto;
 }
 .message { max-width: 78%; padding: 10px 16px 12px; border-radius: 14px; white-space: pre-wrap; line-height: 1.45; }
 .speaker {
@@ -215,16 +219,18 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin-bottom: 2px; white-space: normal;
 }
 .message.customer { align-self: flex-start; background: var(--surface); border: 1px solid var(--rule); border-bottom-left-radius: 4px; }
-.message.pharmacist { align-self: flex-end; background: var(--wash); border-bottom-right-radius: 4px; }
-.chat-status { min-height: 1.5em; color: var(--ink-soft); font-size: 0.95rem; }
+.message.pharmacist { align-self: flex-end; background: var(--bubble-own); border-bottom-right-radius: 4px; }
+.chat-status { min-height: 1.5em; padding: 0 16px; color: var(--ink-soft); font-size: 0.95rem; }
 .chat-status.is-error { color: var(--error-text); }
-.composer { display: flex; gap: 10px; align-items: flex-end; }
+.composer { display: flex; gap: 8px; align-items: flex-end; padding: 10px; background: var(--surface); border-top: 1px solid var(--rule); }
 .composer textarea {
-  flex: 1; font: inherit; padding: 12px 14px; min-height: 52px; resize: none; overflow-y: auto;
+  flex: 1; font: inherit; padding: 11px 14px; min-height: 48px; height: 48px; resize: none; overflow-y: auto; line-height: 1.4;
   border: 1.5px solid var(--rule-strong); border-radius: var(--radius); background: var(--surface); color: var(--ink);
 }
 .composer textarea:focus { border-color: var(--ocean); outline: none; box-shadow: 0 0 0 3px rgb(8 145 178 / 0.18); }
-.composer-note { font-size: 0.85rem; color: var(--ink-soft); }
+.composer .button { min-height: 48px; }
+.chat-panel .chat-closed { margin: 10px; }
+.composer-note { font-size: 0.85rem; color: var(--ink-soft); padding: 0 16px 10px; background: var(--surface); }
 .composer-note:empty { display: none; }
 .end-zone { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .end-zone p { width: 100%; }
@@ -353,10 +359,15 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   .memo, .shelf { display: none; }
   .shelf-open { display: inline-flex; flex: none; }
   main[data-screen="echange"] { padding-top: 12px; padding-bottom: 12px; }
-  .chat { height: calc(100dvh - 150px); gap: 8px; }
+  .chat { height: calc(var(--vvh, 100dvh) - 150px); gap: 8px; }
+  .chat-panel { flex: 1; min-height: 0; }
+  body.keyboard-open .site-header { display: none; }
+  body.keyboard-open main[data-screen="echange"] { padding-top: 6px; padding-bottom: 6px; }
+  body.keyboard-open .chat { height: calc(var(--vvh, 100dvh) - 12px); }
+  body.keyboard-open .end-zone { display: none; }
   .chat-head h1 { font-size: 1.25rem; }
   .messages { height: auto; flex: 1; min-height: 0; }
-  .composer .button { min-height: 52px; }
+  .messages { padding: 12px 10px 6px; }
   .end-zone .link-button { min-height: 36px; padding: 4px 0; }
   .shelf-dialog { margin: auto 0 0; width: 100%; max-width: 100%; border-radius: var(--radius) var(--radius) 0 0; }
   .criterion { grid-template-columns: 1fr; }
