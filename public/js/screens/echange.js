@@ -49,7 +49,7 @@ function composer(progress, customer) {
         placeholder="Votre réponse"></textarea>
       <button class="button primary" type="submit" id="send" ${opened ? "" : "disabled"}>Envoyer</button>
     </form>
-    ${remaining <= 3 ? `<p class="composer-note">Encore ${remaining} message${remaining > 1 ? "s" : ""}.</p>` : ""}
+    <p class="composer-note" id="composer-note" aria-live="polite">${remaining <= 3 ? `Encore ${remaining} message${remaining > 1 ? "s" : ""}.` : ""}</p>
     <div id="end-zone" class="end-zone">
       <button class="link-button" type="button" data-action="end-ask" ${sentCount(progress) ? "" : "hidden"}>Terminer l'échange</button>
     </div>`;
@@ -66,6 +66,30 @@ function setStatus(html, isError = false) {
   if (!status) return;
   status.innerHTML = html;
   status.classList.toggle("is-error", isError);
+}
+
+// After a reply: append it in place so the text box keeps focus and the phone keyboard stays
+// open. Only a change of composer (customer left, message cap reached) re-renders the screen.
+function showReply(ctx, form, reply) {
+  const { module, progress } = ctx;
+  const remaining = MAX_MESSAGES - sentCount(progress);
+  if (progress.chat.left || remaining <= 0) {
+    ctx.update(() => {});
+    return;
+  }
+  document.getElementById("messages").insertAdjacentHTML("beforeend", messageItem({ role: "customer", text: reply }, module.customer));
+  scrollToLatest();
+  setStatus("");
+  form.querySelector("#send").disabled = false;
+  document.querySelector("[data-action=end-ask]")?.removeAttribute("hidden");
+  const note = document.getElementById("composer-note");
+  if (remaining <= 3) note.textContent = `Encore ${remaining} message${remaining > 1 ? "s" : ""}.`;
+}
+
+// The text box grows with its content, up to about 5 lines, instead of a drag handle.
+function fitTextarea(textarea) {
+  textarea.style.height = "auto";
+  textarea.style.height = `${Math.min(textarea.scrollHeight, 160)}px`;
 }
 
 // The customer walks in and speaks first.
@@ -96,7 +120,7 @@ export default {
         <section class="chat" aria-labelledby="chat-title">
           <div class="chat-head">
             <h1 id="chat-title" tabindex="-1">${esc(module.customer)}</h1>
-            <button class="button shelf-open" type="button" data-action="shelf-open">Vos produits</button>
+            <button class="button shelf-open" type="button" data-action="shelf-open">Produits et mémo</button>
           </div>
           <ol class="messages" id="messages">${progress.chat.messages.map((m) => messageItem(m, module.customer)).join("")}</ol>
           <p id="chat-status" class="chat-status" role="status" aria-live="polite"></p>
@@ -106,10 +130,11 @@ export default {
       </div>
       <dialog id="shelf-dialog" class="shelf-dialog" aria-labelledby="shelf-dialog-title">
         <div class="dialog-head">
-          <h2 id="shelf-dialog-title">Vos produits</h2>
+          <h2 id="shelf-dialog-title" class="register-title">Vos produits</h2>
           <button class="button" type="button" data-action="shelf-close">Fermer</button>
         </div>
         ${shelf(module)}
+        <div class="dialog-memo">${memo()}</div>
       </dialog>`;
   },
 
@@ -131,7 +156,8 @@ export default {
       }
     },
 
-    typing() {
+    typing(textarea) {
+      fitTextarea(textarea);
       if (!waiting) setStatus("");
     },
 
@@ -145,6 +171,7 @@ export default {
       ctx.save();
       document.getElementById("messages").insertAdjacentHTML("beforeend", messageItem({ role: "pharmacist", text }, module.customer));
       textarea.value = "";
+      fitTextarea(textarea);
       scrollToLatest();
 
       waiting = true;
@@ -156,8 +183,7 @@ export default {
         progress.chat.left = left;
         ctx.save();
         waiting = false;
-        // Re-render: the composer may change (cap reached, customer left, end link now visible).
-        if (form.isConnected) ctx.update(() => {}, { focus: "#reply" });
+        if (form.isConnected) showReply(ctx, form, reply);
         ctx.announce(`${module.customer} : ${reply}`);
       } catch (error) {
         // Not delivered: take the message back out and return the text to the box.
@@ -167,6 +193,7 @@ export default {
         if (!form.isConnected) return; // screen changed meanwhile: its DOM is gone
         document.querySelector("#messages li:last-child")?.remove();
         textarea.value = text;
+        fitTextarea(textarea);
         form.querySelector("#send").disabled = false;
         setStatus(esc(error.message), true);
         textarea.focus();

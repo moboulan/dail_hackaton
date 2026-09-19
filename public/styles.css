@@ -210,11 +210,12 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .chat-status.is-error { color: var(--error-text); }
 .composer { display: flex; gap: 10px; align-items: flex-end; }
 .composer textarea {
-  flex: 1; font: inherit; padding: 12px 14px; min-height: 52px; resize: vertical;
+  flex: 1; font: inherit; padding: 12px 14px; min-height: 52px; resize: none; overflow-y: auto;
   border: 1.5px solid var(--rule-strong); border-radius: var(--radius); background: var(--surface); color: var(--ink);
 }
 .composer textarea:focus { border-color: var(--ocean); outline: none; box-shadow: 0 0 0 3px rgb(8 145 178 / 0.18); }
 .composer-note { font-size: 0.85rem; color: var(--ink-soft); }
+.composer-note:empty { display: none; }
 .end-zone { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .end-zone p { width: 100%; }
 .chat-closed { padding: 14px var(--gutter); background: var(--wash); border-radius: var(--radius); display: grid; gap: 10px; justify-items: start; }
@@ -222,6 +223,8 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .shelf-dialog { width: min(520px, 100%); max-height: 85vh; border: 0; border-radius: var(--radius); padding: 20px; background: var(--paper); color: var(--ink); }
 .shelf-dialog::backdrop { background: rgb(42 33 24 / 0.45); }
 .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.dialog-head .register-title { border: 0; padding: 0; }
+.dialog-memo { margin-top: 24px; }
 
 /* Bilan */
 .skeleton { display: grid; gap: 14px; margin-bottom: 16px; }
@@ -314,8 +317,8 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   :root { font-size: 17px; }
   h1 { font-size: 1.6rem; }
   main { padding-top: 24px; }
-  .site-header { gap: 4px 12px; }
-  .steps { width: 100%; }
+  .site-header { gap: 4px 12px; justify-items: center; padding-top: 10px; padding-bottom: 4px; }
+  .steps { width: 100%; justify-self: center; }
   .steps ol { gap: 4px 14px; }
   .steps li:not(.is-current) .step-label-text { display: none; }
   .licence { text-align: left; }
@@ -329,10 +332,15 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   .register .stamp-score { font-size: 1rem; }
   .register .stamp-top, .register .stamp-date { font-size: 0.55rem; }
   .chat-layout { grid-template-columns: 1fr; grid-template-areas: none; }
-  .chat { grid-row: auto; }
+  .chat { grid-area: auto; }
   .memo, .shelf { display: none; }
   .shelf-open { display: inline-flex; flex: none; }
-  .messages { height: 55vh; }
+  main[data-screen="echange"] { padding-top: 12px; padding-bottom: 12px; }
+  .chat { height: calc(100dvh - 150px); gap: 8px; }
+  .chat-head h1 { font-size: 1.25rem; }
+  .messages { height: auto; flex: 1; min-height: 0; }
+  .composer .button { min-height: 52px; }
+  .end-zone .link-button { min-height: 36px; padding: 4px 0; }
   .shelf-dialog { margin: auto 0 0; width: 100%; max-width: 100%; border-radius: var(--radius) var(--radius) 0 0; }
   .criterion { grid-template-columns: 1fr; }
   .criterion > :not(.criterion-level) { grid-column: 1; }
@@ -341,7 +349,6 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   .outcome-score span:first-child { font-size: 4.5rem; }
   .part { grid-template-columns: 5em minmax(0, 1fr) 3.8em; gap: 10px; }
   .site-header { grid-template-columns: 1fr; }
-  .steps { justify-self: start; }
 }
 
 @media (prefers-reduced-motion: reduce) {

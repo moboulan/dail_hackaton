@@ -102,10 +102,10 @@ export default {
       window.print();
     },
 
+    // Reset, then leave: re-rendering this screen with an empty module would fail.
     restart(_el, ctx) {
-      ctx.update((progress) => {
-        Object.assign(progress, freshProgress());
-      });
+      Object.assign(ctx.progress, freshProgress());
+      ctx.save();
       ctx.go("brief");
     },
   },
