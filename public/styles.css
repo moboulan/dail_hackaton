@@ -442,7 +442,7 @@ main[data-screen="editor"] { max-width: 820px; }
 /* Connexion */
 main[data-screen="login"] { max-width: none; padding: 0; display: flex; }
 .login-split { flex: 1; display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
-.login-brand { font-family: var(--font-register); font-weight: 700; font-size: 1.9rem; letter-spacing: 0.02em; margin-bottom: 12px; }
+.login-brand { text-align: center; font-family: var(--font-register); font-weight: 700; font-size: 1.9rem; letter-spacing: 0.02em; margin-bottom: 12px; }
 .login-art { background: url("img/rayon.jpg") center / cover no-repeat; }
 .login { display: grid; gap: 20px; align-content: center; width: 100%; max-width: 400px; justify-self: center; padding: 48px var(--gutter); }
 .login h1 { font-size: 2.4rem; }
