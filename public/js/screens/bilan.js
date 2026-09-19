@@ -53,12 +53,12 @@ function criteriaList(debrief, customer) {
     .join("");
 }
 
-// Feed the Mémo: a missed réflexe keeps its better phrasing as a hint, a mastered one loses it.
+// Feed the Mémo: a missed réflexe keeps the Bilan's short tip, a mastered one loses it.
 function rememberForMemo(state, debrief) {
   for (const c of debrief.criteria) {
     if (!REFLEX_IDS.has(c.id) || c.score === null) continue;
     if (c.score === 2) delete state.memoHints[c.id];
-    else if (c.better) state.memoHints[c.id] = c.better;
+    else if (c.tip) state.memoHints[c.id] = c.tip;
   }
 }
 
