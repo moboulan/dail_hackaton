@@ -6,23 +6,19 @@ ruled register of numbered entries; a module is validated with a stamp. Built fr
 
 ## Palette
 
-Forest-led. Forest acts (buttons, cachet, done and current step, numerals); green-tinted
-neutrals structure; amber and red only carry meaning. NomadKit's sand was retired at the
-user's request because it clashed with the green actions; its ocean and forest hues remain.
-
 | Token | Value | Use |
 | --- | --- | --- |
-| `--paper` | #FBFCF8 | Page ground |
-| `--surface` | #FFFFFF | Customer bubbles, quiz options, text field |
-| `--wash` | #EDF4EE | Pharmacist bubbles, hover, notices |
-| `--forest-wash` | #E3EFE6 | Chosen quiz answer |
-| `--ink` / `--ink-soft` | #1D2621 / #56625A | Text; secondary text |
-| `--rule` / `--rule-strong` | #E1E7E1 / #BCCABF | Register hairlines; field borders |
-| `--forest` / `--forest-dark` | #166534 / #125429 | Primary buttons (white text, 7:1), brand mark, cachet, steps, numerals |
-| `--forest-soft` | #8FB59A | Licence "/3", score parts below the 80 % mark |
-| `--ocean` / `--ocean-text` | #0891B2 / #0E6F8A | Focus rings; "Vous auriez pu dire" |
-| `--warning-text` | #8A5A08 | "À améliorer", "à repasser" |
-| `--error-text` | #B91C1C | Product cautions, "Manqué", wrong answers |
+| `--paper` | #FFFDF7 | Page ground (NomadKit background) |
+| `--surface` | #FFFFFF | Chat bubbles, quiz options, text field |
+| `--sand` | #D4A373 | Brand mark, current-step underline, register numerals |
+| `--sand-ink` | #2B1D0E | Text on sand (white on sand fails contrast) |
+| `--wash` | #F6EAD9 | Pharmacist bubbles, hover, notices |
+| `--ink` / `--ink-soft` | #2A2118 / #5E5244 | Text; secondary text |
+| `--rule` / `--rule-strong` | #E8DCC8 / #CDB899 | Register hairlines; field borders |
+| `--ocean` / `--ocean-text` | #0891B2 / #0E6F8A | Focus rings; links and "better phrasing" text |
+| `--forest` | #166534 | Primary buttons (white text, 7:1), cachet, done steps, chosen and right answers |
+| `--warning-text` | #8A5A08 | "À améliorer", "à repasser" (NomadKit #CA8A04 is too light for text) |
+| `--error-text` | #B91C1C | Product cautions, wrong answers |
 
 Rule: meaning never rides on colour alone. Levels carry a word and an icon; cautions carry an
 alert icon and a hidden "Attention :" label.
@@ -46,17 +42,17 @@ alert icon and a hidden "Attention :" label.
 - **Cachet** (`stamp()` in `js/html.js`): 3 px forest ring with an inner 1.5 px ring, "VALIDÉ",
   score, date, rotated -9°, ink-speckle SVG filter (`#ink`). Sizes: 84 px in the register,
   132 px on the result, 150 px on the printed attestation.
-- **Buttons**: primary forest with white text; secondary ink outline; 48 px min height.
-- **Step bar** (centred in the header): numbered circles; current = ink disc + forest underline; done = forest disc with
+- **Buttons**: primary forest with white text (user decision, deviates from nomadkit's "sand for primary actions"); secondary ink outline; 48 px min height.
+- **Step bar** (centred in the header): numbered circles; current = ink disc + sand underline; done = forest disc with
   a check; locked = muted, not a link.
-- **Chat**: Mémo (numbered, forest numerals) | conversation | compact shelf; side columns sticky.
+- **Chat**: Mémo (numbered, sand numerals) | conversation | compact shelf; side columns sticky.
 - **Speaker label**: register caps above every chat message and excerpt line (customer name or "Vous").
 - **Bilan criterion**: level column (icon + word) beside title, comment, the real exchange as two
   bubbles, "Vous auriez pu dire" in a dashed ocean bubble.
-- **Résultat**: the module score lives once: the cachet, or a large ink figure with "80 % requis"
+- **Résultat**: the module score lives once: the cachet, or a large amber figure with "80 % requis"
   and the criteria to rework (with level icons). Échange and Quiz as bars with an 80 % tick.
   Quiz corrections: your answer with a check or struck through, the right answer, the reason.
-- **Quiz**: forest numerals, full-width options (52 px), chosen answer in forest wash; no correction until the Résultat.
+- **Quiz**: sand numerals, full-width options (52 px), chosen answer in forest wash; no correction until the Résultat.
 
 ## Motion
 
