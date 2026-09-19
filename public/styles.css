@@ -206,8 +206,13 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .is-confirmed .product-verdict .icon { margin-top: 0.2em; }
 
 .chat { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.chat-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 2px solid var(--ink); }
-.chat-head h1 { font-size: 1.5rem; }
+.chat-head { display: flex; align-items: center; justify-content: center; gap: 10px; position: relative; padding: 12px 16px; background: var(--panel-dark); }
+.chat-head h1 { font-size: 1.2rem; margin: 0; }
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: var(--forest); color: #fff; font-family: var(--font-register); font-weight: 700; font-size: 1.05rem;
+}
+.chat-head .shelf-open { position: absolute; right: 10px; min-height: 40px; padding: 6px 12px; font-size: 0.9rem; }
 /* The conversation panel: messages and the input bar framed together, like a messaging app. */
 .chat-panel { display: flex; flex-direction: column; background: var(--panel); border-radius: 14px; overflow: hidden; }
 .messages {
@@ -235,7 +240,7 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .composer textarea.is-tall { overflow-y: auto !important; }
 .composer textarea:focus { border-color: var(--ocean); outline: none; box-shadow: 0 0 0 3px rgb(8 145 178 / 0.18); }
 .composer .button { min-height: 48px; }
-.chat-panel .chat-closed { margin: 10px; }
+.chat-panel .chat-closed { margin: 0; border-radius: 0; background: var(--panel-dark); padding: 14px 16px; }
 .chat-panel .end-zone { padding: 0 12px 6px; background: var(--panel-dark); }
 .chat-panel .end-zone:has(> [hidden]:only-child) { display: none; }
 .composer-note { font-size: 0.85rem; color: var(--ink-soft); padding: 0 16px 10px; background: var(--panel-dark); }
@@ -243,7 +248,7 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .end-zone { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .end-zone p { width: 100%; }
 .chat-closed { padding: 14px var(--gutter); background: var(--wash); border-radius: var(--radius); display: grid; gap: 10px; justify-items: start; }
-.shelf-open { display: none; }
+.chat-head .shelf-open { display: none; }
 .shelf-dialog { width: min(520px, 100%); max-height: 85vh; border: 0; border-radius: var(--radius); padding: 20px; background: var(--paper); color: var(--ink); }
 .shelf-dialog::backdrop { background: rgb(42 33 24 / 0.45); }
 .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
@@ -365,7 +370,8 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   .chat-layout { grid-template-columns: 1fr; grid-template-areas: none; }
   .chat { grid-area: auto; }
   .memo, .shelf { display: none; }
-  .shelf-open { display: inline-flex; flex: none; }
+  .chat-head .shelf-open { display: inline-flex; }
+  .chat-head { justify-content: flex-start; }
   main[data-screen="echange"] { padding-top: 12px; padding-bottom: 12px; }
   .chat { height: calc(var(--vvh, 100dvh) - 150px); gap: 8px; }
   .chat-panel { flex: 1; min-height: 0; }
@@ -373,7 +379,6 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   body.keyboard-open main[data-screen="echange"] { padding-top: 6px; padding-bottom: 6px; }
   body.keyboard-open .chat { height: calc(var(--vvh, 100dvh) - 12px); }
   body.keyboard-open .end-zone { display: none; }
-  .chat-head h1 { font-size: 1.25rem; }
   .messages { height: auto; flex: 1; min-height: 0; }
   .messages { padding: 12px 10px 6px; }
   .end-zone .link-button { min-height: 36px; padding: 4px 0; }

@@ -87,6 +87,11 @@ function composer(progress, customer) {
     </div>`;
 }
 
+// "Mme Imane" -> "I", "M. Driss" -> "D": the name without its title.
+function initials(name) {
+  return name.replace(/^(Mme|M\.)\s+/, "").charAt(0);
+}
+
 function scrollToLatest() {
   const list = document.getElementById("messages");
   if (list) list.scrollTop = list.scrollHeight;
@@ -152,11 +157,12 @@ export default {
       <div class="chat-layout">
         <aside class="memo" aria-label="Mémo">${memo(state)}</aside>
         <section class="chat" aria-labelledby="chat-title">
-          <div class="chat-head">
-            <h1 id="chat-title" tabindex="-1">${esc(module.customer)}</h1>
-            <button class="button shelf-open" type="button" data-action="shelf-open">Produits et mémo</button>
-          </div>
           <div class="chat-panel">
+            <div class="chat-head">
+              <span class="avatar" aria-hidden="true">${esc(initials(module.customer))}</span>
+              <h1 id="chat-title" tabindex="-1">${esc(module.customer)}</h1>
+              <button class="button shelf-open" type="button" data-action="shelf-open">Produits et mémo</button>
+            </div>
             <ol class="messages" id="messages">${progress.chat.messages.map((m) => messageItem(m, module.customer)).join("")}</ol>
             <p id="chat-status" class="chat-status" role="status" aria-live="polite"></p>
             ${progress.chat.ended ? `<p class="chat-closed">Échange terminé.</p>` : composer(progress, module.customer)}
