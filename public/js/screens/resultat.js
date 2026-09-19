@@ -3,16 +3,12 @@
 // corrections and the printable attestation.
 
 import { CRITERIA, PASS_MARK, PROFILE } from "../content.js";
-import { esc, icon, stamp } from "../html.js";
+import { attestation, esc, icon, printAttestation, stamp } from "../html.js";
 import { freshProgress } from "../store.js";
 import { quizQuestions, quizScore } from "../quiz-questions.js";
 
 // The cachet is pressed once: on the first view after the quiz is submitted.
 const pressed = new Set();
-
-function formatDate(iso) {
-  return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
-}
 
 function bar(label, value) {
   return `
@@ -79,15 +75,7 @@ export default {
       <h2 class="register-title">Corrections du quiz</h2>
       <ol class="corrections">${questions.map((q, i) => correction(q, progress.quiz[q.id], i + 1)).join("")}</ol>
 
-      ${passed ? `
-      <section class="attestation" aria-hidden="true">
-        <p class="attestation-brand">BP Learning · Formation continue</p>
-        <h2>Attestation de formation</h2>
-        <p><strong>${esc(PROFILE.name)}</strong> a validé le module « ${esc(module.title)} »</p>
-        <p>le ${formatDate(progress.completedAt)}, avec un score de ${progress.score} %.</p>
-        ${stamp(progress.score, progress.completedAt)}
-        <p class="attestation-note">Formation sur cas et produits fictifs.</p>
-      </section>` : ""}`;
+      ${passed ? attestation(module, progress, PROFILE) : ""}`;
   },
 
   // Bar widths are set here: the CSP forbids inline style attributes.
@@ -98,8 +86,8 @@ export default {
   },
 
   actions: {
-    print() {
-      window.print();
+    print(_el, ctx) {
+      printAttestation(ctx.module.id);
     },
 
     // Reset, then leave: re-rendering this screen with an empty module would fail.

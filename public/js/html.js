@@ -41,3 +41,24 @@ export function stamp(score, isoDate, { pressing = false } = {}) {
       <span class="stamp-date">${esc(date)}</span>
     </span>`;
 }
+
+// The printable attestation. Hidden on screen; printAttestation() prints exactly this one.
+export function attestation(module, progress, profile) {
+  const date = new Date(progress.completedAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
+  return `
+    <section class="attestation" data-attestation="${esc(module.id)}" aria-hidden="true">
+      <p class="attestation-brand">BP Learning · Formation continue</p>
+      <h2>Attestation de formation</h2>
+      <p><strong>${esc(profile.name)}</strong> a validé le module « ${esc(module.title)} »</p>
+      <p>le ${esc(date)}, avec un score de ${progress.score} %.</p>
+      ${stamp(progress.score, progress.completedAt)}
+      <p class="attestation-note">Formation sur cas et produits fictifs.</p>
+    </section>`;
+}
+
+export function printAttestation(moduleId) {
+  const sheet = document.querySelector(`[data-attestation="${CSS.escape(moduleId)}"]`);
+  sheet.classList.add("is-printing");
+  window.addEventListener("afterprint", () => sheet.classList.remove("is-printing"), { once: true });
+  window.print();
+}

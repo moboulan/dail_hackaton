@@ -25,8 +25,8 @@ export const MODULES = [
     id: "rhume",
     title: "Rhume",
     duration: "10 min",
-    customer: "Mme Naïma",
-    brief: "Mme Naïma a le nez bouché et dort mal. Elle préfère souvent qu'on lui explique en darija.",
+    customer: "Mme Imane",
+    brief: "Mme Imane a le nez bouché et dort mal. Elle préfère souvent qu'on lui explique en darija.",
     products: [
       { name: "Respira Mer", price: 45, form: "Spray d'eau de mer", forWhat: "Nez bouché ou qui coule.", use: "Se moucher, puis une pulvérisation par narine, plusieurs fois par jour." },
       { name: "Gorgéa Miel", price: 30, form: "Pastilles", forWhat: "Gorge qui gratte.", use: "Laisser fondre en bouche.", caution: "Contient du sucre : pas en cas de diabète." },

@@ -2,7 +2,7 @@
 // A validated line carries the officine's cachet instead of a status word.
 
 import { MODULES, PASS_MARK, PROFILE } from "../content.js";
-import { esc, stamp } from "../html.js";
+import { attestation, esc, printAttestation, stamp } from "../html.js";
 import { STEPS, furthestUnlocked } from "../steps.js";
 
 function passed(progress) {
@@ -30,7 +30,10 @@ export default {
           <th scope="row" class="col-module">${esc(module.title)}<span class="col-customer">${esc(module.customer)}</span></th>
           <td class="col-duration">${esc(module.duration)}</td>
           <td class="col-state">${cell}</td>
-          <td class="col-action"><a class="button${action === "Revoir" ? "" : " primary"}" href="#${module.id}" aria-label="${esc(action)} : ${esc(module.title)}">${esc(action)}</a></td>
+          <td class="col-action">
+            ${passed(state.modules[module.id]) ? `<button class="button primary" type="button" data-action="print" data-module="${module.id}" aria-label="Imprimer l'attestation : ${esc(module.title)}">Attestation</button>` : ""}
+            <a class="button${action === "Revoir" ? "" : " primary"}" href="#${module.id}" aria-label="${esc(action)} : ${esc(module.title)}">${esc(action)}</a>
+          </td>
         </tr>`;
     }).join("");
 
@@ -44,8 +47,13 @@ export default {
           <tr><th scope="col" class="col-number">N°</th><th scope="col">Module</th><th scope="col" class="col-duration">Durée</th><th scope="col">État</th><th scope="col"><span class="visually-hidden">Action</span></th></tr>
         </thead>
         <tbody>${rows}</tbody>
-      </table>`;
+      </table>
+      ${MODULES.filter((m) => passed(state.modules[m.id])).map((m) => attestation(m, state.modules[m.id], PROFILE)).join("")}`;
   },
 
-  actions: {},
+  actions: {
+    print(button) {
+      printAttestation(button.dataset.module);
+    },
+  },
 };

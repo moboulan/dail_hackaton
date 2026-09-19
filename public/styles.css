@@ -137,6 +137,7 @@ main { width: 100%; max-width: var(--measure); margin: 0 auto; padding: 48px var
 .register .col-duration { color: var(--ink-soft); white-space: nowrap; }
 .register .col-state { width: 11em; }
 .register .col-action { text-align: right; width: 1%; white-space: nowrap; }
+.col-action .button + .button { margin-left: 8px; }
 .state { color: var(--ink-soft); }
 .state.is-open { color: var(--ink); font-weight: 700; }
 .state.is-retry { color: var(--warning-text); font-weight: 700; }
@@ -327,7 +328,8 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   .register td, .register tbody th { padding: 0; border: 0; }
   .register .col-duration { display: none; }
   .register .col-state { grid-column: 2; width: auto; }
-  .register .col-action { grid-column: 3; grid-row: 1 / span 2; }
+  .register .col-action { grid-column: 3; grid-row: 1 / span 2; display: grid; gap: 6px; }
+  .col-action .button + .button { margin-left: 0; }
   .register .stamp { --size: 64px; margin: 6px 0 0; }
   .register .stamp-score { font-size: 1rem; }
   .register .stamp-top, .register .stamp-date { font-size: 0.55rem; }
@@ -359,7 +361,7 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 
 /* Printing only ever prints the attestation: a register extract with the cachet. */
 @media print {
-  body > *:not(main), main > *:not(.attestation) { display: none !important; }
+  body > *:not(main), main > *:not(.attestation.is-printing) { display: none !important; }
   body, main { background: #fff; }
   main { max-width: none; padding: 0; }
   .attestation { display: grid; justify-items: center; gap: 10px; text-align: center; padding: 72px 48px; border-top: 3px solid var(--ink); border-bottom: 3px solid var(--ink); }
