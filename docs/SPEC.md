@@ -42,7 +42,7 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | The pharmacist types free text. DeepSeek role-plays the customer. |
 | 19 Sep | Feedback: the conversation runs uninterrupted; an optional "Indice" button helps when stuck; at the end an AI debrief grades against a fixed rubric and quotes the pharmacist's own lines. |
 | 19 Sep | The pharmacist ends the conversation ("Terminer l'échange"); the customer may say goodbye when satisfied. Hard cap: 12 pharmacist messages. |
-| 19 Sep | Preparation: read the product sheet and the 3 communication principles, then 2 quick checks (retry allowed) unlock the conversation. The sheet stays viewable during the chat. |
+| 19 Sep | Preparation: read the fictional product sheets and the 4 reflexes, then 2 quick checks (retry allowed) unlock the conversation. The sheet stays viewable during the chat. |
 | 19 Sep | Quiz at the end, with explanations and retry. |
 | 19 Sep | Final score = 50 % conversation rubric + 50 % final quiz. Pass mark 80 %. Unlimited retries. |
 | 19 Sep | Passing unlocks a printable attestation (module, date, score). The name is typed on the attestation screen only; it is printed, never stored and never sent to the AI. |
@@ -53,18 +53,24 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | PII stripped server-side before anything reaches DeepSeek. |
 | 19 Sep | Design pass later with impeccable.style and designmd.ai. |
 
-## Guided path
+## Guided path (5 screens, rebuilt from scratch)
 
-1. **Intro:** what the training is, who it is for, how long it takes (about 15 min), the pass
-   mark, what is stored (progress in this browser) and what is sent (redacted conversation
-   to an AI provider). One button: "Commencer".
-2. **Preparation:** product sheet + 3 communication principles, then 2 quick checks.
-3. **Conversation:** free-text chat with the AI customer; sheet available; "Indice";
-   "Terminer l'échange".
-4. **Debrief:** rubric results with quotes, what went well, what to improve.
-5. **Final quiz:** short questions with explanations and retry.
-6. **Result:** combined score, pass or not, what to redo.
-7. **Attestation:** only when passed; name typed, printed, not stored.
+No backward compatibility with the starter: new code, new storage key, no old routes.
+No menu and no progress page: a step bar is the only navigation. Finished steps can be
+revisited, later ones cannot be skipped. First visit opens the intro; later visits open the
+step where the pharmacist stopped.
+
+1. **Accueil** (`#accueil`): what the training is, about 15 min, 80 % to pass, what is stored
+   (progress in this browser) and what is sent (redacted conversation to an AI provider).
+   One button: "Commencer".
+2. **Préparation** (`#preparation`): fictional product sheets, the 4 reflexes, 2 quick checks
+   with explanation and retry. "Continuer" unlocks when both are right.
+3. **Échange** (`#echange`): full-screen chat with the AI customer, typed replies,
+   "Fiche produit", "Indice", "Terminer l'échange".
+4. **Bilan** (`#bilan`): debrief with the pharmacist's own quotes, then the final quiz below.
+   "Voir mon résultat".
+5. **Résultat** (`#resultat`): combined score, pass or not, what to redo; when passed, name
+   field and "Imprimer l'attestation". "Recommencer la formation" with in-page confirmation.
 
 ## Conversation design
 
@@ -97,15 +103,13 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 | # | Step | Fixes | Status |
 | --- | --- | --- | --- |
 | 1 | Repo skeleton, baseline, docs, before screenshots (desktop and mobile). | | done |
-| 2 | Guided shell and correctness: French routes, guided step flow with indicator (no skipping, revisit allowed), "vous" throughout, remove dummy elements, focus and scroll reset on step change, inline status instead of covering toast, safe storage, no listener leak, reset with in-page confirmation, compact mobile header. Existing content kept for now. | P07 (header), P15, P16, P17, P18, P19, P22, P23, P24, P25, P26, P27, P28 | todo |
-| 3 | Intro and preparation: intro screen, fictional product sheet, scenario, 2 quick checks. | P20, P21 | todo |
-| 4 | Conversation: Node server, `/api/chat`, persona, PII redaction, limits, all states, "Indice", end button. | P01, P02, P03, P04, P06, P07 | todo |
-| 5 | Debrief: `/api/debrief`, rubric grading with quotes, validated structured output. | P08 | todo |
-| 6 | Final quiz: explanations, retry, varied answer order. | P05, P09, P10, P11, P12, P13 | todo |
-| 7 | Result and attestation: combined score, 80 % pass, printable attestation. | P14 | todo |
-| 8 | Vercel deployment with key in environment variables. | | todo |
-| 9 | Design pass (impeccable.style, designmd.ai). | | todo |
-| 10 | Evidence: test with another person, after screenshots, checklist complete. | | todo |
+| 2 | New app shell (router, step bar, resume, safe storage, focus and scroll handling, inline status, reset with confirmation, mobile layout) plus Accueil and Préparation with the fictional content. | P07 (header), P15 to P28 as they apply | done |
+| 3 | Échange: Node server, `/api/chat`, persona, PII redaction, limits, all states, "Indice", end button. | P01 to P07 | todo |
+| 4 | Bilan: `/api/debrief` rubric grading with quotes, then the final quiz with explanations and retry. | P05, P08 to P13 | todo |
+| 5 | Résultat: combined score, 80 % pass, printable attestation. | P14 | todo |
+| 6 | Design pass: ask the user, then apply impeccable.style with their `nomadkit-DESIGN.md` (designmd.ai). | | todo |
+| 7 | Vercel hosting, key in environment variables. | | todo |
+| 8 | Evidence: test with another person, after screenshots, checklist complete. | | todo |
 
 ## Assumptions
 
@@ -116,7 +120,8 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 ## Known gaps and mocks
 
 - All people, products and dialogue are synthetic and labelled so in the app.
-- To be completed as work progresses.
+- Échange is a placeholder screen until step 3; Bilan and Résultat do not exist until steps 4 and 5.
+- Radio answers in Préparation: moving with the arrow keys selects, so each arrow press counts as an answer (standard radio behaviour; retry is unlimited).
 
 ## References (to research)
 
