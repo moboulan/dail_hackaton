@@ -35,19 +35,20 @@ function criterionItem(result, customer, shown) {
       <p class="criterion-level">${icon(level.mark)}${level.word}</p>
       <h2 class="criterion-title">${esc(title)}</h2>
       <p class="criterion-comment">${esc(result.comment)}</p>
-      ${shown.has(result.exchange?.said) ? "" : exchange(result, customer)}
+      ${result.score < 2 && !shown.has(result.exchange?.said) ? exchange(result, customer) : ""}
       ${result.better ? `<p class="better"><span class="speaker">Vous auriez pu dire</span>${esc(result.better)}</p>` : ""}
     </li>`;
 }
 
-// Criteria the situation called for; an exchange quoted by several criteria is shown once.
+// Criteria the situation called for. Exchanges back up what was missed (a success needs no
+// proof) and each is shown once.
 function criteriaList(debrief, customer) {
   const shown = new Set();
   return debrief.criteria
     .filter((c) => c.score !== null)
     .map((c) => {
       const item = criterionItem(c, customer, shown);
-      if (c.exchange) shown.add(c.exchange.said);
+      if (c.exchange && c.score < 2) shown.add(c.exchange.said);
       return item;
     })
     .join("");
