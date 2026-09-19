@@ -97,9 +97,8 @@ async function openConversation(ctx) {
 export default {
   title: "Échange",
 
-  render({ module, progress, notice }) {
+  render({ module, progress }) {
     return `
-      ${notice ? `<p class="notice">${esc(notice)}</p>` : ""}
       <div class="chat-layout">
         <aside class="memo" aria-label="Mémo">${memo()}</aside>
         <section class="chat" aria-labelledby="chat-title">

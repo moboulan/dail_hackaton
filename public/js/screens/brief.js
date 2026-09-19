@@ -5,10 +5,9 @@ import { esc, productCard } from "../html.js";
 export default {
   title: "Brief",
 
-  render({ module, notice }) {
+  render({ module }) {
     return `
       <h1 tabindex="-1">${esc(module.title)}</h1>
-      ${notice ? `<p class="notice">${esc(notice)}</p>` : ""}
       <p class="scenario">${esc(module.brief)}</p>
 
       <h2>Votre rayon</h2>

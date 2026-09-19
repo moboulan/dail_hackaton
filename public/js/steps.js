@@ -40,19 +40,6 @@ export function isDone(step, progress) {
   }
 }
 
-export function lockReason(step) {
-  switch (step) {
-    case "echange":
-      return "Lisez d'abord le brief.";
-    case "bilan":
-      return "Le bilan s'ouvre quand l'échange est terminé.";
-    case "quiz":
-      return "Le quiz s'ouvre après le bilan.";
-    default:
-      return "";
-  }
-}
-
 export function furthestUnlocked(progress) {
   const open = STEPS.filter((s) => isUnlocked(s.id, progress));
   return open[open.length - 1].id;

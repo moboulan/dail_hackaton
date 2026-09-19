@@ -70,7 +70,6 @@ h1:focus { outline: none; }
 
 /* Page */
 main { width: 100%; max-width: var(--max); margin: 0 auto; padding: 32px var(--space) 48px; flex: 1; }
-.notice { background: var(--notice-bg); border-radius: var(--radius); padding: 12px var(--space); }
 .scenario { background: var(--surface); border-left: 4px solid var(--accent); padding: 12px var(--space); border-radius: 0 var(--radius) var(--radius) 0; }
 
 /* Dashboard */

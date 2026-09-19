@@ -1,6 +1,6 @@
 import * as store from "./store.js";
 import { moduleById } from "./content.js";
-import { STEPS, STEP_IDS, isDone, isUnlocked, lockReason } from "./steps.js";
+import { STEPS, STEP_IDS, isDone, isUnlocked } from "./steps.js";
 import dashboard from "./screens/dashboard.js";
 import brief from "./screens/brief.js";
 import echange from "./screens/echange.js";
@@ -27,7 +27,6 @@ const ctx = {
   get progress() {
     return route.module ? state.modules[route.module.id] : null;
   },
-  notice: "",
   // Persist without re-rendering, for screens that update their own DOM (the chat).
   save() {
     persist();
@@ -79,7 +78,6 @@ function furthestBuilt(progress) {
 
 function show({ moveFocus }) {
   const parsed = parseHash();
-  ctx.notice = "";
 
   if (!parsed.module) {
     route = { module: null, step: null };
@@ -87,11 +85,8 @@ function show({ moveFocus }) {
   } else {
     const progress = state.modules[parsed.module.id];
     let step = parsed.step ?? furthestBuilt(progress);
-    if (!STEP_SCREENS[step] || !isUnlocked(step, progress)) {
-      // Explain only when a step was asked for explicitly; resuming needs no message.
-      if (parsed.step) ctx.notice = lockReason(step);
-      step = furthestBuilt(progress);
-    }
+    // A locked or unbuilt step quietly resolves to where the pharmacist can be.
+    if (!STEP_SCREENS[step] || !isUnlocked(step, progress)) step = furthestBuilt(progress);
     route = { module: parsed.module, step };
     const hash = `#${parsed.module.id}/${step}`;
     if (location.hash !== hash) history.replaceState(null, "", hash);

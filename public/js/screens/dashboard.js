@@ -19,7 +19,7 @@ function cardStatus(progress) {
 export default {
   title: "Tableau de bord",
 
-  render({ state, notice }) {
+  render({ state }) {
     const validated = MODULES.filter((m) => passed(state.modules[m.id]));
     const cards = MODULES.map((module) => {
       const status = cardStatus(state.modules[module.id]);
@@ -34,7 +34,6 @@ export default {
     }).join("");
     return `
       <h1 tabindex="-1">Bonjour, ${esc(PROFILE.name)}</h1>
-      ${notice ? `<p class="notice">${esc(notice)}</p>` : ""}
       <p class="licence">Licence ${PROFILE.licenceYear} : <strong>${validated.length} / ${MODULES.length}</strong> modules validés</p>
       <ul class="modules">${cards}</ul>`;
   },
