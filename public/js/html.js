@@ -6,7 +6,7 @@ export function esc(value) {
   return String(value ?? "").replace(/[&<>"']/g, (c) => ENTITIES[c]);
 }
 
-export function productSheet(product) {
+export function productCard(product) {
   return `
     <article class="sheet">
       <h3>${esc(product.name)} <span class="sheet-form">· ${esc(product.form)}</span></h3>

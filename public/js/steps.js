@@ -1,66 +1,59 @@
-// The guided path: which steps exist, when each one unlocks and when it counts as done.
-// Unlocks are derived from the saved answers, never stored, so they cannot drift out of sync.
-
-import { CHECKS } from "./content.js";
+// The 4 steps of a module, when each unlocks and when it counts as done.
+// Unlocks are derived from the saved progress, never stored, so they cannot drift out of sync.
 
 export const STEPS = [
-  { id: "preparation", label: "Préparation" },
+  { id: "brief", label: "Brief" },
   { id: "echange", label: "Échange" },
-  { id: "bilan", label: "Bilan et quiz" },
-  { id: "resultat", label: "Résultat" },
+  { id: "bilan", label: "Bilan" },
+  { id: "quiz", label: "Quiz" },
 ];
 
-export function preparationDone(state) {
-  return CHECKS.every((check) => state.checks[check.id] === check.correct);
-}
+export const STEP_IDS = new Set(STEPS.map((s) => s.id));
 
-export function isUnlocked(id, state) {
-  switch (id) {
-    case "accueil":
+export function isUnlocked(step, progress) {
+  switch (step) {
+    case "brief":
       return true;
-    case "preparation":
-      return state.started;
     case "echange":
-      return state.started && preparationDone(state);
+      return progress.started;
     case "bilan":
-      return isUnlocked("echange", state) && state.conversation.ended;
-    case "resultat":
-      return isUnlocked("bilan", state) && state.quizDone;
+      return progress.chat.ended;
+    case "quiz":
+      return progress.debrief !== null;
     default:
       return false;
   }
 }
 
-export function isDone(id, state) {
-  switch (id) {
-    case "preparation":
-      return preparationDone(state);
+export function isDone(step, progress) {
+  switch (step) {
+    case "brief":
+      return progress.started;
     case "echange":
-      return state.conversation.ended;
+      return progress.chat.ended;
     case "bilan":
-      return state.quizDone;
+      return progress.debrief !== null;
+    case "quiz":
+      return progress.score !== null;
     default:
       return false;
   }
 }
 
-export function lockReason(id) {
-  switch (id) {
-    case "preparation":
-      return "Commencez le module pour ouvrir la préparation.";
+export function lockReason(step) {
+  switch (step) {
     case "echange":
-      return "L'échange s'ouvre quand les deux questions de la préparation sont réussies.";
+      return "Lisez d'abord le brief.";
     case "bilan":
-      return "Le bilan s'ouvre quand vous avez terminé l'échange.";
-    case "resultat":
-      return "Le résultat s'affiche quand vous avez terminé le quiz.";
+      return "Le bilan s'ouvre quand l'échange est terminé.";
+    case "quiz":
+      return "Le quiz s'ouvre après le bilan.";
     default:
       return "";
   }
 }
 
-// The furthest step the pharmacist may open right now.
-export function furthestUnlocked(state) {
-  const open = STEPS.filter((step) => isUnlocked(step.id, state));
-  return open.length ? open[open.length - 1].id : "accueil";
+export function furthestUnlocked(progress) {
+  const open = STEPS.filter((s) => isUnlocked(s.id, progress));
+  return open[open.length - 1].id;
 }

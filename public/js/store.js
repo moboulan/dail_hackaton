@@ -1,18 +1,25 @@
 // Progress lives only in this browser. Every storage call is guarded: private windows and
 // strict settings can block localStorage, and the app must keep working without it.
 
-const KEY = "bp-learning-eagle-v1";
+import { MODULES } from "./content.js";
+
+const KEY = "bp-learning-eagle-v2";
 
 let storageWorks = true;
 
-export function freshState() {
+export function freshProgress() {
   return {
     started: false,
-    lastStep: "preparation",
-    checks: {},
-    conversation: { messages: [], ended: false },
-    quizDone: false,
+    lastStep: "brief",
+    chat: { messages: [], ended: false },
+    debrief: null,
+    quiz: {},
+    score: null,
   };
+}
+
+export function freshState() {
+  return { modules: Object.fromEntries(MODULES.map((m) => [m.id, freshProgress()])) };
 }
 
 export function load() {
@@ -55,21 +62,25 @@ export function storageAvailable() {
 // Keep only fields of the expected type, so a hand-edited or stale entry cannot break rendering.
 function sanitize(saved) {
   const state = freshState();
-  if (!saved || typeof saved !== "object") return state;
-  if (typeof saved.started === "boolean") state.started = saved.started;
-  if (typeof saved.lastStep === "string") state.lastStep = saved.lastStep;
-  if (saved.checks && typeof saved.checks === "object" && !Array.isArray(saved.checks)) {
-    for (const [id, value] of Object.entries(saved.checks)) {
-      if (Number.isInteger(value)) state.checks[id] = value;
+  for (const module of MODULES) {
+    const stored = saved?.modules?.[module.id];
+    if (!stored || typeof stored !== "object") continue;
+    const progress = state.modules[module.id];
+    if (typeof stored.started === "boolean") progress.started = stored.started;
+    if (typeof stored.lastStep === "string") progress.lastStep = stored.lastStep;
+    if (Array.isArray(stored.chat?.messages)) {
+      progress.chat.messages = stored.chat.messages.filter(
+        (m) => m && (m.role === "customer" || m.role === "pharmacist") && typeof m.text === "string",
+      );
+      progress.chat.ended = stored.chat.ended === true;
     }
+    if (stored.debrief && typeof stored.debrief === "object") progress.debrief = stored.debrief;
+    if (stored.quiz && typeof stored.quiz === "object" && !Array.isArray(stored.quiz)) {
+      for (const [id, value] of Object.entries(stored.quiz)) {
+        if (Number.isInteger(value)) progress.quiz[id] = value;
+      }
+    }
+    if (Number.isFinite(stored.score)) progress.score = stored.score;
   }
-  const conversation = saved.conversation;
-  if (conversation && Array.isArray(conversation.messages)) {
-    state.conversation.messages = conversation.messages.filter(
-      (m) => m && (m.role === "customer" || m.role === "pharmacist") && typeof m.text === "string",
-    );
-    state.conversation.ended = conversation.ended === true;
-  }
-  if (typeof saved.quizDone === "boolean") state.quizDone = saved.quizDone;
   return state;
 }

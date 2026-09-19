@@ -111,7 +111,7 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 | --- | --- | --- | --- |
 | 1 | Repo skeleton, baseline, docs, before screenshots (desktop and mobile). | | done |
 | 2 | First rebuild: shell, router, step bar, storage, focus handling, reset (kept); intro and preparation (replaced by step 3). | P15 to P28 | done |
-| 3 | Module engine: 3 modules as content, dashboard with 3 cards and licence status, Brief screen, per-module routes and state. | | todo |
+| 3 | Module engine: 3 modules as content, dashboard with 3 cards and licence status, Brief screen, per-module routes and state. | | done |
 | 4 | Échange: Node server, `/api/chat`, persona per module, PII redaction, limits, all states, products panel, Mémo, Indice, end button. | P01 to P07 | todo |
 | 5 | Bilan: `/api/debrief`, rubric scoring with quotes. | P08 | todo |
 | 6 | Quiz, module score, attestation, dashboard update. | P05, P09 to P14 | todo |
@@ -128,8 +128,7 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 ## Known gaps and mocks
 
 - All people, products and dialogue are synthetic and labelled so in the app.
-- Échange is a placeholder screen until step 3; Bilan and Résultat do not exist until steps 4 and 5.
-- Radio answers in Préparation: moving with the arrow keys selects, so each arrow press counts as an answer (standard radio behaviour; retry is unlimited).
+- Échange is a placeholder until step 4; Bilan and Quiz do not exist until steps 5 and 6.
 
 ## References (to research)
 

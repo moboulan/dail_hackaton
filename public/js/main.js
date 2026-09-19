@@ -1,38 +1,52 @@
 import * as store from "./store.js";
-import { STEPS, furthestUnlocked, isDone, isUnlocked, lockReason } from "./steps.js";
-import accueil from "./screens/accueil.js";
-import preparation from "./screens/preparation.js";
+import { moduleById } from "./content.js";
+import { STEPS, STEP_IDS, isDone, isUnlocked, lockReason } from "./steps.js";
+import dashboard from "./screens/dashboard.js";
+import brief from "./screens/brief.js";
 import echange from "./screens/echange.js";
 
-const SCREENS = { accueil, preparation, echange };
+// Module steps that exist so far. A step missing here falls back to the furthest built one.
+const STEP_SCREENS = { brief, echange };
 
 const main = document.getElementById("main");
 const stepBar = document.getElementById("steps");
+const backLink = document.getElementById("back");
 const status = document.getElementById("status");
 const storageWarning = document.getElementById("storage-warning");
 const resetZone = document.getElementById("reset");
 
 let state = store.load();
-let current = "accueil";
+let route = { module: null, step: null }; // module null = dashboard
 
-// Shared with every screen.
+// Shared with every screen. Inside a module, update() hands over that module's progress.
 const ctx = {
   get state() {
     return state;
   },
+  get module() {
+    return route.module;
+  },
+  get progress() {
+    return route.module ? state.modules[route.module.id] : null;
+  },
   notice: "",
   update(change, { focus } = {}) {
-    change(state);
+    change(route.module ? state.modules[route.module.id] : state);
     persist();
     renderScreen();
     if (focus) main.querySelector(focus)?.focus();
   },
-  navigate(id) {
-    if (location.hash === `#${id}`) show(id, { moveFocus: true });
-    else location.hash = id; // triggers hashchange, which calls show()
+  go(step) {
+    navigate(`${route.module.id}/${step}`);
   },
+  navigate,
   announce,
 };
+
+function navigate(hash) {
+  if (location.hash === `#${hash}`) show({ moveFocus: true });
+  else location.hash = hash; // triggers hashchange, which calls show()
+}
 
 function persist() {
   store.save(state);
@@ -47,32 +61,42 @@ function announce(message) {
   }, 50);
 }
 
-function defaultRoute() {
-  return state.started ? state.lastStep : "accueil";
+// "#rhume/echange" -> module + requested step. Anything unknown -> dashboard.
+function parseHash() {
+  const [moduleId, step] = location.hash.slice(1).split("/");
+  const module = moduleById(moduleId);
+  if (!module) return { module: null, step: null };
+  return { module, step: STEP_IDS.has(step) ? step : null };
 }
 
-// The furthest step that is both unlocked and already built.
-function fallbackRoute() {
-  const id = furthestUnlocked(state);
-  return SCREENS[id] ? id : "accueil";
+// The furthest step that is unlocked and already built.
+function furthestBuilt(progress) {
+  const open = STEPS.map((s) => s.id).filter((id) => isUnlocked(id, progress) && STEP_SCREENS[id]);
+  return open[open.length - 1];
 }
 
-function show(requested, { moveFocus }) {
-  const askedExplicitly = Boolean(SCREENS[requested]);
-  let id = askedExplicitly ? requested : defaultRoute();
+function show({ moveFocus }) {
+  const parsed = parseHash();
   ctx.notice = "";
-  if (!SCREENS[id] || !isUnlocked(id, state)) {
-    // Explain only when the pharmacist asked for this step; a silent resume needs no message.
-    if (askedExplicitly) ctx.notice = lockReason(id);
-    id = fallbackRoute();
-  }
-  if (location.hash !== `#${id}`) history.replaceState(null, "", `#${id}`);
 
-  current = id;
-  if (id !== "accueil") {
-    state.lastStep = id;
+  if (!parsed.module) {
+    route = { module: null, step: null };
+    if (location.hash !== "#accueil") history.replaceState(null, "", "#accueil");
+  } else {
+    const progress = state.modules[parsed.module.id];
+    let step = parsed.step ?? progress.lastStep;
+    if (!STEP_SCREENS[step] || !isUnlocked(step, progress)) {
+      // Explain only when a step was asked for explicitly; resuming needs no message.
+      if (parsed.step) ctx.notice = lockReason(step);
+      step = furthestBuilt(progress);
+    }
+    route = { module: parsed.module, step };
+    progress.lastStep = step;
     persist();
+    const hash = `#${parsed.module.id}/${step}`;
+    if (location.hash !== hash) history.replaceState(null, "", hash);
   }
+
   renderScreen();
   renderResetLink();
   if (moveFocus) {
@@ -81,34 +105,41 @@ function show(requested, { moveFocus }) {
   }
 }
 
+function currentScreen() {
+  return route.module ? STEP_SCREENS[route.step] : dashboard;
+}
+
 function renderScreen() {
-  const screen = SCREENS[current];
+  const screen = currentScreen();
   main.innerHTML = screen.render(ctx);
-  document.title = `${screen.title} · BP Learning`;
+  document.title = route.module
+    ? `${route.module.title} · ${screen.title} · BP Learning`
+    : `${screen.title} · BP Learning`;
   renderStepBar();
 }
 
 function renderStepBar() {
-  if (current === "accueil") {
-    stepBar.hidden = true;
-    return;
-  }
-  stepBar.hidden = false;
-  const position = STEPS.findIndex((s) => s.id === current) + 1;
+  const inModule = Boolean(route.module);
+  stepBar.hidden = !inModule;
+  backLink.hidden = !inModule;
+  if (!inModule) return;
+
+  const progress = state.modules[route.module.id];
+  const position = STEPS.findIndex((s) => s.id === route.step) + 1;
   const items = STEPS.map((step, index) => {
     const number = `<span class="step-number">${index + 1}</span>`;
     const label = `<span class="step-label-text">${step.label}</span>`;
-    if (step.id === current) {
+    if (step.id === route.step) {
       return `<li class="is-current"><span aria-current="step">${number}${label}</span></li>`;
     }
-    if (isUnlocked(step.id, state)) {
-      const done = isDone(step.id, state) ? `<span class="visually-hidden"> (terminé)</span>` : "";
-      return `<li class="is-open"><a href="#${step.id}">${number}${label}${done}</a></li>`;
+    if (isUnlocked(step.id, progress) && STEP_SCREENS[step.id]) {
+      const done = isDone(step.id, progress) ? `<span class="visually-hidden"> (terminé)</span>` : "";
+      return `<li class="is-open"><a href="#${route.module.id}/${step.id}">${number}${label}${done}</a></li>`;
     }
     return `<li class="is-locked"><span>${number}${label}<span class="visually-hidden"> (pas encore disponible)</span></span></li>`;
   }).join("");
   stepBar.innerHTML = `
-    <p class="step-count">Étape ${position} sur ${STEPS.length}</p>
+    <p class="step-count">${route.module.title} · étape ${position} sur ${STEPS.length}</p>
     <ol>${items}</ol>`;
 }
 
@@ -118,21 +149,21 @@ document.addEventListener("click", (event) => {
   if (!target) return;
   const action = target.dataset.action;
   if (RESET_ACTIONS[action]) return RESET_ACTIONS[action]();
-  SCREENS[current].actions[action]?.(target, ctx);
+  currentScreen().actions[action]?.(target, ctx);
 });
 
 document.addEventListener("change", (event) => {
   const target = event.target.closest("[data-change]");
-  if (target) SCREENS[current].actions[target.dataset.change]?.(target, ctx);
+  if (target) currentScreen().actions[target.dataset.change]?.(target, ctx);
 });
 
-window.addEventListener("hashchange", () => show(location.hash.slice(1), { moveFocus: true }));
+window.addEventListener("hashchange", () => show({ moveFocus: true }));
 
-// Reset lives in the footer on every screen and always asks first, inside the page.
+// Reset lives in the footer and always asks first, inside the page.
 const RESET_ACTIONS = {
   "reset-ask"() {
     resetZone.innerHTML = `
-      <p id="reset-question">Effacer toute votre progression et recommencer au début ?</p>
+      <p id="reset-question">Effacer toute votre progression ?</p>
       <button class="button danger" type="button" data-action="reset-confirm" aria-describedby="reset-question">Oui, tout effacer</button>
       <button class="button" type="button" data-action="reset-cancel">Annuler</button>`;
     resetZone.querySelector("[data-action=reset-cancel]").focus();
@@ -144,18 +175,18 @@ const RESET_ACTIONS = {
   "reset-confirm"() {
     store.clear();
     state = store.freshState();
-    ctx.navigate("accueil");
-    announce("Votre progression a été effacée.");
+    navigate("accueil");
+    announce("Progression effacée.");
   },
 };
 
 // Offered only once there is progress to erase.
 function renderResetLink() {
-  resetZone.innerHTML = state.started
-    ? `<button class="link-button" type="button" data-action="reset-ask">Recommencer depuis le début</button>`
+  const anyProgress = Object.values(state.modules).some((p) => p.started);
+  resetZone.innerHTML = anyProgress
+    ? `<button class="link-button" type="button" data-action="reset-ask">Effacer ma progression</button>`
     : "";
 }
 
-renderResetLink();
 storageWarning.hidden = store.storageAvailable();
-show(location.hash.slice(1), { moveFocus: false });
+show({ moveFocus: false });
