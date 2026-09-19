@@ -50,6 +50,7 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | Products during the chat: side panel on desktop, "Vos produits" bottom sheet on phones. |
 | 19 Sep | Products show a fictional price (DH): knowing what you sell includes its price. |
 | 19 Sep | Each customer's hidden facts and rules live in `lib/personas.js` on the server, so they cannot be read in the page source. |
+| 19 Sep | Customer renamed Mme Imane, speaking mostly darija; language is graded on the conversation only. Products are ruled out live on the chat shelf when the customer reveals the fact that excludes them. Attestation printable from the dashboard. Inventory page and tags not built (time; tags would feel like a toy in a licence tool). |
 | 19 Sep | Whether the language preference is graded is set per persona (`languageMatters`), not left to the model, which applied the rule inconsistently. |
 | 19 Sep | The AI customer speaks first (no scripted opening line), so no two conversations start the same way. |
 | 19 Sep | Quiz generated from the Bilan (the pharmacist's own misses); scores and corrections moved to a new Résultat step; criteria not called for are hidden; products without contraindication show no Attention line; primary buttons forest green (deviation from nomadkit's sand rule, user decision); speaker named on every chat message. |
@@ -91,7 +92,7 @@ module cards (duration, state, score when done, one button). Attestations appear
 **Modules** (all fictional):
 | Module | Customer | Decision to learn |
 | --- | --- | --- |
-| Rhume | Mme Naïma, prefers darija, treats her blood pressure (revealed only if asked) | The night decongestant is contraindicated: do not upsell it; the throat lozenge fits. |
+| Rhume | Mme Imane, speaks mostly darija, treats her blood pressure (revealed only if asked) | The night decongestant is contraindicated: do not upsell it; the throat lozenge fits. |
 | Coup de soleil | Young customer back from the beach | The complementary product fits: offer it. |
 | Mal de ventre | Customer with a warning sign (revealed if asked) | Sell nothing: refer to a doctor. |
 
