@@ -121,7 +121,8 @@ function showReply(ctx, form, reply) {
 // The text box grows with its content, up to about 5 lines, instead of a drag handle.
 function fitTextarea(textarea) {
   textarea.style.height = "auto";
-  textarea.style.height = `${Math.min(textarea.scrollHeight, 160)}px`;
+  textarea.style.height = `${Math.min(textarea.scrollHeight + 3, 160)}px`; // + the 1.5 px borders
+  textarea.style.overflowY = textarea.scrollHeight > 157 ? "auto" : "hidden";
 }
 
 // The customer walks in and speaks first.
