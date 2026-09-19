@@ -20,6 +20,15 @@ node server.js
 Open http://127.0.0.1:8089/. Progress is saved in this browser only. The API key stays on the
 server: the browser only calls `/api/chat` on the same origin, and `.env` is never served.
 
+## Live demo
+
+https://dail-bp-learning.vercel.app
+
+Deployed with the Vercel CLI (`vercel deploy --prod`). `public/` is the static output, and
+`api/chat.js` and `api/debrief.js` wrap the same handlers the local server uses (`lib/`).
+`DEEPSEEK_API_KEY` is a Vercel production secret. `.vercelignore` keeps `.env` files out of
+every upload.
+
 ## Docs
 
 - `docs/SPEC.md`: scope, decisions, steps, open questions.

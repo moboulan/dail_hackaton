@@ -50,6 +50,7 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | Products during the chat: side panel on desktop, "Vos produits" bottom sheet on phones. |
 | 19 Sep | Products show a fictional price (DH): knowing what you sell includes its price. |
 | 19 Sep | Each customer's hidden facts and rules live in `lib/personas.js` on the server, so they cannot be read in the page source. |
+| 19 Sep | Whether the language preference is graded is set per persona (`languageMatters`), not left to the model, which applied the rule inconsistently. |
 | 19 Sep | The AI customer speaks first (no scripted opening line), so no two conversations start the same way. |
 | 19 Sep | Quiz generated from the Bilan (the pharmacist's own misses); scores and corrections moved to a new Résultat step; criteria not called for are hidden; products without contraindication show no Attention line; primary buttons forest green (deviation from nomadkit's sand rule, user decision); speaker named on every chat message. |
 | 19 Sep | One piece of information in one place: the logo is the way home (no back link), the step bar names the step (no counter, no repeated heading). Chat layout: Mémo left, conversation centre with the customer's name as its title, compact shelf right; side columns stay in view. |
@@ -131,7 +132,7 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 | 5 | Bilan: `/api/debrief`, rubric scoring with quotes. | P08 | done |
 | 6 | Quiz, module score, attestation, dashboard update. | P05, P09 to P14 | done |
 | 7 | Design pass: impeccable with `nomadkit-DESIGN.md`; direction "ordonnancier and cachet" (see DESIGN.md). | | done |
-| 8 | Vercel hosting, key in environment variables. | | todo |
+| 8 | Vercel hosting, key in environment variables: https://dail-bp-learning.vercel.app | | done |
 | 9 | Evidence: test with another person, after screenshots, checklist complete. | | todo |
 
 ## Ideas (not planned)

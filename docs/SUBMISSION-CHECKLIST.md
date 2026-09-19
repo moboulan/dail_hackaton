@@ -6,9 +6,9 @@ Fireside: seated, starts 17:30 Casablanca time, 10 minutes maximum.
 
 | # | Item (from the DaiL site) | Status | Where |
 | --- | --- | --- | --- |
-| 1 | Working local or hosted demo. | missing | |
+| 1 | Working local or hosted demo. | done | https://dail-bp-learning.vercel.app ; local: `node server.js` |
 | 2 | Source ZIP or repository without secrets, credentials or dependency caches. | in progress | this repo; `.env` is git-ignored |
-| 3 | README with exact setup and run steps. | in progress | `README.md` |
+| 3 | README with exact setup and run steps. | done | `README.md` |
 | 4 | Short problem statement naming the audience and task. | missing | `SPEC.md` |
 | 5 | Before and after screenshots from the path you changed. | before done | `evidence/before/`, `evidence/after/` |
 | 6 | Two reference links and why the selected pattern fits. | missing | `SPEC.md` |

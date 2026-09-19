@@ -1,0 +1,6 @@
+# Never upload secrets or local tooling
+.env
+.env.*
+!.env.example
+.vercel
+node_modules

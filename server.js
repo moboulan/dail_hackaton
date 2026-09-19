@@ -8,6 +8,7 @@ import { extname, join, normalize, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { handleChat } from "./lib/chat.js";
 import { handleDebrief } from "./lib/debrief.js";
+import { rateLimited } from "./lib/rate-limit.js";
 
 const ROOT = fileURLToPath(new URL(".", import.meta.url));
 const PUBLIC = join(ROOT, "public");
@@ -39,16 +40,6 @@ function loadEnv(path) {
     const match = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/);
     if (match && !(match[1] in process.env)) process.env[match[1]] = match[2];
   }
-}
-
-// Basic abuse brake: 40 API requests per IP per 10 minutes. In memory, so it resets on restart.
-const hits = new Map();
-function rateLimited(ip) {
-  const now = Date.now();
-  const recent = (hits.get(ip) || []).filter((t) => now - t < 10 * 60 * 1000);
-  recent.push(now);
-  hits.set(ip, recent);
-  return recent.length > 40;
 }
 
 function send(res, status, body, type = "application/json; charset=utf-8") {
