@@ -85,4 +85,5 @@ Numbers 15 to 23 come from the builder testing the live demo in the last hour.
   server-side, but wording can still surprise.
 - Rate limiting is per Vercel instance, so it slows abuse rather than stopping it.
 - The login is client-side with demo passwords; real accounts and a shared database are the next step.
+- The login photo (`public/img/rayon.jpg`) is a web image cropped to remove brand signage; replace it with a licensed or own photo before any real client use.
 - Not built: a shared inventory of all products unlocked across modules.

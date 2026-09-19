@@ -7,8 +7,11 @@ export default {
 
   render() {
     return `
+      <div class="login-split">
+      <div class="login-art" aria-hidden="true"></div>
       <section class="login">
         <h1 tabindex="-1">Connexion</h1>
+        <p class="login-lead">La formation continue de votre officine.</p>
         <form class="login-form" data-submit="signIn" novalidate>
           <label class="field" for="f-login">
             <span class="field-label">Identifiant</span>
@@ -21,7 +24,8 @@ export default {
           <p id="login-error" class="login-error" role="alert"></p>
           <button class="button primary" type="submit">Se connecter</button>
         </form>
-      </section>`;
+      </section>
+      </div>`;
   },
 
   actions: {
