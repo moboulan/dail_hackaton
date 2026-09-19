@@ -62,7 +62,7 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | PII stripped server-side before anything reaches DeepSeek. |
 | 19 Sep | Design pass later with impeccable.style and designmd.ai. |
 | 19 Sep | First screen is a dashboard (fictional profile Dr Alami, licence status, the module, attestations), not an explainer. Minimal copy everywhere: the user is a pharmacist who does not want to read. |
-| 19 Sep | The data warning is one line at the chat input only ("Cas fictif : n'écrivez aucune donnée réelle de patient."), not on the dashboard. |
+| 19 Sep | No data warning in the UI (user decision); personal data is still redacted server-side before reaching DeepSeek. |
 
 ## Product structure
 
@@ -74,7 +74,7 @@ module cards (duration, state, score when done, one button). Attestations appear
    One button: "Commencer l'échange".
 2. **Échange:** the AI customer speaks first. Mémo (the 4 réflexes) on the left, the
    conversation in the centre, a compact "Vos produits" shelf on the right (sheet on phones),
-   "Terminer l'échange". One-line data warning at the input.
+   "Terminer l'échange".
 3. **Bilan:** feedback only, no score. One AI grading on 5 criteria (the 4 réflexes plus "le
    bon conseil, sans erreur"), 0 to 2 each or not applicable when the situation did not call for
    it (hidden, and left out of the score). Each shows a comment, the real exchange (customer line

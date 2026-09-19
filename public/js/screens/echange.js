@@ -46,10 +46,10 @@ function composer(progress, customer) {
     <form class="composer" data-submit="send">
       <label class="visually-hidden" for="reply">Votre réponse</label>
       <textarea id="reply" rows="2" maxlength="${MAX_LENGTH}" data-keydown="composeKey" data-input="typing"
-        placeholder="Votre réponse" aria-describedby="composer-note"></textarea>
+        placeholder="Votre réponse"></textarea>
       <button class="button primary" type="submit" id="send" ${opened ? "" : "disabled"}>Envoyer</button>
     </form>
-    <p class="composer-note" id="composer-note">Cas fictif : n'écrivez aucune donnée réelle de patient.${remaining <= 3 ? ` Encore ${remaining} message${remaining > 1 ? "s" : ""}.` : ""}</p>
+    ${remaining <= 3 ? `<p class="composer-note">Encore ${remaining} message${remaining > 1 ? "s" : ""}.</p>` : ""}
     <div id="end-zone" class="end-zone">
       <button class="link-button" type="button" data-action="end-ask" ${sentCount(progress) ? "" : "hidden"}>Terminer l'échange</button>
     </div>`;

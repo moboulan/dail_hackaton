@@ -3,7 +3,7 @@
 
 import { MODULES } from "./content.js";
 
-const KEY = "bp-learning-eagle-v2";
+const KEY = "bp-learning-eagle-v3";
 
 let storageWorks = true;
 
