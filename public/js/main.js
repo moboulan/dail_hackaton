@@ -29,6 +29,10 @@ const ctx = {
     return route.module ? state.modules[route.module.id] : null;
   },
   notice: "",
+  // Persist without re-rendering, for screens that update their own DOM (the chat).
+  save() {
+    persist();
+  },
   update(change, { focus } = {}) {
     change(route.module ? state.modules[route.module.id] : state);
     persist();
@@ -108,6 +112,8 @@ function currentScreen() {
 function renderScreen() {
   const screen = currentScreen();
   main.innerHTML = screen.render(ctx);
+  main.dataset.screen = route.module ? route.step : "dashboard";
+  screen.afterRender?.(ctx);
   document.title = route.module
     ? `${route.module.title} · ${screen.title} · BP Learning`
     : `${screen.title} · BP Learning`;
@@ -147,10 +153,15 @@ document.addEventListener("click", (event) => {
   currentScreen().actions[action]?.(target, ctx);
 });
 
-document.addEventListener("change", (event) => {
-  const target = event.target.closest("[data-change]");
-  if (target) currentScreen().actions[target.dataset.change]?.(target, ctx);
-});
+// Other events route the same way: data-change, data-input, data-keydown, data-submit.
+for (const type of ["change", "input", "keydown", "submit"]) {
+  document.addEventListener(type, (event) => {
+    const target = event.target.closest(`[data-${type}]`);
+    if (!target) return;
+    if (type === "submit") event.preventDefault();
+    currentScreen().actions[target.dataset[type]]?.(target, ctx, event);
+  });
+}
 
 window.addEventListener("hashchange", () => show({ moveFocus: true }));
 

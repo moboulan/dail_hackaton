@@ -21,6 +21,9 @@ export default {
     start(_el, ctx) {
       ctx.update((progress) => {
         progress.started = true;
+        if (!progress.chat.messages.length) {
+          progress.chat.messages.push({ role: "customer", text: ctx.module.opening });
+        }
       });
       ctx.go("echange");
     },

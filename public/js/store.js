@@ -10,7 +10,7 @@ let storageWorks = true;
 export function freshProgress() {
   return {
     started: false,
-    chat: { messages: [], ended: false },
+    chat: { messages: [], left: false, ended: false },
     debrief: null,
     quiz: {},
     score: null,
@@ -70,6 +70,7 @@ function sanitize(saved) {
       progress.chat.messages = stored.chat.messages.filter(
         (m) => m && (m.role === "customer" || m.role === "pharmacist") && typeof m.text === "string",
       );
+      progress.chat.left = stored.chat.left === true;
       progress.chat.ended = stored.chat.ended === true;
     }
     if (stored.debrief && typeof stored.debrief === "object") progress.debrief = stored.debrief;

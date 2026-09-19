@@ -13,13 +13,13 @@ Evidence: a screenshot in `evidence/before/`, "browser" (reproduced by hand, no 
 
 | ID | Problem | Evidence | Sev | Status | Fix (commit) |
 | --- | --- | --- | --- | --- | --- |
-| P01 | The customer's next line is fixed. A rude reply ("Je vais choisir la langue pour aller plus vite") gets the same polite answer as the best one, so it is not a conversation. | 03 | High | open | |
-| P02 | Feedback is one sentence per turn, identical for every choice, so it praises weak replies ("Ce document est pourtant très clair" is followed by praise). | 03 | High | open | |
-| P03 | Feedback appears only in a small bottom-right toast for 2.6 s, away from the answer. Easy to miss, impossible to reread. | 03, browser | High | open | |
-| P04 | A weak reply gets no explanation, no better alternative and no retry. | browser | Medium | open | |
+| P01 | The customer's next line is fixed. A rude reply ("Je vais choisir la langue pour aller plus vite") gets the same polite answer as the best one, so it is not a conversation. | 03 | High | fixed | Free-text chat with an AI customer who reacts to what is said and how; hidden facts come out only when asked (step 4). |
+| P02 | Feedback is one sentence per turn, identical for every choice, so it praises weak replies ("Ce document est pourtant très clair" is followed by praise). | 03 | High | open | Replaced by per-conversation grading in the Bilan (step 5). |
+| P03 | Feedback appears only in a small bottom-right toast for 2.6 s, away from the answer. Easy to miss, impossible to reread. | 03, browser | High | fixed | No toast: replies appear in the conversation and are announced to screen readers (steps 2 and 4). |
+| P04 | A weak reply gets no explanation, no better alternative and no retry. | browser | Medium | open | The customer reacts to weak replies in the chat; explanation comes in the Bilan (step 5). |
 | P05 | The best reply is always option 1, in every dialogue turn and every quiz, so the right answer can be guessed. | code | Medium | partly fixed | Quiz content places the right answer at varying positions in all 3 modules (step 3). Quiz screen: step 6. |
-| P06 | A green "Simulation terminée" box looks like success even when every reply was weak (0 %). | browser | Medium | open | |
-| P07 | Mobile: the sticky header and navigation take about 190 px (27 % of the screen) and the scenario card fills the first screen. The dialogue and the choices are below the fold. | mobile/00, mobile/03 | Medium | partly fixed | Header no longer sticky, 125 px at 390 px wide with a one-line step bar. Chat layout: step 3. (step 2) |
+| P06 | A green "Simulation terminée" box looks like success even when every reply was weak (0 %). | browser | Medium | fixed | The end of a chat says only "Échange terminé"; judgement belongs to the Bilan (step 4). |
+| P07 | Mobile: the sticky header and navigation take about 190 px (27 % of the screen) and the scenario card fills the first screen. The dialogue and the choices are below the fold. | mobile/00, mobile/03 | Medium | fixed | At 390 px: 2-row header, conversation and text box on the first screen, products one tap away in a sheet (steps 2 and 4). |
 
 ## Result and quiz
 

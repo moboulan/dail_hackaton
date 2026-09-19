@@ -48,6 +48,8 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | Passing unlocks a printable attestation (name from the fictional profile, module, date, score). No name field. |
 | 19 Sep | Navigation: dashboard, then per module a guided path (Brief, Échange, Bilan, Quiz) with a step bar. Finished steps can be revisited; later steps cannot be skipped. |
 | 19 Sep | Products during the chat: side panel on desktop, "Vos produits" bottom sheet on phones. |
+| 19 Sep | Products show a fictional price (DH): knowing what you sell includes its price. |
+| 19 Sep | Each customer's hidden facts and rules live in `lib/personas.js` on the server, so they cannot be read in the page source. |
 | 19 Sep | No footer, no global reset (a pharmacist never wipes licence progress; "Réessayer" redoes a module), no empty "Attestations : aucune" line, no "Médecin si" line. Nothing is added now that polish would remove later. |
 | 19 Sep | "Reprendre" always lands on the furthest unlocked step, so revisiting an earlier step never moves the resume point. |
 | 19 Sep | Patterns borrowed: role-play trainers (short scenario card, conversation, skill-scored debrief), Duolingo (start doing at once, tips behind a button), Khan Academy (hints on demand). |
@@ -114,7 +116,7 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 | 1 | Repo skeleton, baseline, docs, before screenshots (desktop and mobile). | | done |
 | 2 | First rebuild: shell, router, step bar, storage, focus handling, reset (kept); intro and preparation (replaced by step 3). | P15 to P28 | done |
 | 3 | Module engine: 3 modules as content, dashboard with 3 cards and licence status, Brief screen, per-module routes and state. | | done |
-| 4 | Échange: Node server, `/api/chat`, persona per module, PII redaction, limits, all states, products panel, Mémo, Indice, end button. | P01 to P07 | todo |
+| 4 | Échange: Node server, `/api/chat`, persona per module, PII redaction, limits, all states, products panel, Mémo, end button. | P01 to P07 | done |
 | 5 | Bilan: `/api/debrief`, rubric scoring with quotes. | P08 | todo |
 | 6 | Quiz, module score, attestation, dashboard update. | P05, P09 to P14 | todo |
 | 7 | Design pass: ask the user, then impeccable.style with `nomadkit-DESIGN.md`. | | todo |
@@ -140,7 +142,9 @@ not a pre-picked shortlist. Worth doing after the 3 modules work, not before.
 ## Known gaps and mocks
 
 - All people, products and dialogue are synthetic and labelled so in the app.
-- Échange is a placeholder until step 4; Bilan and Quiz do not exist until steps 5 and 6.
+- Bilan and Quiz do not exist until steps 5 and 6: after "Terminer l'échange" the chat stays read-only.
+- The pharmacist's own messages are kept unredacted in their browser (local only); redaction applies to what leaves the server.
+- The customer is a language model: it follows the persona and rules well in tests, but can still word things unexpectedly.
 
 ## References (to research)
 

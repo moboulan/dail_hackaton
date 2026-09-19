@@ -1,27 +1,24 @@
 # BP Learning: Eagle Day version
 
-French communication practice for pharmacy employees in Casablanca: ask the customer's
-language preference, explain one step at a time, check understanding. All people and
-dialogue are synthetic. The app gives no health advice.
+Continuing-education modules for pharmacists in Morocco. In each module the pharmacist reads a
+short brief, advises an AI-played customer in free text, gets a debrief and takes a short quiz.
+Three modules, one decision each: do not upsell (Rhume), upsell when it helps (Coup de soleil),
+refer to a doctor (Mal de ventre). All people and products are fictional.
 
 Built for DaiL Eagle Day, 19 September 2026, Challenge A, from the organisers' starter
 (baseline commit `aa0dfd0`, originals in `docs/original/`).
 
-## Run (current state)
+## Run
 
-The app is still static until the chat server lands (see `docs/SPEC.md`, step 4).
+Requires Node 18 or later. No install step, no dependencies.
 
 ```sh
-cd public
-python3 -m http.server 8089
+cp .env.example .env   # then set DEEPSEEK_API_KEY
+node server.js
 ```
 
-Open http://127.0.0.1:8089/. Progress is saved in this browser only.
-
-## Configuration
-
-Copy `.env.example` to `.env` and set `DEEPSEEK_API_KEY`. `.env` is git-ignored and must
-never be committed or served.
+Open http://127.0.0.1:8089/. Progress is saved in this browser only. The API key stays on the
+server: the browser only calls `/api/chat` on the same origin, and `.env` is never served.
 
 ## Docs
 
