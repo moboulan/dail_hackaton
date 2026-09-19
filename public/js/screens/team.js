@@ -1,5 +1,5 @@
 // Manager view: every pharmacist's level per module, their licence count and their
-// attestations (printable from here), plus the cases written for the team.
+// attestations, printable from here.
 
 import { MODULES, PASS_MARK } from "../content.js";
 import { attestation, esc, icon, printAttestation } from "../html.js";
@@ -53,13 +53,6 @@ export default {
         </table>
       </div>
 
-      <section class="cases">
-        <h2 class="register-title">Cas de la pharmacie</h2>
-        ${state.customModules.length
-          ? `<ul class="case-list">${state.customModules.map((c) => `<li><strong>${esc(c.title)}</strong> <span>${esc(c.customer)}</span></li>`).join("")}</ul>`
-          : `<p class="field-hint">Aucun cas pour l'instant. Écrivez une situation que votre équipe rencontre au comptoir.</p>`}
-        <a class="button primary" href="#nouveau-cas">Créer un cas</a>
-      </section>
       ${sheets.join("")}`;
   },
 

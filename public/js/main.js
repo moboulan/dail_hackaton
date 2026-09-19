@@ -3,7 +3,7 @@ import { findModule } from "./modules.js";
 import { icon } from "./html.js";
 import { STEPS, STEP_IDS, isDone, isUnlocked } from "./steps.js";
 import dashboard from "./screens/dashboard.js";
-import editor from "./screens/editor.js";
+import login from "./screens/login.js";
 import team from "./screens/team.js";
 import brief from "./screens/brief.js";
 import echange from "./screens/echange.js";
@@ -21,7 +21,7 @@ const storageWarning = document.getElementById("storage-warning");
 
 let pharmacy = store.load();
 let state = store.view(pharmacy); // the current person's record plus the shared cases
-let route = { module: null, step: null, page: "dashboard" }; // module null = dashboard or editor
+let route = { module: null, step: null, page: "dashboard" }; // module null: dashboard, team or login
 
 // Shared with every screen. Inside a module, update() hands over that module's progress.
 const ctx = {
@@ -30,6 +30,13 @@ const ctx = {
   },
   get pharmacy() {
     return pharmacy;
+  },
+  signIn(accountId) {
+    pharmacy.current = accountId;
+    state = store.view(pharmacy);
+    persist();
+    renderAccount();
+    navigate(state.isAdmin ? "equipe" : "accueil");
   },
 
   get module() {
@@ -76,7 +83,6 @@ function announce(message) {
 // "#rhume/echange" -> module + requested step. Anything unknown -> dashboard.
 function parseHash() {
   const [moduleId, step] = location.hash.slice(1).split("/");
-  if (moduleId === "nouveau-cas") return { module: null, step: null, page: "editor" };
   if (moduleId === "equipe") return { module: null, step: null, page: "team" };
   const module = findModule(moduleId, state);
   if (!module) return { module: null, step: null };
@@ -92,14 +98,19 @@ function furthestBuilt(progress) {
 function show({ moveFocus }) {
   const parsed = parseHash();
 
-  // The manager only has the team pages; pharmacists never see them.
-  const allowed = state.isAdmin ? ["team", "editor"] : ["dashboard"];
-  if (state.isAdmin && !parsed.page) parsed.page = "team";
-  if (parsed.page && !allowed.includes(parsed.page)) parsed.page = state.isAdmin ? "team" : null;
-  if (state.isAdmin) parsed.module = null;
+  // Signed out: only the login page. The manager only has the team page; pharmacists never see it.
+  if (state.signedOut) {
+    parsed.page = "login";
+    parsed.module = null;
+  } else if (state.isAdmin) {
+    parsed.page = "team";
+    parsed.module = null;
+  } else if (parsed.page === "team") {
+    parsed.page = null;
+  }
   if (parsed.page) {
     route = { module: null, step: null, page: parsed.page };
-    const hash = parsed.page === "team" ? "#equipe" : "#nouveau-cas";
+    const hash = parsed.page === "team" ? "#equipe" : "#connexion";
     if (location.hash !== hash) history.replaceState(null, "", hash);
   } else if (!parsed.module) {
     route = { module: null, step: null, page: "dashboard" };
@@ -123,7 +134,7 @@ function show({ moveFocus }) {
 
 function currentScreen() {
   if (route.module) return STEP_SCREENS[route.step];
-  return { editor, team }[route.page] ?? dashboard;
+  return { login, team }[route.page] ?? dashboard;
 }
 
 function renderScreen() {
@@ -192,19 +203,20 @@ syncViewport();
 
 window.addEventListener("hashchange", () => show({ moveFocus: true }));
 
-// Account menu: who is using the pharmacy computer.
+// Who is signed in, and the way out.
 function renderAccount() {
-  const options = [...store.STAFF, store.ADMIN]
-    .map((a) => `<option value="${a.id}" ${a.id === pharmacy.current ? "selected" : ""}>${a.name}</option>`)
-    .join("");
-  account.innerHTML = `<label class="visually-hidden" for="account-select">Compte</label><select id="account-select">${options}</select>`;
+  account.innerHTML = state.signedOut
+    ? ""
+    : `<span class="account-name">${state.staffName}</span><button class="link-button" type="button" id="sign-out">Se déconnecter</button>`;
 }
 
-account.addEventListener("change", (event) => {
-  pharmacy.current = event.target.value;
+account.addEventListener("click", (event) => {
+  if (event.target.id !== "sign-out") return;
+  pharmacy.current = null;
   state = store.view(pharmacy);
   persist();
-  navigate(state.isAdmin ? "equipe" : "accueil");
+  renderAccount();
+  navigate("connexion");
 });
 
 renderAccount();

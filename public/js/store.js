@@ -7,13 +7,20 @@
 
 import { MODULES } from "./content.js";
 
-const KEY = "bp-learning-eagle-v5";
-// Fixed accounts on the pharmacy computer: two pharmacists and the manager (admin).
+const KEY = "bp-learning-eagle-v6";
+// Demo accounts on the pharmacy computer: two pharmacists and the manager. The passwords live in
+// the page, so this login is for the demonstration only; real accounts need a server.
 export const STAFF = [
-  { id: "alami", name: "Dr Alami" },
-  { id: "bennani", name: "Dr Bennani" },
+  { id: "alami", name: "Dr Alami", password: "alami" },
+  { id: "bennani", name: "Dr Bennani", password: "bennani" },
 ];
-export const ADMIN = { id: "admin", name: "Responsable" };
+export const ADMIN = { id: "admin", name: "Responsable", password: "admin" };
+
+// The account id for a login, or null when it does not match.
+export function authenticate(login, password) {
+  const account = [...STAFF, ADMIN].find((a) => a.id === login.trim().toLowerCase());
+  return account && account.password === password ? account.id : null;
+}
 
 let storageWorks = true;
 
@@ -35,8 +42,8 @@ export function freshRecord() {
 
 export function freshPharmacy() {
   return {
-    staff: STAFF.map((s) => ({ ...s })),
-    current: STAFF[0].id,
+    staff: STAFF.map(({ id, name }) => ({ id, name })),
+    current: null, // nobody signed in
     records: Object.fromEntries(STAFF.map((s) => [s.id, freshRecord()])),
     customModules: [],
   };
@@ -45,6 +52,7 @@ export function freshPharmacy() {
 // What the screens read and change: the current person's record plus the shared cases.
 // The objects are the pharmacy's own, so changes persist with save(pharmacy).
 export function view(pharmacy) {
+  if (!pharmacy.current) return { modules: {}, memoHints: {}, customModules: [], staffName: "", isAdmin: false, signedOut: true };
   if (pharmacy.current === ADMIN.id) {
     return { modules: {}, memoHints: {}, customModules: pharmacy.customModules, staffName: ADMIN.name, isAdmin: true };
   }
@@ -96,7 +104,7 @@ function sanitizePharmacy(saved) {
     pharmacy.staff.map((s) => [s.id, sanitizeRecord(saved?.records?.[s.id], ids)]),
   );
   const accounts = [...pharmacy.staff.map((s) => s.id), ADMIN.id];
-  pharmacy.current = accounts.includes(saved?.current) ? saved.current : pharmacy.staff[0].id;
+  pharmacy.current = accounts.includes(saved?.current) ? saved.current : null;
   return pharmacy;
 }
 

@@ -416,7 +416,6 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 
 /* Créer un cas */
 main[data-screen="editor"] { max-width: 820px; }
-.new-case { margin-top: 24px; }
 .editor-lead { color: var(--ink-soft); margin: 8px 0 28px; }
 .editor { display: grid; gap: 32px; }
 .editor-part { display: grid; gap: 14px; }
@@ -436,11 +435,17 @@ main[data-screen="editor"] { max-width: 820px; }
 .product-fields legend { font-weight: 700; padding: 0; margin-bottom: 6px; }
 
 /* Équipe */
-.account { justify-self: end; grid-column: 3; }
-.account select {
-  font: inherit; font-weight: 700; color: var(--ink); background: var(--surface); min-height: 44px;
-  padding: 6px 12px; border: 1.5px solid var(--rule-strong); border-radius: var(--radius); cursor: pointer;
-}
+.account { justify-self: end; grid-column: 3; display: flex; gap: 14px; align-items: center; }
+.account-name { font-weight: 700; }
+
+/* Connexion */
+main[data-screen="login"] { max-width: 420px; padding-top: 72px; }
+.login { display: grid; gap: 20px; }
+.login-form { display: grid; gap: 14px; }
+.login-form .button { justify-self: stretch; }
+.login-error { min-height: 1.4em; color: var(--error-text); font-weight: 700; }
+.login-error:empty { min-height: 0; }
+.login-demo { color: var(--ink-soft); font-size: 0.9rem; padding-top: 16px; border-top: 1px solid var(--rule); }
 main[data-screen="team"] { max-width: 1100px; }
 .table-scroll { overflow-x: auto; }
 .register.team td, .register.team th { white-space: nowrap; }
