@@ -299,7 +299,7 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .option input:disabled { opacity: 1; }
 .submit-zone { margin-top: 32px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 
-/* Résultat: the module score lives once (cachet or large figure), parts as bars vs 80 % */
+/* Résultat: the module score lives once (cachet or large figure), parts as bars vs the pass mark */
 .outcome { display: flex; gap: 36px; align-items: center; padding-bottom: 32px; border-bottom: 2px solid var(--ink); }
 .outcome-body { display: grid; gap: 10px; }
 .outcome h1 { font-size: 2.3rem; }
@@ -322,7 +322,7 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .part-label { font-weight: 700; }
 .part-track { position: relative; height: 10px; border-radius: 5px; background: var(--wash); }
 .part-track::after {
-  content: ""; position: absolute; left: 80%; top: -5px; bottom: -5px; width: 2px; background: var(--ink);
+  content: ""; position: absolute; left: 60%; /* PASS_MARK */ top: -5px; bottom: -5px; width: 2px; background: var(--ink);
 }
 .part-fill { display: block; height: 100%; border-radius: 5px; width: 0; }
 .part-ok { background: var(--forest); }

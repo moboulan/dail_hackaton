@@ -4,7 +4,7 @@
 
 export const PROFILE = { name: "Dr Alami", licenceYear: 2026 };
 
-export const PASS_MARK = 80;
+export const PASS_MARK = 60;
 
 // Shown as the "Mémo" during the chat; also the first 4 criteria of every Bilan.
 export const REFLEXES = [

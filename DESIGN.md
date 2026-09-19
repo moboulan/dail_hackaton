@@ -49,8 +49,8 @@ alert icon and a hidden "Attention :" label.
 - **Speaker label**: register caps above every chat message and excerpt line (customer name or "Vous").
 - **Bilan criterion**: level column (icon + word) beside title, comment, the real exchange as two
   bubbles, "Vous auriez pu dire" in a dashed ocean bubble.
-- **Résultat**: the module score lives once: the cachet, or a large amber figure with "80 % requis"
-  and the criteria to rework (with level icons). Échange and Quiz as bars with an 80 % tick.
+- **Résultat**: the module score lives once: the cachet, or a large amber figure with "60 % requis"
+  and the criteria to rework (with level icons). Échange and Quiz as bars with a 60 % tick.
   Quiz corrections: your answer with a check or struck through, the right answer, the reason.
 - **Quiz**: sand numerals, full-width options (52 px), chosen answer in forest wash; no correction until the Résultat.
 

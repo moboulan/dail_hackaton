@@ -44,7 +44,7 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | The pharmacist ends the conversation ("Terminer l'échange"); the customer may say goodbye when satisfied. Hard cap: 12 pharmacist messages. |
 | 19 Sep | ~~Preparation with reflexes and checks~~ superseded: a short Brief (situation + "Votre rayon" product cards) leads straight to the chat. The 4 réflexes are learned through the debrief (they are its scoring grid) and a "Mémo" available in the chat. Checks move to the end-of-module quiz. |
 | 19 Sep | Quiz at the end, with explanations and retry. |
-| 19 Sep | Final score = 50 % conversation rubric + 50 % final quiz. Pass mark 80 %. Unlimited retries. |
+| 19 Sep | Final score = 50 % conversation rubric + 50 % final quiz. Pass mark 60 % (lowered from 80 % on 19 Sep so a solid conversation validates). Unlimited retries. |
 | 19 Sep | Passing unlocks a printable attestation (name from the fictional profile, module, date, score). No name field. |
 | 19 Sep | Navigation: dashboard, then per module a guided path (Brief, Échange, Bilan, Quiz) with a step bar. Finished steps can be revisited; later steps cannot be skipped. |
 | 19 Sep | Products during the chat: side panel on desktop, "Vos produits" bottom sheet on phones. |
@@ -95,7 +95,7 @@ module cards (duration, state, score when done, one button). Attestations appear
    validated, answer order shuffled); the module's fixed questions when none were written.
    Answers are chosen, then submitted once with "Valider mes réponses"; no correction shown.
 5. **Résultat:** the cachet (pressed once) or "Pas encore validé", the scores (Échange, Quiz,
-   Module = 50/50), quiz corrections with reasons, "Imprimer l'attestation" at 80 % (printing
+   Module = 50/50), quiz corrections with reasons, "Imprimer l'attestation" at 60 % (printing
    shows only the attestation) or "Recommencer le module".
 
 **Modules** (all fictional):

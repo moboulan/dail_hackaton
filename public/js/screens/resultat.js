@@ -1,5 +1,5 @@
 // The module's outcome. The module score lives in one place (the cachet, or the large figure when
-// not validated); the two parts are bars against the 80 % mark; then what to rework, the quiz
+// not validated); the two parts are bars against the pass mark; then what to rework, the quiz
 // corrections and the printable attestation.
 
 import { CRITERIA, PASS_MARK, PROFILE } from "../content.js";
