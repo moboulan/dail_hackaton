@@ -13,11 +13,11 @@ export async function askCustomer(module, messages) {
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
   } catch {
-    throw new Error(`${module.customer} ne répond pas. Vérifiez la connexion et renvoyez votre message.`);
+    throw new Error(`${module.customer} ne répond pas. Vérifiez la connexion.`);
   }
   const data = await response.json().catch(() => ({}));
   if (response.ok && typeof data.reply === "string") return data;
   // Rate limits and invalid input carry a message written for the pharmacist.
   if (response.status === 429 || response.status === 400) throw new Error(data.error);
-  throw new Error(`${module.customer} ne répond pas. Renvoyez votre message.`);
+  throw new Error(`${module.customer} ne répond pas. Réessayez dans un instant.`);
 }

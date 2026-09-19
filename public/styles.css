@@ -53,9 +53,6 @@ h1:focus { outline: none; }
   display: grid; place-items: center; font-size: 0.9rem;
 }
 .steps { flex: 1; }
-.back-link { color: var(--accent); font-weight: 700; min-height: 44px; display: inline-flex; align-items: center; }
-.back-link::before { content: "\2190"; margin-right: 6px; }
-.step-count { margin: 0 0 4px; font-size: 0.85rem; color: var(--muted); }
 .steps ol { list-style: none; margin: 0; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
 .steps li > a, .steps li > span {
   display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 4px 10px 4px 4px;
@@ -123,18 +120,21 @@ main { width: 100%; max-width: var(--max); margin: 0 auto; padding: 32px var(--s
 .next { margin-top: 28px; }
 .link-button { background: none; border: 0; padding: 8px 0; min-height: 44px; font: inherit; color: var(--accent); text-decoration: underline; cursor: pointer; }
 
-/* Chat */
-main[data-screen="echange"] { max-width: 1100px; }
-.chat-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-.chat-title { font-size: 1.4rem; margin: 0; }
-.dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
-.dialog-head h2 { margin: 0; font-size: 1.2rem; }
-.chat-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; align-items: start; }
-.chat { display: flex; flex-direction: column; gap: 10px; }
+/* Chat: Mémo | conversation | shelf. Side columns stay in view while the chat scrolls. */
+main[data-screen="echange"] { max-width: 1280px; }
+.chat-layout { display: grid; grid-template-columns: 230px minmax(0, 1fr) 290px; gap: 24px; align-items: start; }
+.memo, .shelf { position: sticky; top: 16px; }
+.memo h2, .shelf h2 { margin: 0 0 10px; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.memo-list { margin: 0; padding-left: 1.2em; display: grid; gap: 12px; font-size: 0.95rem; }
+.memo-list strong, .memo-list span { display: block; }
+.memo-list span { color: var(--muted); }
+.chat { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.chat-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.chat-head h1 { font-size: 1.3rem; margin: 0; }
 .messages {
   list-style: none; margin: 0; padding: var(--space); display: flex; flex-direction: column; gap: 10px;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  height: min(55vh, 520px); overflow-y: auto;
+  height: calc(100vh - 330px); min-height: 280px; overflow-y: auto;
 }
 .message { max-width: 80%; padding: 10px 14px; border-radius: 16px; white-space: pre-wrap; }
 .message.customer { align-self: flex-start; background: #eef1f5; border-bottom-left-radius: 4px; }
@@ -151,21 +151,25 @@ main[data-screen="echange"] { max-width: 1100px; }
 .end-zone p { width: 100%; margin: 0; }
 .chat-closed { background: var(--notice-bg); border-radius: var(--radius); padding: 12px var(--space); }
 .chat-closed p { margin: 0 0 8px; }
-.shelf h2 { margin-top: 0; font-size: 1.1rem; }
-.shelf .sheet dl { grid-template-columns: 1fr; gap: 2px; }
-.shelf .sheet dd { margin-bottom: 6px; }
-.memo { margin-top: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px var(--space); }
-.memo summary { cursor: pointer; font-weight: 700; min-height: 32px; }
-.memo ol { padding-left: 1.2em; margin: 8px 0 0; }
-.memo li { margin-bottom: 6px; }
+.shelf-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.shelf-list li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; font-size: 0.9rem; }
+.shelf-list p { margin: 0 0 2px; }
+.shelf-name { display: flex; justify-content: space-between; gap: 8px; font-size: 1rem; }
+.shelf-use { color: var(--muted); }
+.shelf-caution { color: var(--wrong); }
 .shelf-open { display: none; }
 .shelf-dialog { width: min(560px, 100%); max-height: 85vh; border: 0; border-radius: var(--radius); padding: var(--space); }
 .shelf-dialog::backdrop { background: rgb(0 0 0 / 0.4); }
-.shelf-dialog .sheet dl { grid-template-columns: 1fr; gap: 2px; }
-.scenario { font-size: 1.1rem; }
-.hint { color: var(--muted); }
+.dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.dialog-head h2 { margin: 0; font-size: 1.2rem; }
 
-.storage-warning { margin: 0; padding: 10px var(--space); background: var(--notice-bg); text-align: center; }
+/* Narrower screens: the Mémo moves above the shelf. */
+@media (max-width: 1100px) {
+  .chat-layout { grid-template-columns: minmax(0, 1fr) 280px; grid-template-areas: "chat memo" "chat shelf"; }
+  .chat { grid-area: chat; grid-row: 1 / span 2; }
+  .memo { grid-area: memo; position: static; }
+  .shelf { grid-area: shelf; position: static; }
+}
 
 /* Phones: only the current step keeps its label, so the bar fits on one line. */
 @media (max-width: 640px) {
@@ -173,14 +177,13 @@ main[data-screen="echange"] { max-width: 1100px; }
   main { padding-top: 20px; }
   .site-header { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; }
   .brand small { display: none; }
-  .back-link { justify-self: end; }
   .steps { grid-column: 1 / -1; }
-  .step-count { margin: 0; }
   .steps li:not(.is-current) .step-label-text { display: none; }
   .sheet dl { grid-template-columns: 1fr; gap: 2px; }
   .sheet dd { margin-bottom: 8px; }
-  .chat-layout { grid-template-columns: 1fr; }
-  .shelf { display: none; }
+  .chat-layout { grid-template-columns: 1fr; grid-template-areas: none; }
+  .chat { grid-row: auto; }
+  .memo, .shelf { display: none; }
   .shelf-open { display: inline-block; flex: none; }
   .messages { height: 50vh; }
   .shelf-dialog { margin: auto 0 0; width: 100%; max-width: 100%; border-radius: var(--radius) var(--radius) 0 0; }

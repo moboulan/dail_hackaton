@@ -10,7 +10,6 @@ const STEP_SCREENS = { brief, echange };
 
 const main = document.getElementById("main");
 const stepBar = document.getElementById("steps");
-const backLink = document.getElementById("back");
 const status = document.getElementById("status");
 const storageWarning = document.getElementById("storage-warning");
 
@@ -123,11 +122,9 @@ function renderScreen() {
 function renderStepBar() {
   const inModule = Boolean(route.module);
   stepBar.hidden = !inModule;
-  backLink.hidden = !inModule;
   if (!inModule) return;
 
   const progress = state.modules[route.module.id];
-  const position = STEPS.findIndex((s) => s.id === route.step) + 1;
   const items = STEPS.map((step, index) => {
     const number = `<span class="step-number">${index + 1}</span>`;
     const label = `<span class="step-label-text">${step.label}</span>`;
@@ -140,9 +137,7 @@ function renderStepBar() {
     }
     return `<li class="is-locked"><span>${number}${label}<span class="visually-hidden"> (pas encore disponible)</span></span></li>`;
   }).join("");
-  stepBar.innerHTML = `
-    <p class="step-count">${route.module.title} · étape ${position} sur ${STEPS.length}</p>
-    <ol>${items}</ol>`;
+  stepBar.innerHTML = `<ol>${items}</ol>`;
 }
 
 // One listener per event type for the whole page, attached once.

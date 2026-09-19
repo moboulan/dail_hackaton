@@ -21,7 +21,6 @@ export const MODULES = [
     duration: "10 min",
     customer: "Mme Naïma",
     brief: "Mme Naïma a le nez bouché et dort mal. Elle préfère souvent qu'on lui explique en darija.",
-    opening: "Salam, bonjour. J'ai le nez bouché, je dors très mal. Vous avez quelque chose de fort pour la nuit ?",
     products: [
       { name: "Respira Mer", price: 45, form: "Spray d'eau de mer", forWhat: "Nez bouché ou qui coule.", use: "Se moucher, puis une pulvérisation par narine, plusieurs fois par jour.", caution: "Aucune contre-indication. Ne pas partager le flacon." },
       { name: "Gorgéa Miel", price: 30, form: "Pastilles", forWhat: "Gorge qui gratte.", use: "Laisser fondre en bouche.", caution: "Contient du sucre : pas en cas de diabète." },
@@ -66,7 +65,6 @@ export const MODULES = [
     duration: "10 min",
     customer: "Yasmine",
     brief: "Yasmine a les épaules brûlées par le soleil. Elle retourne à la plage demain.",
-    opening: "Bonjour ! J'ai pris un gros coup de soleil sur les épaules hier, ça brûle. Vous avez quelque chose ?",
     products: [
       { name: "Apaisa Gel", price: 60, form: "Gel après-soleil", forWhat: "Coup de soleil léger, peau rouge.", use: "En couche fine, plusieurs fois par jour.", caution: "Pas sur des cloques ni une peau abîmée." },
       { name: "Solaris 50", price: 120, form: "Crème solaire SPF 50", forWhat: "Protéger la peau du soleil.", use: "Avant l'exposition, à renouveler toutes les 2 heures.", caution: "Aucune contre-indication." },
@@ -111,7 +109,6 @@ export const MODULES = [
     duration: "10 min",
     customer: "M. Driss",
     brief: "M. Driss a mal au ventre depuis deux jours. Il veut « quelque chose qui calme ».",
-    opening: "Bonjour. J'ai mal au ventre depuis deux jours, donnez-moi quelque chose qui calme, je n'ai pas le temps d'aller chez le médecin.",
     products: [
       { name: "Digestia", price: 35, form: "Comprimés à croquer", forWhat: "Brûlures d'estomac après un repas.", use: "Après le repas.", caution: "Pas en cas de douleur forte ou de fièvre." },
       { name: "Flora+", price: 70, form: "Gélules", forWhat: "Digestion difficile, ballonnements.", use: "Le matin.", caution: "Ne remplace pas une consultation." },

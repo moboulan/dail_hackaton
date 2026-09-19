@@ -50,6 +50,8 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | Products during the chat: side panel on desktop, "Vos produits" bottom sheet on phones. |
 | 19 Sep | Products show a fictional price (DH): knowing what you sell includes its price. |
 | 19 Sep | Each customer's hidden facts and rules live in `lib/personas.js` on the server, so they cannot be read in the page source. |
+| 19 Sep | The AI customer speaks first (no scripted opening line), so no two conversations start the same way. |
+| 19 Sep | One piece of information in one place: the logo is the way home (no back link), the step bar names the step (no counter, no repeated heading). Chat layout: Mémo left, conversation centre with the customer's name as its title, compact shelf right; side columns stay in view. |
 | 19 Sep | No footer, no global reset (a pharmacist never wipes licence progress; "Réessayer" redoes a module), no empty "Attestations : aucune" line, no "Médecin si" line. Nothing is added now that polish would remove later. |
 | 19 Sep | "Reprendre" always lands on the furthest unlocked step, so revisiting an earlier step never moves the resume point. |
 | 19 Sep | Patterns borrowed: role-play trainers (short scenario card, conversation, skill-scored debrief), Duolingo (start doing at once, tips behind a button), Khan Academy (hints on demand). |
@@ -69,8 +71,9 @@ module cards (duration, state, score when done, one button). Attestations appear
 **Per module** (`#<module>/<step>`), step bar with 4 steps:
 1. **Brief:** who comes in and why (2 lines), "Votre rayon" product cards. Referral criteria are not listed: they live in the product cautions and the customer's answers.
    One button: "Commencer l'échange".
-2. **Échange:** chat with the AI customer. "Vos produits" panel (sheet on phones), "Mémo"
-   (the 4 réflexes), "Terminer l'échange". One-line data warning at the input.
+2. **Échange:** the AI customer speaks first. Mémo (the 4 réflexes) on the left, the
+   conversation in the centre, a compact "Vos produits" shelf on the right (sheet on phones),
+   "Terminer l'échange". One-line data warning at the input.
 3. **Bilan:** score on the 4 réflexes plus product accuracy, the pharmacist's own lines quoted,
    what to improve.
 4. **Quiz:** 3 questions, immediate correction with a one-line reason, retry.
