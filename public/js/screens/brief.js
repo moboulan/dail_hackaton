@@ -1,6 +1,6 @@
 // Who comes in, and what is on the shelf. Then straight to the conversation.
 
-import { esc, productCard } from "../html.js";
+import { esc, productLine } from "../html.js";
 
 export default {
   title: "Brief",
@@ -8,10 +8,10 @@ export default {
   render({ module }) {
     return `
       <h1 tabindex="-1">${esc(module.title)}</h1>
-      <p class="scenario">${esc(module.brief)}</p>
+      <p class="situation">${esc(module.brief)}</p>
 
-      <h2>Votre rayon</h2>
-      <div class="sheets">${module.products.map(productCard).join("")}</div>
+      <h2 class="register-title">Votre rayon</h2>
+      <ul class="products">${module.products.map(productLine).join("")}</ul>
 
       <button class="button primary next" type="button" data-action="start">Commencer l'échange</button>`;
   },

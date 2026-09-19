@@ -10,15 +10,36 @@
     <meta name="description" content="Formation continue pour pharmaciens : conseiller une cliente clairement et en sécurité." />
     <title>BP Learning</title>
     <link rel="icon" href="data:," />
+    <link rel="preload" href="fonts/atkinson-400.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="styles.css" />
     <script type="module" src="js/main.js"></script>
   </head>
   <body>
+    <!--
+      THESIS: Training is kept like the pharmacy's ordonnancier: a ruled register of numbered
+      entries, and a module is validated the way an officine validates anything, with its cachet.
+      Refuses the course-card grid and progress-ring dashboard.
+      OWN-WORLD: NomadKit paper #FFFDF7, ink text, sand #D4A373 rules and primary actions, ocean for
+      links, forest #166534 cachet. Ruled hairlines instead of cards, tabular figures, condensed
+      register caps (Barlow Condensed) over Atkinson Hyperlegible.
+      STORY: The pharmacist sees what is left for the licence, opens one entry, practises at the
+      counter, reads an honest debrief, answers 3 questions and earns the stamp.
+      FIRST VIEWPORT: Greeting, licence count, the register of 3 modules with one action per line.
+      FORM: Ordonnancier and cachet, position 3 of 7, seed key ab7323e2.
+      FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+    -->
+    <svg class="defs" aria-hidden="true" focusable="false">
+      <filter id="ink">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise" />
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -0.7 1.3" result="speckle" />
+        <feComposite in="SourceGraphic" in2="speckle" operator="in" />
+      </filter>
+    </svg>
     <a class="skip-link" href="#main">Aller au contenu</a>
     <header class="site-header">
       <a class="brand" href="#accueil" aria-label="BP Learning : tableau de bord">
         <span class="brand-mark" aria-hidden="true">BP</span>
-        <span>BP Learning <small>Formation continue</small></span>
+        <span class="brand-name">BP Learning</span>
       </a>
       <nav id="steps" class="steps" aria-label="Étapes du module" hidden></nav>
     </header>

@@ -1,5 +1,6 @@
 import * as store from "./store.js";
 import { moduleById } from "./content.js";
+import { icon } from "./html.js";
 import { STEPS, STEP_IDS, isDone, isUnlocked } from "./steps.js";
 import dashboard from "./screens/dashboard.js";
 import brief from "./screens/brief.js";
@@ -128,8 +129,9 @@ function renderStepBar() {
       return `<li class="is-current"><span aria-current="step">${number}${label}</span></li>`;
     }
     if (isUnlocked(step.id, progress) && STEP_SCREENS[step.id]) {
-      const done = isDone(step.id, progress) ? `<span class="visually-hidden"> (terminé)</span>` : "";
-      return `<li class="is-open"><a href="#${route.module.id}/${step.id}">${number}${label}${done}</a></li>`;
+      const done = isDone(step.id, progress);
+      const mark = done ? `<span class="step-number is-done">${icon("check")}</span>` : number;
+      return `<li class="is-open"><a href="#${route.module.id}/${step.id}">${mark}${label}${done ? `<span class="visually-hidden"> (terminé)</span>` : ""}</a></li>`;
     }
     return `<li class="is-locked"><span>${number}${label}<span class="visually-hidden"> (pas encore disponible)</span></span></li>`;
   }).join("");

@@ -1,4 +1,4 @@
-// Every piece of text that reaches innerHTML goes through esc().
+// Markup shared by several screens. Every text that reaches innerHTML goes through esc().
 
 const ENTITIES = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
 
@@ -6,17 +6,38 @@ export function esc(value) {
   return String(value ?? "").replace(/[&<>"']/g, (c) => ENTITIES[c]);
 }
 
-export function productCard(product) {
+// One stroke icon set, drawn on a 20 px grid, 1.75 px stroke, currentColor.
+const ICON_PATHS = {
+  check: '<path d="M4.5 10.5l3.5 3.5 7.5-8"/>',
+  partial: '<circle cx="10" cy="10" r="6.5"/><path d="M10 3.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/>',
+  cross: '<path d="M5.5 5.5l9 9M14.5 5.5l-9 9"/>',
+  alert: '<path d="M10 3l7.5 13.5h-15z"/><path d="M10 8.5v3.5M10 14.2v.1"/>',
+  lock: '<rect x="4.5" y="9" width="11" height="8" rx="1.5"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/>',
+};
+
+export function icon(name, label = "") {
+  const a11y = label ? `role="img" aria-label="${esc(label)}"` : 'aria-hidden="true"';
+  return `<svg class="icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" ${a11y}>${ICON_PATHS[name]}</svg>`;
+}
+
+// A product as a line of the pharmacy's register. Same markup on the Brief and the chat shelf.
+export function productLine(product) {
   return `
-    <article class="sheet">
-      <div class="sheet-head">
-        <h3>${esc(product.name)} <span class="sheet-form">· ${esc(product.form)}</span></h3>
-        <p class="price">${product.price} DH</p>
-      </div>
-      <dl>
-        <dt>Pour</dt><dd>${esc(product.forWhat)}</dd>
-        <dt>Usage</dt><dd>${esc(product.use)}</dd>
-        <dt>Attention</dt><dd>${esc(product.caution)}</dd>
-      </dl>
-    </article>`;
+    <li class="product">
+      <p class="product-head"><strong>${esc(product.name)}</strong><span class="product-form">${esc(product.form)}</span><span class="price">${product.price} DH</span></p>
+      <p class="product-for">${esc(product.forWhat)}</p>
+      <p class="product-use">${esc(product.use)}</p>
+      <p class="product-caution">${icon("alert")}<span class="visually-hidden">Attention : </span>${esc(product.caution)}</p>
+    </li>`;
+}
+
+// The officine's cachet: a round forest stamp with the score and date.
+export function stamp(score, isoDate, { pressing = false } = {}) {
+  const date = new Date(isoDate).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+  return `
+    <span class="stamp${pressing ? " is-pressing" : ""}" role="img" aria-label="Validé, ${score} %, le ${esc(date)}">
+      <span class="stamp-top">Validé</span>
+      <span class="stamp-score">${score}&nbsp;%</span>
+      <span class="stamp-date">${esc(date)}</span>
+    </span>`;
 }

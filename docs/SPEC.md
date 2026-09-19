@@ -125,7 +125,7 @@ safety (nothing outside the sheet stated as fact, contraindication respected).
 | 4 | Échange: Node server, `/api/chat`, persona per module, PII redaction, limits, all states, products panel, Mémo, end button. | P01 to P07 | done |
 | 5 | Bilan: `/api/debrief`, rubric scoring with quotes. | P08 | done |
 | 6 | Quiz, module score, attestation, dashboard update. | P05, P09 to P14 | done |
-| 7 | Design pass: ask the user, then impeccable.style with `nomadkit-DESIGN.md`. | | todo |
+| 7 | Design pass: impeccable with `nomadkit-DESIGN.md`; direction "ordonnancier and cachet" (see DESIGN.md). | | done |
 | 8 | Vercel hosting, key in environment variables. | | todo |
 | 9 | Evidence: test with another person, after screenshots, checklist complete. | | todo |
 

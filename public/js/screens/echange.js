@@ -4,7 +4,7 @@
 
 import { REFLEXES } from "../content.js";
 import { askCustomer } from "../api.js";
-import { esc } from "../html.js";
+import { esc, productLine } from "../html.js";
 
 const MAX_MESSAGES = 12; // pharmacist messages, same cap as the server
 const MAX_LENGTH = 500;
@@ -22,21 +22,13 @@ function messageItem(message, customer) {
 
 function memo() {
   return `
-    <h2>Mémo</h2>
+    <h2 class="register-title">Mémo</h2>
     <ol class="memo-list">${REFLEXES.map((r) => `<li><strong>${esc(r.title)}</strong><span>${esc(r.body)}</span></li>`).join("")}</ol>`;
 }
 
-// Compact reminder of the shelf: the full cards were on the Brief.
+// The same register lines as the Brief, set compact beside the conversation.
 function shelf(module) {
-  return `
-    <ul class="shelf-list">${module.products.map((p) => `
-      <li>
-        <p class="shelf-name"><strong>${esc(p.name)}</strong><span>${p.price} DH</span></p>
-        <p>${esc(p.form)} · ${esc(p.forWhat)}</p>
-        <p class="shelf-use">${esc(p.use)}</p>
-        <p class="shelf-caution">${esc(p.caution)}</p>
-      </li>`).join("")}
-    </ul>`;
+  return `<ul class="products is-compact">${module.products.map(productLine).join("")}</ul>`;
 }
 
 function composer(progress, customer) {
@@ -110,7 +102,7 @@ export default {
           <p id="chat-status" class="chat-status" role="status" aria-live="polite"></p>
           ${progress.chat.ended ? `<p class="chat-closed">Échange terminé.</p>` : composer(progress, module.customer)}
         </section>
-        <aside class="shelf" aria-labelledby="shelf-title"><h2 id="shelf-title">Vos produits</h2>${shelf(module)}</aside>
+        <aside class="shelf" aria-labelledby="shelf-title"><h2 id="shelf-title" class="register-title">Vos produits</h2>${shelf(module)}</aside>
       </div>
       <dialog id="shelf-dialog" class="shelf-dialog" aria-labelledby="shelf-dialog-title">
         <div class="dialog-head">

@@ -2,18 +2,25 @@
 
 import { CRITERIA } from "../content.js";
 import { requestDebrief } from "../api.js";
-import { esc } from "../html.js";
+import { esc, icon } from "../html.js";
 
-const LEVELS = ["Manqué", "À améliorer", "Réussi"]; // by score 0, 1, 2
+// By score 0, 1, 2: a word and a mark, so the level never depends on colour alone.
+const LEVELS = [
+  { word: "Manqué", mark: "cross" },
+  { word: "À améliorer", mark: "partial" },
+  { word: "Réussi", mark: "check" },
+];
 
 let loading = false;
 
 function criterionItem(result) {
   const { title } = CRITERIA.find((c) => c.id === result.id);
+  const level = LEVELS[result.score];
   return `
     <li class="criterion level-${result.score}">
-      <p class="criterion-head"><strong>${esc(title)}</strong><span>${LEVELS[result.score]}</span></p>
-      <p>${esc(result.comment)}</p>
+      <p class="criterion-level">${icon(level.mark)}${level.word}</p>
+      <h2 class="criterion-title">${esc(title)}</h2>
+      <p class="criterion-comment">${esc(result.comment)}</p>
       ${result.quote ? `<p class="said">Vous avez dit : « ${esc(result.quote)} »</p>` : ""}
       ${result.better ? `<p class="better">Vous auriez pu dire : « ${esc(result.better)} »</p>` : ""}
     </li>`;
@@ -46,11 +53,14 @@ export default {
     if (!debrief) {
       return `
         <h1 tabindex="-1" class="visually-hidden">Bilan</h1>
+        <div class="skeleton" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
         <p id="bilan-pending" class="pending" role="status">Analyse de votre échange…</p>`;
     }
     return `
-      <h1 tabindex="-1" class="bilan-score">Votre échange : ${debrief.score} %</h1>
-      ${debrief.summary ? `<p class="lead">${esc(debrief.summary)}</p>` : ""}
+      <div class="bilan-head">
+        <h1 tabindex="-1">Votre échange <span class="bilan-score">${debrief.score}&nbsp;%</span></h1>
+        ${debrief.summary ? `<p class="bilan-summary">${esc(debrief.summary)}</p>` : ""}
+      </div>
       <ol class="criteria">${debrief.criteria.map(criterionItem).join("")}</ol>
       <button class="button primary next" type="button" data-action="to-quiz">Passer au quiz</button>`;
   },

@@ -2,7 +2,7 @@
 // until right. Once all are answered, the module result and the attestation appear below.
 
 import { PASS_MARK, PROFILE } from "../content.js";
-import { esc } from "../html.js";
+import { esc, stamp } from "../html.js";
 import { freshProgress } from "../store.js";
 
 function allAnswered(module, progress) {
@@ -14,7 +14,10 @@ function quizScore(module, progress) {
   return Math.round((right / module.quiz.length) * 100);
 }
 
-function question(q, progress) {
+// Set when the answer that completes the quiz is given, so the cachet is pressed exactly once.
+let pressNext = false;
+
+function question(q, progress, number) {
   const answers = progress.quiz[q.id] ?? [];
   const chosen = answers[answers.length - 1];
   const answered = chosen !== undefined;
@@ -29,8 +32,8 @@ function question(q, progress) {
       </label>`;
   }).join("");
   return `
-    <fieldset class="check">
-      <legend>${esc(q.question)}</legend>
+    <fieldset class="question">
+      <legend><span class="question-number">${number}</span>${esc(q.question)}</legend>
       ${options}
       ${answered ? `<p class="feedback ${right ? "is-right" : "is-wrong"}"><strong>${right ? "Oui." : "Non."}</strong> ${esc(q.options[chosen].why)}</p>` : ""}
     </fieldset>`;
@@ -46,23 +49,33 @@ function result(module, progress) {
   if (!passed) {
     return `
       <section class="result" aria-labelledby="result-title">
-        <h2 id="result-title">Pas encore validé : ${progress.score} %</h2>
-        <p>${detail}. Il faut ${PASS_MARK} % pour valider le module.</p>
-        <button class="button primary" type="button" data-action="restart">Recommencer le module</button>
+        <div class="result-body">
+          <h2 id="result-title">Pas encore validé : ${progress.score}&nbsp;%</h2>
+          <p>${detail}. Il faut ${PASS_MARK} % pour valider le module.</p>
+          <div class="result-actions">
+            <button class="button primary" type="button" data-action="restart">Recommencer le module</button>
+          </div>
+        </div>
       </section>`;
   }
   return `
     <section class="result is-passed" aria-labelledby="result-title">
-      <h2 id="result-title">Module validé : ${progress.score} %</h2>
-      <p>${detail}.</p>
-      <button class="button primary" type="button" data-action="print">Imprimer l'attestation</button>
-      <a class="button" href="#accueil">Tableau de bord</a>
+      ${stamp(progress.score, progress.completedAt, { pressing: pressNext })}
+      <div class="result-body">
+        <h2 id="result-title">Module validé</h2>
+        <p>${detail}.</p>
+        <div class="result-actions">
+          <button class="button primary" type="button" data-action="print">Imprimer l'attestation</button>
+          <a class="button" href="#accueil">Tableau de bord</a>
+        </div>
+      </div>
     </section>
     <section class="attestation" aria-hidden="true">
       <p class="attestation-brand">BP Learning · Formation continue</p>
       <h2>Attestation de formation</h2>
       <p><strong>${esc(PROFILE.name)}</strong> a validé le module « ${esc(module.title)} »</p>
       <p>le ${formatDate(progress.completedAt)}, avec un score de ${progress.score} %.</p>
+      ${stamp(progress.score, progress.completedAt)}
       <p class="attestation-note">Formation sur cas et produits fictifs.</p>
     </section>`;
 }
@@ -73,7 +86,7 @@ export default {
   render({ module, progress }) {
     return `
       <h1 tabindex="-1" class="visually-hidden">Quiz</h1>
-      ${module.quiz.map((q) => question(q, progress)).join("")}
+      <ol class="questions">${module.quiz.map((q, i) => `<li>${question(q, progress, i + 1)}</li>`).join("")}</ol>
       ${progress.score !== null ? result(module, progress) : ""}`;
   },
 
@@ -89,12 +102,14 @@ export default {
           (progress.quiz[id] ??= []).push(index);
           // The module is scored once, the first time every question has an answer.
           if (progress.score === null && allAnswered(module, progress)) {
+            pressNext = true;
             progress.score = Math.round((progress.debrief.score + quizScore(module, progress)) / 2);
             progress.completedAt = new Date().toISOString();
           }
         },
         { focus: `#${id}-${index}` },
       );
+      pressNext = false;
       const justScored = !alreadyScored && ctx.progress.score !== null;
       ctx.announce(
         (index === q.correct ? "Oui. " : "Non. ") + q.options[index].why +
