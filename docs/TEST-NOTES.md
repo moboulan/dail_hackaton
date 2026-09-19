@@ -54,6 +54,12 @@ Numbers 15 to 23 come from the builder testing the live demo in the last hour.
 
 **Créer un cas** was tested end to end: a case written in the editor (M. Karim, dry cough, hidden: smokes, no fever) was saved, played in darija with its hidden facts revealed only when asked, graded, given a personalised quiz, validated and stamped, with no page errors.
 
+**Login and manager page** were tested end to end: a wrong password shows an error; alami signs in and passes Rhume (90 %); signing out returns to the login; admin signs in and sees "Dr Alami 1/3, Rhume 90 %" with a printable attestation; a pharmacist opening `#equipe` is sent back to their register.
+
+| # | What failed | Found by | Fix |
+| --- | --- | --- | --- |
+| 24 | A CSS replacement matched a phone rule first and deleted a large part of the stylesheet (phone rules, reduced motion, print, editor). | Screenshot review | Restored from the last good commit and re-applied the change with an exact, unique match. |
+
 ## Still to do by a person
 
 - Test with another person (not the builder): watch a pharmacist-like user do Rhume without
@@ -78,4 +84,5 @@ Numbers 15 to 23 come from the builder testing the live demo in the last hour.
 - The customer and the grader are a language model: behaviour is constrained and validated
   server-side, but wording can still surprise.
 - Rate limiting is per Vercel instance, so it slows abuse rather than stopping it.
-- Not built: a shared inventory of all products unlocked across modules; a staff overview for the pharmacy (needs accounts and a database); editing or deleting a written case.
+- The login is client-side with demo passwords; real accounts and a shared database are the next step.
+- Not built: a shared inventory of all products unlocked across modules.

@@ -24,6 +24,14 @@ server: the browser only calls `/api/chat` on the same origin, and `.env` is nev
 
 https://dail-bp-learning.vercel.app
 
+Demo accounts (the login runs in the browser: a demonstration of roles, not security):
+
+| Role | Login | Password |
+| --- | --- | --- |
+| Pharmacist | alami | alami |
+| Pharmacist | bennani | bennani |
+| Manager (team progress and attestations) | admin | admin |
+
 Deployed with the Vercel CLI (`vercel deploy --prod`). `public/` is the static output, and
 `api/chat.js` and `api/debrief.js` wrap the same handlers the local server uses (`lib/`).
 `DEEPSEEK_API_KEY` is a Vercel production secret. `.vercelignore` keeps `.env` files out of
