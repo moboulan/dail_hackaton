@@ -10,6 +10,7 @@ export default {
       <div class="login-split">
       <div class="login-art" aria-hidden="true"></div>
       <section class="login">
+        <p class="login-brand">BP Learning</p>
         <h1 tabindex="-1">Connexion</h1>
         <p class="login-lead">La formation continue de votre officine.</p>
         <form class="login-form" data-submit="signIn" novalidate>

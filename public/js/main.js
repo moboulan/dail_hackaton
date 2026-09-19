@@ -141,6 +141,8 @@ function renderScreen() {
   const screen = currentScreen();
   main.innerHTML = screen.render(ctx);
   main.dataset.screen = route.module ? route.step : route.page;
+  // The login page carries its own wordmark; the top bar starts once signed in.
+  document.querySelector(".site-header").hidden = route.page === "login";
   screen.afterRender?.(ctx);
   document.title = route.module
     ? `${route.module.title} · ${screen.title} · BP Learning`
