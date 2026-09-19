@@ -1,8 +1,9 @@
 import * as store from "./store.js";
-import { moduleById } from "./content.js";
+import { findModule } from "./modules.js";
 import { icon } from "./html.js";
 import { STEPS, STEP_IDS, isDone, isUnlocked } from "./steps.js";
 import dashboard from "./screens/dashboard.js";
+import editor from "./screens/editor.js";
 import brief from "./screens/brief.js";
 import echange from "./screens/echange.js";
 import bilan from "./screens/bilan.js";
@@ -17,7 +18,7 @@ const status = document.getElementById("status");
 const storageWarning = document.getElementById("storage-warning");
 
 let state = store.load();
-let route = { module: null, step: null }; // module null = dashboard
+let route = { module: null, step: null, page: "dashboard" }; // module null = dashboard or editor
 
 // Shared with every screen. Inside a module, update() hands over that module's progress.
 const ctx = {
@@ -68,7 +69,8 @@ function announce(message) {
 // "#rhume/echange" -> module + requested step. Anything unknown -> dashboard.
 function parseHash() {
   const [moduleId, step] = location.hash.slice(1).split("/");
-  const module = moduleById(moduleId);
+  if (moduleId === "nouveau-cas") return { module: null, step: null, page: "editor" };
+  const module = findModule(moduleId, state);
   if (!module) return { module: null, step: null };
   return { module, step: STEP_IDS.has(step) ? step : null };
 }
@@ -82,8 +84,10 @@ function furthestBuilt(progress) {
 function show({ moveFocus }) {
   const parsed = parseHash();
 
-  if (!parsed.module) {
-    route = { module: null, step: null };
+  if (parsed.page === "editor") {
+    route = { module: null, step: null, page: "editor" };
+  } else if (!parsed.module) {
+    route = { module: null, step: null, page: "dashboard" };
     if (location.hash !== "#accueil") history.replaceState(null, "", "#accueil");
   } else {
     const progress = state.modules[parsed.module.id];
@@ -103,13 +107,14 @@ function show({ moveFocus }) {
 }
 
 function currentScreen() {
-  return route.module ? STEP_SCREENS[route.step] : dashboard;
+  if (route.module) return STEP_SCREENS[route.step];
+  return route.page === "editor" ? editor : dashboard;
 }
 
 function renderScreen() {
   const screen = currentScreen();
   main.innerHTML = screen.render(ctx);
-  main.dataset.screen = route.module ? route.step : "dashboard";
+  main.dataset.screen = route.module ? route.step : route.page;
   screen.afterRender?.(ctx);
   document.title = route.module
     ? `${route.module.title} · ${screen.title} · BP Learning`

@@ -4,6 +4,7 @@
 import { MODULES, PASS_MARK, PROFILE } from "../content.js";
 import { attestation, esc, printAttestation, stamp } from "../html.js";
 import { STEPS, furthestUnlocked } from "../steps.js";
+import { allModules } from "../modules.js";
 
 function passed(progress) {
   return progress.score !== null && progress.score >= PASS_MARK;
@@ -22,12 +23,13 @@ export default {
 
   render({ state }) {
     const validated = MODULES.filter((m) => passed(state.modules[m.id])).length;
-    const rows = MODULES.map((module, index) => {
+    const modules = allModules(state);
+    const rows = modules.map((module, index) => {
       const { cell, action } = status(state.modules[module.id]);
       return `
         <tr>
           <td class="col-number">${String(index + 1).padStart(2, "0")}</td>
-          <th scope="row" class="col-module">${esc(module.title)}<span class="col-customer">${esc(module.customer)}</span></th>
+          <th scope="row" class="col-module">${esc(module.title)}<span class="col-customer">${esc(module.customer)}${module.custom ? " · cas de la pharmacie" : ""}</span></th>
           <td class="col-duration">${esc(module.duration)}</td>
           <td class="col-state">${cell}</td>
           <td class="col-action">
@@ -48,7 +50,8 @@ export default {
         </thead>
         <tbody>${rows}</tbody>
       </table>
-      ${MODULES.filter((m) => passed(state.modules[m.id])).map((m) => attestation(m, state.modules[m.id], PROFILE)).join("")}`;
+      <a class="button new-case" href="#nouveau-cas">Créer un cas</a>
+      ${modules.filter((m) => passed(state.modules[m.id])).map((m) => attestation(m, state.modules[m.id], PROFILE)).join("")}`;
   },
 
   actions: {

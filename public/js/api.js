@@ -9,7 +9,7 @@ export async function askCustomer(module, messages) {
     response = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ module: module.id, messages }),
+      body: JSON.stringify({ module: module.id, custom: module.custom, messages }),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
   } catch {
@@ -29,7 +29,7 @@ export async function requestDebrief(module, messages) {
     response = await fetch("/api/debrief", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ module: module.id, messages }),
+      body: JSON.stringify({ module: module.id, custom: module.custom, messages }),
       signal: AbortSignal.timeout(TIMEOUT_MS * 2),
     });
   } catch {

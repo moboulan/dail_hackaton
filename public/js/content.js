@@ -164,3 +164,37 @@ export const MODULES = [
 export function moduleById(id) {
   return MODULES.find((m) => m.id === id);
 }
+
+// Quiz for cases written in the editor, used when the Bilan did not write a personalised one.
+export const GENERIC_QUIZ = [
+  {
+    id: "g1",
+    question: "Un client demande un produit précis. Que faites-vous d'abord ?",
+    options: [
+      { text: "Je lui donne le produit demandé.", why: "Sans questions, vous pouvez manquer une contre-indication." },
+      { text: "Je demande ses symptômes, ses traitements et depuis quand.", why: "Questionner d'abord permet de conseiller en sécurité." },
+      { text: "Je propose le produit le plus cher.", why: "Le prix ne répond à aucun besoin." },
+    ],
+    correct: 1,
+  },
+  {
+    id: "g2",
+    question: "Quand proposer un complément ?",
+    options: [
+      { text: "À chaque vente.", why: "Un complément inutile n'aide pas le client." },
+      { text: "Jamais.", why: "Un complément utile fait partie d'un bon conseil." },
+      { text: "Quand il répond à un besoin réel et n'est pas contre-indiqué.", why: "C'est la règle du bon complément." },
+    ],
+    correct: 2,
+  },
+  {
+    id: "g3",
+    question: "Comment vérifier que le client a compris ?",
+    options: [
+      { text: "« Vous pouvez me redire comment vous allez faire ? »", why: "La reformulation montre ce qu'il a retenu." },
+      { text: "« C'est clair ? »", why: "Un oui ne prouve pas la compréhension." },
+      { text: "« Lisez la notice. »", why: "Cela ne vérifie rien." },
+    ],
+    correct: 0,
+  },
+];

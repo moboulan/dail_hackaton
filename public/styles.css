@@ -411,3 +411,24 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
   .attestation-brand { font-family: var(--font-register); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
   .attestation-note { margin-top: 24px; font-size: 0.85rem; }
 }
+
+/* Créer un cas */
+main[data-screen="editor"] { max-width: 820px; }
+.new-case { margin-top: 24px; }
+.editor-lead { color: var(--ink-soft); margin: 8px 0 28px; }
+.editor { display: grid; gap: 32px; }
+.editor-part { display: grid; gap: 14px; }
+.field { display: grid; gap: 4px; }
+.field-label { font-weight: 700; }
+.field-optional, .field-hint { font-weight: 400; color: var(--ink-soft); font-size: 0.9rem; }
+.field input, .field textarea {
+  font: inherit; padding: 10px 12px; border: 1.5px solid var(--rule-strong); border-radius: var(--radius);
+  background: var(--surface); color: var(--ink); resize: vertical;
+}
+.field input:focus, .field textarea:focus { border-color: var(--ocean); outline: none; box-shadow: 0 0 0 3px rgb(8 145 178 / 0.18); }
+.field-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.field-price { max-width: 160px; }
+.check-field { display: flex; gap: 10px; align-items: center; min-height: 44px; }
+.check-field input { width: 20px; height: 20px; accent-color: var(--forest); }
+.product-fields { border: 0; border-bottom: 1px solid var(--rule); padding: 0 0 18px; margin: 0; display: grid; gap: 10px; }
+.product-fields legend { font-weight: 700; padding: 0; margin-bottom: 6px; }

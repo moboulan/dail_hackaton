@@ -21,7 +21,7 @@ export function freshProgress() {
 // memoHints: réflexe id -> the better phrasing from the last Bilan that missed it. Kept across
 // modules and retries so the Mémo can remind the pharmacist what they forgot.
 export function freshState() {
-  return { modules: Object.fromEntries(MODULES.map((m) => [m.id, freshProgress()])), memoHints: {} };
+  return { modules: Object.fromEntries(MODULES.map((m) => [m.id, freshProgress()])), memoHints: {}, customModules: [] };
 }
 
 export function load() {
@@ -69,7 +69,14 @@ function sanitize(saved) {
       if (typeof hint === "string") state.memoHints[id] = hint;
     }
   }
-  for (const module of MODULES) {
+  if (Array.isArray(saved?.customModules)) {
+    state.customModules = saved.customModules.filter(
+      (c) => c && /^cas-\d{6,}$/.test(c.id) && typeof c.title === "string" && Array.isArray(c.products),
+    );
+  }
+  for (const id of [...MODULES.map((m) => m.id), ...state.customModules.map((c) => c.id)]) {
+    const module = { id };
+    state.modules[module.id] ??= freshProgress();
     const stored = saved?.modules?.[module.id];
     if (!stored || typeof stored !== "object") continue;
     const progress = state.modules[module.id];
