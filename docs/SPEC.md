@@ -45,13 +45,15 @@ progress reports 78 % when nothing was learned, and nothing proves the training 
 | 19 Sep | Preparation: read the fictional product sheets and the 4 reflexes, then 2 quick checks (retry allowed) unlock the conversation. The sheet stays viewable during the chat. |
 | 19 Sep | Quiz at the end, with explanations and retry. |
 | 19 Sep | Final score = 50 % conversation rubric + 50 % final quiz. Pass mark 80 %. Unlimited retries. |
-| 19 Sep | Passing unlocks a printable attestation (module, date, score). The name is typed on the attestation screen only; it is printed, never stored and never sent to the AI. |
+| 19 Sep | Passing unlocks a printable attestation (name from the fictional profile, module, date, score). No name field. |
 | 19 Sep | Navigation: guided path with one clear "Continuer" button and a step indicator. Finished steps can be revisited; later steps cannot be skipped. |
 | 19 Sep | If DeepSeek fails: honest error, typed text kept, retry. No fake scripted customer. A recorded run is kept as backup evidence for the fireside. |
 | 19 Sep | Backend: Node, no dependencies. Local server serves `public/` and `/api/*`; the same handlers deploy as Vercel functions. Hosted on Vercel as well as locally. |
 | 19 Sep | API key only on the server (`.env` locally, Vercel environment variables when hosted). Never in the browser, never committed. |
 | 19 Sep | PII stripped server-side before anything reaches DeepSeek. |
 | 19 Sep | Design pass later with impeccable.style and designmd.ai. |
+| 19 Sep | First screen is a dashboard (fictional profile Dr Alami, licence status, the module, attestations), not an explainer. Minimal copy everywhere: the user is a pharmacist who does not want to read. |
+| 19 Sep | The data warning is one line at the chat input only ("Cas fictif : n'écrivez aucune donnée réelle de patient."), not on the dashboard. |
 
 ## Guided path (5 screens, rebuilt from scratch)
 
@@ -60,17 +62,16 @@ No menu and no progress page: a step bar is the only navigation. Finished steps 
 revisited, later ones cannot be skipped. First visit opens the intro; later visits open the
 step where the pharmacist stopped.
 
-1. **Accueil** (`#accueil`): what the training is, about 15 min, 80 % to pass, what is stored
-   (progress in this browser) and what is sent (redacted conversation to an AI provider).
-   One button: "Commencer".
+1. **Tableau de bord** (`#accueil`): "Bonjour, Dr Alami", licence status (0 / 1 module),
+   the module card (15 min, state, one button: Commencer / Reprendre), attestations.
 2. **Préparation** (`#preparation`): fictional product sheets, the 4 reflexes, 2 quick checks
    with explanation and retry. "Continuer" unlocks when both are right.
 3. **Échange** (`#echange`): full-screen chat with the AI customer, typed replies,
-   "Fiche produit", "Indice", "Terminer l'échange".
+   "Fiche produit", "Indice", "Terminer l'échange". One-line data warning at the input.
 4. **Bilan** (`#bilan`): debrief with the pharmacist's own quotes, then the final quiz below.
    "Voir mon résultat".
-5. **Résultat** (`#resultat`): combined score, pass or not, what to redo; when passed, name
-   field and "Imprimer l'attestation". "Recommencer la formation" with in-page confirmation.
+5. **Résultat** (`#resultat`): combined score, pass or not, what to redo; when passed,
+   "Imprimer l'attestation". The dashboard then shows 1 / 1 and the attestation.
 
 ## Conversation design
 

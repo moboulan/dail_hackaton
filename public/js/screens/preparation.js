@@ -19,8 +19,8 @@ function renderCheck(check, state) {
     .join("");
   const feedback = answered
     ? `<p class="feedback ${right ? "is-right" : "is-wrong"}">
-        <strong>${right ? "Bonne réponse." : "Pas tout à fait."}</strong>
-        ${esc(check.options[chosen].why)}${right ? "" : " Choisissez une autre réponse."}
+        <strong>${right ? "Oui." : "Non."}</strong>
+        ${esc(check.options[chosen].why)}
        </p>`
     : "";
   return `
@@ -37,35 +37,25 @@ export default {
   render({ state, notice }) {
     const done = preparationDone(state);
     return `
-      <h1 tabindex="-1">Préparez l'échange</h1>
+      <h1 tabindex="-1">Préparation</h1>
       ${notice ? `<p class="notice">${esc(notice)}</p>` : ""}
+      <p class="scenario">${esc(SCENARIO.summary)}</p>
 
-      <section>
-        <h2>La situation</h2>
-        <p class="scenario">${esc(SCENARIO.summary)}</p>
-      </section>
+      <h2>Produits</h2>
+      <div class="sheets">${PRODUCTS.map(productSheet).join("")}</div>
+      <p class="doctor"><strong>Médecin si :</strong> ${esc(SEE_A_DOCTOR)}.</p>
 
-      <section>
-        <h2>Ce que vous vendez</h2>
-        <div class="sheets">${PRODUCTS.map(productSheet).join("")}</div>
-        <p class="doctor"><strong>Orientez vers un médecin</strong> en cas de ${esc(SEE_A_DOCTOR)}.</p>
-      </section>
+      <h2>Les 4 réflexes</h2>
+      <ol class="reflexes">
+        ${REFLEXES.map((r) => `<li><strong>${esc(r.title)}</strong> <span>${esc(r.body)}</span></li>`).join("")}
+      </ol>
 
-      <section>
-        <h2>Les 4 réflexes</h2>
-        <ol class="reflexes">
-          ${REFLEXES.map((r) => `<li><strong>${esc(r.title)}</strong><span>${esc(r.body)}</span></li>`).join("")}
-        </ol>
-      </section>
-
-      <section>
-        <h2>Vérifiez-vous</h2>
-        ${CHECKS.map((check) => renderCheck(check, state)).join("")}
-      </section>
+      <h2>2 questions</h2>
+      ${CHECKS.map((check) => renderCheck(check, state)).join("")}
 
       <div class="next">
-        <p class="hint" id="prep-hint">${done ? "Tout est prêt. Mme Naïma vous attend." : "Réussissez les deux questions pour passer à l'échange."}</p>
-        <button class="button primary" type="button" data-action="continue" aria-describedby="prep-hint">Continuer vers l'échange</button>
+        ${done ? "" : `<p class="hint" id="prep-hint">Réussissez les 2 questions pour continuer.</p>`}
+        <button class="button primary" type="button" data-action="continue" ${done ? "" : 'aria-describedby="prep-hint"'}>Continuer</button>
       </div>`;
   },
 
@@ -79,7 +69,7 @@ export default {
         },
         { focus: `#${check.id}-${index}` },
       );
-      ctx.announce(index === check.correct ? "Bonne réponse." : "Pas tout à fait. " + check.options[index].why);
+      ctx.announce((index === check.correct ? "Oui. " : "Non. ") + check.options[index].why);
     },
 
     continue(_el, ctx) {
@@ -91,7 +81,7 @@ export default {
       const fieldset = document.getElementById(`check-${pending.id}`);
       fieldset.scrollIntoView({ block: "center" });
       fieldset.focus();
-      ctx.announce("Il reste une question à réussir avant l'échange.");
+      ctx.announce("Il reste une question à réussir.");
     },
   },
 };

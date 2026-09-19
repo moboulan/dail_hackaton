@@ -9,12 +9,10 @@ export function esc(value) {
 export function productSheet(product) {
   return `
     <article class="sheet">
-      <p class="sheet-tag">Produit fictif</p>
-      <h3>${esc(product.name)}</h3>
-      <p class="sheet-form">${esc(product.form)}</p>
+      <h3>${esc(product.name)} <span class="sheet-form">· ${esc(product.form)}</span></h3>
       <dl>
-        <dt>Pour quoi</dt><dd>${esc(product.forWhat)}</dd>
-        <dt>Utilisation</dt><dd>${esc(product.use)}</dd>
+        <dt>Pour</dt><dd>${esc(product.forWhat)}</dd>
+        <dt>Usage</dt><dd>${esc(product.use)}</dd>
         <dt>Attention</dt><dd>${esc(product.caution)}</dd>
       </dl>
     </article>`;

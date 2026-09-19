@@ -47,7 +47,7 @@ export function isDone(id, state) {
 export function lockReason(id) {
   switch (id) {
     case "preparation":
-      return "Cliquez sur « Commencer » pour ouvrir la préparation.";
+      return "Commencez le module pour ouvrir la préparation.";
     case "echange":
       return "L'échange s'ouvre quand les deux questions de la préparation sont réussies.";
     case "bilan":

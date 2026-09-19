@@ -47,7 +47,7 @@ Evidence: a screenshot in `evidence/before/`, "browser" (reproduced by hand, no 
 
 | ID | Problem | Evidence | Sev | Status | Fix (commit) |
 | --- | --- | --- | --- | --- | --- |
-| P20 | No intro: the first screen does not explain what the app is, how it works or what is stored. | 01 | Medium | fixed | New Accueil screen: purpose, duration, steps, pass mark, what is stored and sent. (step 2) |
+| P20 | No intro: the first screen does not explain what the app is, how it works or what is stored. | 01 | Medium | fixed | Dashboard as first screen: licence status, the module with its state and one button. (step 2) |
 | P21 | Preparation is three checkboxes to tick. Nothing is practised or checked. | 02 | Medium | fixed | Preparation teaches: fictional product sheets, 4 reflexes, 2 checks with per-answer explanation and retry. (step 2) |
 | P22 | German route names (`#vorbereitung`, `#abschluss`, `#lernplan`) in a French app, visible in the URL. | browser | Low | fixed | French routes: #accueil, #preparation, #echange, #bilan, #resultat. (step 2) |
 
