@@ -25,7 +25,7 @@ function memo(state) {
   const item = (r) => {
     const hint = state.memoHints[r.id];
     // A hint replaces the generic line: one reminder per réflexe, the personal one when it exists.
-    const detail = hint ? `<span class="memo-hint">${esc(hint)}</span>` : `<span>${esc(r.body)}</span>`;
+    const detail = hint ? `<span class="memo-hint">« ${esc(hint)} »</span>` : `<span>${esc(r.body)}</span>`;
     return `<li${hint ? ' class="has-hint"' : ""}><strong>${esc(r.title)}</strong>${detail}</li>`;
   };
   return `
