@@ -230,6 +230,8 @@ main[data-screen="echange"] { max-width: 1180px; padding-top: 28px; }
 .composer textarea:focus { border-color: var(--ocean); outline: none; box-shadow: 0 0 0 3px rgb(8 145 178 / 0.18); }
 .composer .button { min-height: 48px; }
 .chat-panel .chat-closed { margin: 10px; }
+.chat-panel .end-zone { padding: 0 12px 6px; background: var(--surface); }
+.chat-panel .end-zone:has(> [hidden]:only-child) { display: none; }
 .composer-note { font-size: 0.85rem; color: var(--ink-soft); padding: 0 16px 10px; background: var(--surface); }
 .composer-note:empty { display: none; }
 .end-zone { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
