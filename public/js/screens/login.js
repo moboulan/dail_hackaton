@@ -21,7 +21,14 @@ export default {
           <p id="login-error" class="login-error" role="alert"></p>
           <button class="button primary" type="submit">Se connecter</button>
         </form>
-        <p class="login-demo">Comptes de démonstration : <strong>alami</strong> / alami · <strong>bennani</strong> / bennani · <strong>admin</strong> / admin</p>
+        <div class="login-demo">
+          <p class="register-title">Comptes de démonstration</p>
+          <ul>
+            <li><span>Pharmacien</span><code><strong>alami</strong> / alami</code></li>
+            <li><span>Pharmacien</span><code><strong>bennani</strong> / bennani</code></li>
+            <li><span>Responsable</span><code><strong>admin</strong> / admin</code></li>
+          </ul>
+        </div>
       </section>`;
   },
 

@@ -207,7 +207,7 @@ window.addEventListener("hashchange", () => show({ moveFocus: true }));
 function renderAccount() {
   account.innerHTML = state.signedOut
     ? ""
-    : `<span class="account-name">${state.staffName}</span><button class="link-button" type="button" id="sign-out">Se déconnecter</button>`;
+    : `<span class="account-name">${state.staffName}</span><button class="button button-small" type="button" id="sign-out">Se déconnecter</button>`;
 }
 
 account.addEventListener("click", (event) => {
