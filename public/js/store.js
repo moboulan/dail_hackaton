@@ -43,7 +43,7 @@ export function freshRecord() {
 export function freshPharmacy() {
   return {
     staff: STAFF.map(({ id, name }) => ({ id, name })),
-    current: null, // nobody signed in
+    current: STAFF[0].id, // the demo opens on Dr Alami's dashboard; sign out to reach the login
     records: Object.fromEntries(STAFF.map((s) => [s.id, freshRecord()])),
     customModules: [],
   };
@@ -104,7 +104,7 @@ function sanitizePharmacy(saved) {
     pharmacy.staff.map((s) => [s.id, sanitizeRecord(saved?.records?.[s.id], ids)]),
   );
   const accounts = [...pharmacy.staff.map((s) => s.id), ADMIN.id];
-  pharmacy.current = accounts.includes(saved?.current) ? saved.current : null;
+  pharmacy.current = accounts.includes(saved?.current) ? saved.current : STAFF[0].id;
   return pharmacy;
 }
 
